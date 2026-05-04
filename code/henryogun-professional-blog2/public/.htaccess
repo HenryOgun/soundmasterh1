@@ -1,4 +1,11 @@
 Options -MultiViews
 RewriteEngine On
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# React Router support
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.html [QL]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [QSA,L]

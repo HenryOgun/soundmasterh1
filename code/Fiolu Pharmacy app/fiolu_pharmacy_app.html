@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Fiolu Pharmacy</title>
+</head>
+<body>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 18px; font-weight: 500; background: var(--color-background-tertiary, #f4f6f9); color: var(--color-text-primary, #111); }
+  :root {
+    --blue: #1a6fc4; --blue-light: #e6f1fb; --blue-mid: #378add;
+    --green: #1d9e75; --green-light: #e1f5ee;
+    --red: #e24b4a; --red-light: #fcebeb;
+    --amber: #ba7517; --amber-light: #faeeda;
+    --sidebar-w: 220px;
+  }
+  #app { min-height: 700px; display: flex; flex-direction: column; }
+  .topbar { background: #fff; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; padding: 0 20px; height: 56px; gap: 16px; position: sticky; top: 0; z-index: 100; }
+  .topbar-logo { font-size: 22px; font-weight: 800; color: var(--blue); letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
+  .topbar-logo .cross { width: 24px; height: 24px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .topbar-logo .cross::before { content: '+'; color: #fff; font-size: 19px; font-weight: 700; line-height: 1; }
+  .topbar-search { flex: 1; max-width: 400px; }
+  .topbar-search input { width: 100%; height: 38px; border: 0.5px solid var(--color-border-tertiary, #ddd); border-radius: 20px; padding: 0 16px; font-size: 17px; font-weight: 500; background: var(--color-background-secondary, #f5f5f5); color: var(--color-text-primary, #111); outline: none; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .nav-pills { display: flex; gap: 2px; }
+  .nav-pill { padding: 7px 16px; font-size: 17px; font-weight: 600; border: none; background: none; border-radius: 20px; cursor: pointer; color: var(--color-text-secondary, #555); }
+  .nav-pill.active { background: var(--blue-light); color: var(--blue); font-weight: 700; }
+  .cart-btn { position: relative; background: var(--blue); color: #fff; border: none; border-radius: 20px; padding: 8px 18px; font-size: 17px; font-weight: 700; cursor: pointer; }
+  .cart-badge { position: absolute; top: -6px; right: -6px; background: var(--red); color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 13px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .body { display: flex; flex: 1; }
+  .sidebar { width: var(--sidebar-w); min-width: var(--sidebar-w); background: #fff; border-right: 0.5px solid var(--color-border-tertiary); padding: 16px 0; }
+  .sidebar-section { margin-bottom: 8px; }
+  .sidebar-label { font-size: 15px; font-weight: 800; color: var(--color-text-tertiary, #888); padding: 6px 16px 4px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 17px; font-weight: 600; cursor: pointer; color: var(--color-text-secondary, #444); border-left: 2px solid transparent; }
+  .sidebar-item:hover { background: var(--color-background-secondary, #f5f5f5); }
+  .sidebar-item.active { color: var(--blue); background: var(--blue-light); border-left-color: var(--blue); font-weight: 800; }
+  .sidebar-item .icon { font-size: 19px; width: 20px; text-align: center; }
+  .main { flex: 1; padding: 20px; overflow-y: auto; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Product Catalog */
+  .section-title { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+  .section-sub { font-size: 17px; font-weight: 500; color: var(--color-text-secondary, #555); margin-bottom: 16px; }
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .filter-chip { padding: 7px 16px; border-radius: 20px; border: 1px solid var(--color-border-tertiary, #ddd); font-size: 16px; font-weight: 700; cursor: pointer; background: var(--color-background-primary, #fff); color: var(--color-text-secondary, #555); }
+  .filter-chip.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+  .product-card { background: var(--color-background-primary, #fff); border: 1px solid var(--color-border-tertiary, #e5e7eb); border-radius: 14px; padding: 14px; cursor: pointer; transition: border-color 0.15s; }
+  .product-card:hover { border-color: var(--blue-mid); }
+  .product-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 10px; }
+  .product-name { font-size: 17px; font-weight: 800; margin-bottom: 3px; }
+  .product-category { font-size: 15px; font-weight: 700; color: var(--color-text-tertiary, #888); margin-bottom: 6px; }
+  .product-price { font-size: 19px; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+  .product-stock { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .in-stock { color: var(--green); }
+  .low-stock { color: var(--amber); }
+  .out-stock { color: var(--red); }
+  .add-btn { width: 100%; padding: 9px; border: none; background: var(--blue); color: #fff; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
+  .add-btn:hover { opacity: 0.9; }
+  .add-btn:disabled { background: var(--color-background-secondary, #eee); color: var(--color-text-tertiary, #aaa); cursor: not-allowed; }
+
+  /* Cart */
+  .cart-container { max-width: 640px; }
+  .cart-item { background: var(--color-background-primary, #fff); border: 1px solid var(--color-border-tertiary, #e5e7eb); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .cart-icon { font-size: 28px; width: 42px; text-align: center; }
+  .cart-info { flex: 1; }
+  .cart-name { font-size: 18px; font-weight: 700; }
+  .cart-price { font-size: 16px; font-weight: 600; color: var(--color-text-secondary, #555); }
+  .qty-ctrl { display: flex; align-items: center; gap: 8px; }
+  .qty-btn { width: 32px; height: 32px; border: 1px solid var(--color-border-tertiary, #ddd); background: var(--color-background-secondary, #f5f5f5); border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; color: var(--color-text-primary, #111); }
+  .qty-num { font-size: 18px; font-weight: 700; min-width: 22px; text-align: center; }
+  .remove-btn { color: var(--red); background: none; border: none; font-size: 16px; font-weight: 700; cursor: pointer; padding: 4px 8px; }
+  .cart-summary { background: var(--color-background-primary, #fff); border: 1px solid var(--color-border-tertiary, #e5e7eb); border-radius: 14px; padding: 16px; margin-top: 12px; }
+  .summary-row { display: flex; justify-content: space-between; font-size: 18px; font-weight: 600; padding: 5px 0; }
+  .summary-row.total { font-weight: 800; font-size: 20px; border-top: 1px solid var(--color-border-tertiary, #e5e7eb); padding-top: 10px; margin-top: 6px; }
+  .checkout-btn { width: 100%; margin-top: 12px; padding: 14px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: 800; cursor: pointer; }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--color-text-secondary, #555); }
+  .empty-icon { font-size: 52px; margin-bottom: 12px; }
+  .empty-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: var(--color-text-primary, #111); }
+
+  /* Order History */
+  .order-card { background: var(--color-background-primary, #fff); border: 1px solid var(--color-border-tertiary, #e5e7eb); border-radius: 14px; padding: 16px; margin-bottom: 10px; }
+  .order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .order-id { font-size: 18px; font-weight: 800; }
+  .order-date { font-size: 15px; font-weight: 600; color: var(--color-text-tertiary, #888); }
+  .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 15px; font-weight: 700; }
+  .status-delivered { background: var(--green-light); color: var(--green); }
+  .status-processing { background: var(--blue-light); color: var(--blue); }
+  .status-pending { background: var(--amber-light); color: var(--amber); }
+  .order-items { font-size: 16px; font-weight: 600; color: var(--color-text-secondary, #555); margin-bottom: 8px; }
+  .order-total { font-size: 18px; font-weight: 800; color: var(--blue); }
+  .reorder-btn { float: right; padding: 7px 16px; border: 1.5px solid var(--blue); color: var(--blue); background: none; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; }
+
+  /* Admin */
+  .admin-tabs { display: flex; gap: 2px; margin-bottom: 20px; border-bottom: 1px solid var(--color-border-tertiary, #e5e7eb); }
+  .admin-tab { padding: 10px 18px; font-size: 17px; font-weight: 600; cursor: pointer; color: var(--color-text-secondary, #555); border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; border-top: none; border-left: none; border-right: none; }
+  .admin-tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 800; }
+  .admin-panel { display: none; }
+  .admin-panel.active { display: block; }
+  .stats-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .stat-card { background: var(--color-background-secondary, #f5f5f5); border-radius: 10px; padding: 16px; }
+  .stat-label { font-size: 15px; font-weight: 700; color: var(--color-text-secondary, #555); margin-bottom: 4px; }
+  .stat-value { font-size: 28px; font-weight: 800; }
+  .stat-change { font-size: 15px; font-weight: 600; margin-top: 2px; }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+  .admin-table { width: 100%; border-collapse: collapse; font-size: 16px; font-weight: 600; }
+  .admin-table th { text-align: left; padding: 10px 12px; color: var(--color-text-secondary, #555); font-weight: 800; border-bottom: 1px solid var(--color-border-tertiary, #e5e7eb); }
+  .admin-table td { padding: 11px 12px; border-bottom: 1px solid var(--color-border-tertiary, #e5e7eb); }
+  .admin-table tr:last-child td { border-bottom: none; }
+  .table-card { background: var(--color-background-primary, #fff); border: 1px solid var(--color-border-tertiary, #e5e7eb); border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+  .table-card-header { padding: 14px 16px; border-bottom: 1px solid var(--color-border-tertiary, #e5e7eb); display: flex; justify-content: space-between; align-items: center; }
+  .table-card-title { font-size: 18px; font-weight: 800; }
+  .add-product-btn { padding: 8px 16px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
+  .action-link { color: var(--blue); background: none; border: none; font-size: 15px; font-weight: 700; cursor: pointer; padding: 0 4px; }
+  .action-del { color: var(--red); }
+  .progress-bar { height: 7px; background: var(--color-background-secondary, #eee); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: var(--blue); }
+
+  /* Profile / Login */
+  .auth-card { background: var(--color-background-primary, #fff); border: 1px solid var(--color-border-tertiary, #e5e7eb); border-radius: 14px; padding: 28px; max-width: 400px; }
+  .auth-card h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .auth-card p { font-size: 17px; font-weight: 500; color: var(--color-text-secondary, #555); margin-bottom: 20px; }
+  .form-group { margin-bottom: 14px; }
+  .form-label { display: block; font-size: 16px; font-weight: 700; color: var(--color-text-secondary, #555); margin-bottom: 6px; }
+  .form-input { width: 100%; height: 44px; border: 1px solid var(--color-border-tertiary, #ddd); border-radius: 10px; padding: 0 14px; font-size: 17px; font-weight: 500; background: var(--color-background-secondary, #f5f5f5); color: var(--color-text-primary, #111); outline: none; }
+  .form-input:focus { border-color: var(--blue-mid); }
+  .form-btn { width: 100%; padding: 13px; background: var(--blue); color: #fff; border: none; border-radius: 10px; font-size: 18px; font-weight: 800; cursor: pointer; margin-top: 4px; }
+  .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; color: var(--blue); }
+  .profile-info h3 { font-size: 20px; font-weight: 800; }
+  .profile-info p { font-size: 16px; font-weight: 500; color: var(--color-text-secondary, #555); }
+  .profile-section { background: var(--color-background-primary, #fff); border: 1px solid var(--color-border-tertiary, #e5e7eb); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+  .profile-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 17px; font-weight: 600; border-bottom: 1px solid var(--color-border-tertiary, #e5e7eb); }
+  .profile-row:last-child { border-bottom: none; }
+  .profile-row span:first-child { color: var(--color-text-secondary, #555); font-weight: 600; }
+  .toast { position: fixed; bottom: 20px; right: 20px; background: #1a6fc4; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 17px; font-weight: 700; z-index: 9999; display: none; }
+
+  /* Prescription upload */
+  .rx-box { border: 1.5px dashed var(--color-border-tertiary); border-radius: 10px; padding: 20px; text-align: center; color: var(--color-text-secondary); font-size: 15px; cursor: pointer; margin-bottom: 12px; }
+  .rx-box:hover { border-color: var(--blue-mid); background: var(--blue-light); }
+
+  /* Checkout modal */
+  .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.35); z-index: 200; display: none; align-items: center; justify-content: center; }
+  .overlay.open { display: flex; }
+  .modal { background: #ffffff; border-radius: 14px; padding: 24px; width: 420px; max-width: 94vw; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.25); color: #111; }
+  .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 16px; }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--color-text-secondary, #555); }
+  .step-indicator { display: flex; gap: 6px; margin-bottom: 20px; }
+  .step-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--color-background-secondary); }
+  .step-dot.done { background: var(--blue); }
+  .success-screen { text-align: center; padding: 20px 0; }
+  .success-icon { font-size: 48px; margin-bottom: 12px; }
+  .success-title { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+  .success-sub { font-size: 15px; color: var(--color-text-secondary); }
+
+  .pill-reminder { background: var(--green-light); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+  .pill-reminder .icon { font-size: 24px; }
+  .pill-reminder .text { font-size: 15px; }
+  .pill-reminder .text b { font-size: 15px; font-weight: 500; color: var(--green); }
+
+  /* ── NEW: Hamburger / Mobile sidebar ── */
+  .hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 6px; color: var(--color-text-primary); line-height: 1; flex-shrink: 0; }
+  .sidebar-mobile-overlay { display: none; position: fixed; top: 56px; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 150; }
+  .sidebar-mobile-overlay.open { display: block; }
+
+  /* ── NEW: Sort dropdown ── */
+  .sort-select { height: 32px; border: 0.5px solid var(--color-border-tertiary); border-radius: 20px; padding: 0 12px; font-size: 14px; background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; outline: none; margin-left: auto; }
+
+  /* ── NEW: Order tracker ── */
+  .order-tracker { display: flex; align-items: flex-start; margin: 12px 0 8px; }
+  .tracker-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+  .tracker-step:not(:last-child)::after { content: ''; position: absolute; top: 6px; left: 50%; width: 100%; height: 2px; background: var(--color-background-secondary); z-index: 0; }
+  .tracker-step.line-done:not(:last-child)::after { background: var(--blue); }
+  .tracker-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--color-background-secondary); border: 2px solid var(--color-border-tertiary); position: relative; z-index: 1; flex-shrink: 0; }
+  .tracker-dot.done { background: var(--blue); border-color: var(--blue); }
+  .tracker-dot.current { background: #fff; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); }
+  .tracker-label { font-size: 9px; color: var(--color-text-tertiary); margin-top: 5px; text-align: center; max-width: 60px; line-height: 1.3; }
+  .tracker-label.active { color: var(--blue); font-weight: 500; }
+
+  /* ── NEW: Notification bell ── */
+  .notif-wrap { position: relative; }
+  .notif-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px 6px; color: var(--color-text-secondary); position: relative; display: flex; align-items: center; }
+  .notif-count { position: absolute; top: -2px; right: -2px; background: var(--red); color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 500; }
+  .notif-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 320px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.18); z-index: 250; display: none; overflow: hidden; color: #111; max-height: 400px; display: none; flex-direction: column; }
+  .notif-dropdown.open { display: flex; animation: dropIn 0.15s ease; }
+  #notif-list { overflow-y: auto; overscroll-behavior: contain; flex: 1; }
+  @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+  .notif-header { padding: 13px 16px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; background: #f9fafb; flex-shrink: 0; }
+  .notif-item { padding: 11px 16px; border-bottom: 1px solid #f3f4f6; font-size: 14px; display: flex; gap: 10px; align-items: flex-start; background: #fff; transition: background 0.1s; }
+  .notif-item:last-child { border-bottom: none; }
+  .notif-item:hover { background: #f9fafb; }
+  .notif-item.unread { background: #eef5fd; border-left: 3px solid #1a6fc4; }
+  .notif-item.unread:hover { background: #e3eef9; }
+  .notif-item-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .notif-item-time { font-size: 13px; color: #888; margin-top: 3px; }
+  .mark-read-btn { background: none; border: none; font-size: 13px; color: #1a6fc4; cursor: pointer; padding: 0; font-weight: 500; }
+
+  /* ── NEW: Pill reminder modal ── */
+  .reminder-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.55); z-index: 400; display: none; align-items: center; justify-content: center; }
+  .reminder-overlay.open { display: flex; }
+  .reminder-modal { background: #ffffff; border-radius: 14px; padding: 28px; width: 420px; max-width: 94vw; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.25); color: #111; }
+  .reminder-list { margin-top: 12px; max-height: 180px; overflow-y: auto; }
+  .reminder-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 15px; }
+  .reminder-item:last-child { border-bottom: none; }
+  .del-reminder-btn { background: none; border: none; color: var(--red); font-size: 14px; cursor: pointer; }
+
+  /* ── NEW: Product detail modal ── */
+  .prod-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 300; display: none; align-items: center; justify-content: center; }
+  .prod-modal-overlay.open { display: flex; }
+  .prod-modal { background: #ffffff; border-radius: 14px; padding: 24px; width: 460px; max-width: 94vw; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.25); color: #111; }
+  .prod-modal-icon { width: 64px; height: 64px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px; }
+  .prod-modal-name { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+  .prod-modal-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .prod-modal-tag { padding: 3px 10px; border-radius: 20px; font-size: 13px; font-weight: 500; background: var(--color-background-secondary); }
+  .prod-modal-price { font-size: 24px; font-weight: 500; color: var(--blue); margin-bottom: 8px; }
+  .prod-modal-desc { font-size: 15px; color: var(--color-text-secondary); margin-bottom: 16px; line-height: 1.6; }
+  .prod-modal-info { background: var(--color-background-secondary); border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+  .prod-modal-info-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 15px; gap: 12px; }
+  .prod-modal-info-row:last-child { border-bottom: none; }
+  .prod-modal-info-label { color: var(--color-text-secondary); flex-shrink: 0; }
+
+  /* ── NEW: Rx warning modal ── */
+  .rx-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 500; display: none; align-items: center; justify-content: center; }
+  .rx-overlay.open { display: flex; }
+  .rx-warn-modal { background: #ffffff; border-radius: 14px; padding: 28px; width: 380px; max-width: 94vw; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.25); color: #111; }
+  .rx-warn-icon { font-size: 44px; margin-bottom: 12px; }
+  .rx-warn-title { font-size: 18px; font-weight: 500; margin-bottom: 8px; }
+  .rx-warn-text { font-size: 15px; color: var(--color-text-secondary); margin-bottom: 20px; line-height: 1.5; }
+  .rx-btn-row { display: flex; gap: 10px; }
+  .rx-btn-row button { flex: 1; padding: 10px; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; border: none; }
+  .rx-proceed { background: var(--blue); color: #fff; }
+  .rx-cancel { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+
+  /* ── Mobile bottom navigation bar ── */
+  .mobile-bottom-nav { display: none; }
+  @media (max-width: 600px) {
+    body { font-size: 17px; font-weight: 500; background: #f4f6f9; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .hamburger { display: block; }
+    .sidebar { display: block; position: fixed; top: 56px; left: 0; bottom: 0; z-index: 160; overflow-y: auto; transform: translateX(-100%); transition: transform 0.22s ease; }
+    .sidebar.mobile-open { transform: translateX(0); }
+    .nav-pills { display: none; }
+    .sort-select { margin-left: 0; width: 100%; }
+
+    /* Bigger topbar on mobile */
+    .topbar { height: 60px; padding: 0 14px; gap: 10px; }
+    .topbar-logo { font-size: 19px; font-weight: 700; }
+    .topbar-search input { font-size: 16px; height: 38px; }
+    .cart-btn { font-size: 16px; font-weight: 700; padding: 8px 16px; }
+
+    /* Bigger main area with bottom nav spacing */
+    .main { padding: 14px; padding-bottom: 80px; }
+
+    /* Product grid */
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .product-card { padding: 12px; }
+    .product-name { font-size: 15px; font-weight: 700; }
+    .product-category { font-size: 14px; font-weight: 600; }
+    .product-price { font-size: 18px; font-weight: 800; }
+    .product-stock { font-size: 14px; font-weight: 600; }
+    .add-btn { font-size: 15px; font-weight: 700; padding: 10px; border-radius: 10px; }
+
+    /* Section headings */
+    .section-title { font-size: 22px; font-weight: 800; }
+    .section-sub { font-size: 16px; font-weight: 500; }
+
+    /* Filter chips */
+    .filter-chip { font-size: 15px; font-weight: 600; padding: 7px 16px; }
+
+    /* Cart */
+    .cart-name { font-size: 17px; font-weight: 700; }
+    .cart-price { font-size: 15px; font-weight: 600; }
+    .qty-btn { width: 34px; height: 34px; font-size: 20px; }
+    .qty-num { font-size: 18px; font-weight: 700; }
+    .checkout-btn { font-size: 18px; font-weight: 800; padding: 16px; border-radius: 12px; }
+    .summary-row { font-size: 17px; font-weight: 600; }
+    .summary-row.total { font-size: 20px; font-weight: 800; }
+
+    /* Orders */
+    .order-id { font-size: 17px; font-weight: 800; }
+    .order-date { font-size: 15px; font-weight: 600; }
+    .order-items { font-size: 15px; font-weight: 500; }
+    .order-total { font-size: 18px; font-weight: 800; }
+    .reorder-btn { font-size: 15px; font-weight: 700; padding: 8px 16px; }
+    .status-badge { font-size: 14px; font-weight: 700; padding: 5px 12px; }
+
+    /* Profile / Auth */
+    .form-input { height: 48px; font-size: 17px; font-weight: 500; }
+    .form-btn { padding: 14px; font-size: 18px; font-weight: 800; border-radius: 12px; }
+    .form-label { font-size: 15px; font-weight: 700; }
+    .auth-card { padding: 22px; }
+    .auth-card h2 { font-size: 24px; font-weight: 800; }
+    .profile-row { font-size: 16px; font-weight: 600; padding: 10px 0; }
+    .avatar { width: 64px; height: 64px; font-size: 26px; font-weight: 800; }
+    .profile-info h3 { font-size: 20px; font-weight: 800; }
+    .profile-info p { font-size: 15px; font-weight: 500; }
+
+    /* Admin */
+    .stat-value { font-size: 28px; font-weight: 800; }
+    .stat-label { font-size: 15px; font-weight: 700; }
+    .stat-change { font-size: 14px; font-weight: 600; }
+    .admin-table { font-size: 14px; }
+    .admin-table th { font-size: 14px; font-weight: 800; }
+
+    /* Pill reminder banner */
+    .pill-reminder .text { font-size: 16px; font-weight: 600; }
+
+    /* Modals */
+    .modal { padding: 20px; }
+    .modal-title { font-size: 20px; font-weight: 800; }
+    .prod-modal-name { font-size: 22px; font-weight: 800; }
+    .prod-modal-price { font-size: 26px; font-weight: 800; }
+    .prod-modal-desc { font-size: 16px; font-weight: 500; }
+    .prod-modal-info-row { font-size: 16px; font-weight: 600; }
+    .rx-warn-title { font-size: 20px; font-weight: 800; }
+    .rx-warn-text { font-size: 16px; font-weight: 500; }
+    .rx-btn-row button { padding: 14px; font-size: 17px; font-weight: 700; }
+    .reminder-modal { padding: 22px; }
+
+    /* Bottom nav bar */
+    .mobile-bottom-nav {
+      display: flex; position: fixed; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid #e5e7eb;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+      z-index: 120; height: 64px;
+    }
+    .mob-nav-btn {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 3px; background: none; border: none;
+      font-size: 13px; font-weight: 700; color: #888; cursor: pointer;
+      padding: 8px 0;
+    }
+    .mob-nav-btn .mob-icon { font-size: 24px; line-height: 1; }
+    .mob-nav-btn.active { color: #1a6fc4; }
+    .mob-nav-btn .mob-badge {
+      position: absolute; top: 6px; background: #e24b4a; color: #fff;
+      border-radius: 50%; width: 16px; height: 16px; font-size: 10px;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+    .mob-nav-item { position: relative; flex: 1; display: flex; }
+    .mob-nav-item .mob-nav-btn { width: 100%; }
+  }
+</style>
+
+<div id="app">
+  <div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-logo"><div class="cross"></div>Fiolu Pharmacy</div>
+    <div class="topbar-search"><input type="text" id="search-input" placeholder="Search medications, vitamins, supplements..." /></div>
+    <div class="topbar-right">
+      <div class="nav-pills">
+        <button class="nav-pill active" onclick="showPage('catalog')">Shop</button>
+        <button class="nav-pill" onclick="showPage('orders')">Orders</button>
+        <button class="nav-pill" onclick="showPage('profile')">Account</button>
+        <button class="nav-pill" onclick="showPage('admin')">Admin</button>
+      </div>
+      <div class="notif-wrap">
+        <button class="notif-btn" onclick="toggleNotifications()" title="Notifications">
+          🔔<span class="notif-count" id="notif-count">3</span>
+        </button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-header">
+            <span>Notifications</span>
+            <button class="mark-read-btn" onclick="markAllRead()">Mark all read</button>
+          </div>
+          <div id="notif-list"></div>
+        </div>
+      </div>
+      <button class="cart-btn" onclick="showPage('cart')">
+        Cart <span class="cart-badge" id="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="sidebar-mobile-overlay" id="sidebar-mobile-overlay" onclick="closeSidebar()"></div>
+
+  <div class="body">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Categories</div>
+        <div class="sidebar-item active" onclick="filterCat('All')"><span class="icon">💊</span> All Medications</div>
+        <div class="sidebar-item" onclick="filterCat('Antibiotics')"><span class="icon">🔬</span> Antibiotics</div>
+        <div class="sidebar-item" onclick="filterCat('Vitamins')"><span class="icon">🌿</span> Vitamins &amp; Supplements</div>
+        <div class="sidebar-item" onclick="filterCat('Analgesics')"><span class="icon">💉</span> Analgesics &amp; Pain</div>
+        <div class="sidebar-item" onclick="filterCat('Chronic')"><span class="icon">❤️</span> Chronic Disease</div>
+        <div class="sidebar-item" onclick="filterCat('Skincare')"><span class="icon">✨</span> Skincare</div>
+        <div class="sidebar-item" onclick="filterCat('First Aid')"><span class="icon">🩹</span> First Aid</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Quick links</div>
+        <div class="sidebar-item" onclick="showPage('orders')"><span class="icon">📦</span> My Orders</div>
+        <div class="sidebar-item" onclick="showPage('cart')"><span class="icon">🛒</span> Cart</div>
+        <div class="sidebar-item" onclick="openPillReminder()"><span class="icon">⏰</span> Pill Reminders</div>
+        <div class="sidebar-item" onclick="alert('Prescription upload: tap to select file')"><span class="icon">📋</span> Upload Prescription</div>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <!-- CATALOG PAGE -->
+      <div class="page active" id="page-catalog">
+        <div class="pill-reminder">
+          <span class="icon">⏰</span>
+          <div class="text"><b>Pill Reminder:</b> Set daily reminders to never miss a dose. <a href="#" onclick="openPillReminder();return false;" style="color:var(--green);text-decoration:none;font-size:13px;">Set reminder →</a></div>
+        </div>
+        <div class="section-title">Browse Medications</div>
+        <div class="section-sub">Quality medicines. Fast delivery. Trusted care.</div>
+        <div class="filter-bar" id="filter-bar">
+          <button class="filter-chip active" onclick="filterCat('All')">All</button>
+          <button class="filter-chip" onclick="filterCat('Antibiotics')">Antibiotics</button>
+          <button class="filter-chip" onclick="filterCat('Vitamins')">Vitamins</button>
+          <button class="filter-chip" onclick="filterCat('Analgesics')">Analgesics</button>
+          <button class="filter-chip" onclick="filterCat('Chronic')">Chronic Disease</button>
+          <button class="filter-chip" onclick="filterCat('Skincare')">Skincare</button>
+          <button class="filter-chip" onclick="filterCat('First Aid')">First Aid</button>
+          <select class="sort-select" id="sort-select" onchange="sortProducts(this.value)">
+            <option value="default">Sort: Default</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="stock">In Stock First</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+        <div class="products-grid" id="products-grid"></div>
+      </div>
+
+      <!-- CART PAGE -->
+      <div class="page" id="page-cart">
+        <div class="section-title">Shopping Cart</div>
+        <div class="section-sub" id="cart-sub">Review your items before checkout</div>
+        <div class="cart-container">
+          <div id="cart-items-list"></div>
+          <div id="cart-summary-block"></div>
+        </div>
+      </div>
+
+      <!-- ORDERS PAGE -->
+      <div class="page" id="page-orders">
+        <div class="section-title">Order History</div>
+        <div class="section-sub">Track and manage your past orders</div>
+        <div id="orders-list"></div>
+      </div>
+
+      <!-- PROFILE PAGE -->
+      <div class="page" id="page-profile">
+        <div id="profile-content"></div>
+      </div>
+
+      <!-- ADMIN PAGE -->
+      <div class="page" id="page-admin">
+        <div class="section-title">Admin Dashboard</div>
+        <div class="section-sub">Manage inventory, orders and sales</div>
+        <div class="admin-tabs">
+          <button class="admin-tab active" onclick="adminTab('overview')">Overview</button>
+          <button class="admin-tab" onclick="adminTab('inventory')">Inventory</button>
+          <button class="admin-tab" onclick="adminTab('orders')">Orders</button>
+          <button class="admin-tab" onclick="adminTab('customers')">Customers</button>
+        </div>
+        <div class="admin-panel active" id="apanel-overview">
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-label">Total Sales (₦)</div><div class="stat-value">284,500</div><div class="stat-change up">↑ 12% this month</div></div>
+            <div class="stat-card"><div class="stat-label">Orders Today</div><div class="stat-value">38</div><div class="stat-change up">↑ 5 from yesterday</div></div>
+            <div class="stat-card"><div class="stat-label">Active Customers</div><div class="stat-value">612</div><div class="stat-change up">↑ 8 new today</div></div>
+            <div class="stat-card"><div class="stat-label">Low Stock Items</div><div class="stat-value" style="color:var(--red)">7</div><div class="stat-change down">Needs restock</div></div>
+          </div>
+          <div class="table-card">
+            <div class="table-card-header"><div class="table-card-title">Top Selling Products</div></div>
+            <table class="admin-table">
+              <thead><tr><th>Product</th><th>Sales</th><th>Revenue</th><th>Progress</th></tr></thead>
+              <tbody>
+                <tr><td>Amoxicillin 500mg</td><td>148 units</td><td>₦44,400</td><td><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></td></tr>
+                <tr><td>Paracetamol 500mg</td><td>210 units</td><td>₦21,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:95%"></div></div></td></tr>
+                <tr><td>Vitamin C 1000mg</td><td>93 units</td><td>₦27,900</td><td><div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div></td></tr>
+                <tr><td>Metformin 500mg</td><td>77 units</td><td>₦23,100</td><td><div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div></td></tr>
+                <tr><td>Omeprazole 20mg</td><td>65 units</td><td>₦19,500</td><td><div class="progress-bar"><div class="progress-fill" style="width:38%"></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-card">
+            <div class="table-card-header"><div class="table-card-title">Recent Orders</div></div>
+            <table class="admin-table">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td>#FP-1042</td><td>Adewale Musa</td><td>₦5,400</td><td><span class="status-badge status-processing">Processing</span></td><td><button class="action-link" onclick="alert('Order #FP-1042 marked as delivered!')">Mark Delivered</button></td></tr>
+                <tr><td>#FP-1041</td><td>Ngozi Okafor</td><td>₦2,800</td><td><span class="status-badge status-delivered">Delivered</span></td><td><button class="action-link">View</button></td></tr>
+                <tr><td>#FP-1040</td><td>Tunde Abiola</td><td>₦7,200</td><td><span class="status-badge status-pending">Pending</span></td><td><button class="action-link" onclick="alert('Order confirmed!')">Confirm</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="admin-panel" id="apanel-inventory">
+          <div class="table-card">
+            <div class="table-card-header">
+              <div class="table-card-title">Product Inventory</div>
+              <button class="add-product-btn" onclick="adminAddProduct()">+ Add Product</button>
+            </div>
+            <table class="admin-table" id="inventory-table">
+              <thead><tr><th>Product</th><th>Category</th><th>Price (₦)</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="inventory-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="admin-panel" id="apanel-orders">
+          <div class="table-card">
+            <div class="table-card-header"><div class="table-card-title">All Orders</div></div>
+            <table class="admin-table">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>#FP-1042</td><td>Adewale Musa</td><td>3 items</td><td>₦5,400</td><td>29 Mar 2026</td><td><span class="status-badge status-processing">Processing</span></td></tr>
+                <tr><td>#FP-1041</td><td>Ngozi Okafor</td><td>1 item</td><td>₦2,800</td><td>28 Mar 2026</td><td><span class="status-badge status-delivered">Delivered</span></td></tr>
+                <tr><td>#FP-1040</td><td>Tunde Abiola</td><td>5 items</td><td>₦7,200</td><td>28 Mar 2026</td><td><span class="status-badge status-pending">Pending</span></td></tr>
+                <tr><td>#FP-1039</td><td>Fatima Bello</td><td>2 items</td><td>₦3,100</td><td>27 Mar 2026</td><td><span class="status-badge status-delivered">Delivered</span></td></tr>
+                <tr><td>#FP-1038</td><td>Chukwuemeka Eze</td><td>4 items</td><td>₦9,600</td><td>27 Mar 2026</td><td><span class="status-badge status-delivered">Delivered</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="admin-panel" id="apanel-customers">
+          <div class="table-card">
+            <div class="table-card-header"><div class="table-card-title">Registered Customers</div></div>
+            <table class="admin-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Orders</th><th>Total Spent</th><th>Joined</th></tr></thead>
+              <tbody>
+                <tr><td>Adewale Musa</td><td>adewale@email.com</td><td>12</td><td>₦48,200</td><td>Jan 2026</td></tr>
+                <tr><td>Ngozi Okafor</td><td>ngozi@email.com</td><td>8</td><td>₦22,400</td><td>Feb 2026</td></tr>
+                <tr><td>Tunde Abiola</td><td>tunde@email.com</td><td>5</td><td>₦31,100</td><td>Jan 2026</td></tr>
+                <tr><td>Fatima Bello</td><td>fatima@email.com</td><td>20</td><td>₦74,500</td><td>Dec 2025</td></tr>
+                <tr><td>Chukwuemeka Eze</td><td>c.eze@email.com</td><td>3</td><td>₦14,800</td><td>Mar 2026</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT OVERLAY -->
+<div class="overlay" id="checkout-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCheckout()">✕</button>
+    <div class="modal-title" id="modal-title">Checkout</div>
+    <div class="step-indicator">
+      <div class="step-dot" id="sdot-1"></div>
+      <div class="step-dot" id="sdot-2"></div>
+      <div class="step-dot" id="sdot-3"></div>
+    </div>
+    <div id="checkout-body"></div>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="prod-modal-overlay" id="prod-modal-overlay" onclick="if(event.target===this)closeProdModal()">
+  <div class="prod-modal">
+    <button class="modal-close" onclick="closeProdModal()">✕</button>
+    <div id="prod-modal-body"></div>
+  </div>
+</div>
+
+<!-- PILL REMINDER MODAL -->
+<div class="reminder-overlay" id="reminder-overlay">
+  <div class="reminder-modal">
+    <button class="modal-close" onclick="closeReminderModal()">✕</button>
+    <div class="modal-title">💊 Pill Reminders</div>
+    <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;">Set daily reminder times to never miss a dose.</p>
+    <div style="display:flex;gap:8px;margin-bottom:8px;">
+      <input type="time" id="reminder-time-input" class="form-input" style="flex:1;" />
+      <input type="text" id="reminder-med-input" class="form-input" style="flex:2;" placeholder="Medication name (optional)" />
+    </div>
+    <button class="form-btn" style="margin-top:0;" onclick="addReminder()">+ Add Reminder</button>
+    <div class="reminder-list" id="reminder-list"></div>
+  </div>
+</div>
+
+<!-- RX WARNING MODAL -->
+<div class="rx-overlay" id="rx-overlay">
+  <div class="rx-warn-modal">
+    <div class="rx-warn-icon">⚠️</div>
+    <div class="rx-warn-title">Prescription Required</div>
+    <div class="rx-warn-text" id="rx-warn-text">This medication requires a valid prescription from a licensed doctor.</div>
+    <div class="rx-btn-row">
+      <button class="rx-cancel" onclick="closeRxWarning()">Cancel</button>
+      <button class="rx-proceed" onclick="proceedAddToCart()">I Have a Prescription</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+  <div class="mob-nav-item">
+    <button class="mob-nav-btn active" id="mobnav-catalog" onclick="showPage('catalog');setMobNav('catalog')">
+      <span class="mob-icon">💊</span>Shop
+    </button>
+  </div>
+  <div class="mob-nav-item">
+    <button class="mob-nav-btn" id="mobnav-orders" onclick="showPage('orders');setMobNav('orders')">
+      <span class="mob-icon">📦</span>Orders
+    </button>
+  </div>
+  <div class="mob-nav-item">
+    <button class="mob-nav-btn" id="mobnav-cart" onclick="showPage('cart');setMobNav('cart')" style="position:relative;">
+      <span class="mob-icon">🛒</span>Cart
+      <span class="mob-badge" id="mob-cart-badge">0</span>
+    </button>
+  </div>
+  <div class="mob-nav-item">
+    <button class="mob-nav-btn" id="mobnav-profile" onclick="showPage('profile');setMobNav('profile')">
+      <span class="mob-icon">👤</span>Account
+    </button>
+  </div>
+  <div class="mob-nav-item">
+    <button class="mob-nav-btn" id="mobnav-admin" onclick="showPage('admin');setMobNav('admin')">
+      <span class="mob-icon">⚙️</span>Admin
+    </button>
+  </div>
+</nav>
+
+<script>
+const PRODUCTS = [
+  {id:1,  name:'Amoxicillin 500mg',      cat:'Antibiotics', price:300, stock:48,  icon:'💊', color:'#e6f1fb', rx:true,  desc:'Broad-spectrum antibiotic for bacterial infections.',        dosage:'250–500mg every 8 hours',          duration:'7–14 days',              sideEffects:'Nausea, diarrhea, skin rash'},
+  {id:2,  name:'Paracetamol 500mg',      cat:'Analgesics',  price:100, stock:200, icon:'🔵', color:'#e1f5ee', rx:false, desc:'Effective for pain relief and fever reduction.',              dosage:'500–1000mg every 4–6 hours',       duration:'As needed, max 3 days',   sideEffects:'Rare at normal doses'},
+  {id:3,  name:'Vitamin C 1000mg',       cat:'Vitamins',    price:300, stock:85,  icon:'🍋', color:'#faeeda', rx:false, desc:'Boosts immunity and skin health.',                            dosage:'1000mg once daily',                duration:'Ongoing',                 sideEffects:'Stomach upset at high doses'},
+  {id:4,  name:'Metformin 500mg',        cat:'Chronic',     price:300, stock:62,  icon:'❤️', color:'#fcebeb', rx:true,  desc:'First-line medication for type 2 diabetes.',                 dosage:'500mg twice daily with meals',     duration:'Ongoing — as prescribed', sideEffects:'Nausea, diarrhea, metallic taste'},
+  {id:5,  name:'Omeprazole 20mg',        cat:'Analgesics',  price:300, stock:44,  icon:'🟢', color:'#e1f5ee', rx:true,  desc:'Reduces stomach acid production.',                           dosage:'20–40mg once daily before meals',  duration:'2–8 weeks',               sideEffects:'Headache, diarrhea, abdominal pain'},
+  {id:6,  name:'Vitamin D3 5000IU',      cat:'Vitamins',    price:450, stock:70,  icon:'☀️', color:'#faeeda', rx:false, desc:'Essential for bone health and immunity.',                    dosage:'5000IU once daily with food',      duration:'Ongoing',                 sideEffects:'Rare at recommended doses'},
+  {id:7,  name:'Ciprofloxacin 500mg',    cat:'Antibiotics', price:350, stock:5,   icon:'🔬', color:'#e6f1fb', rx:true,  desc:'Fluoroquinolone antibiotic for serious infections.',         dosage:'500mg twice daily',                duration:'7–14 days',               sideEffects:'Nausea, dizziness, tendon issues'},
+  {id:8,  name:'Ibuprofen 400mg',        cat:'Analgesics',  price:150, stock:110, icon:'🟠', color:'#faeeda', rx:false, desc:'Anti-inflammatory pain relief.',                             dosage:'400mg every 6–8 hours with food',  duration:'As needed, max 5 days',   sideEffects:'Stomach upset, avoid on empty stomach'},
+  {id:9,  name:'Clotrimazole Cream',     cat:'Skincare',    price:600, stock:30,  icon:'✨', color:'#fbeaf0', rx:false, desc:'Antifungal cream for skin infections.',                      dosage:'Apply thin layer 2–3× daily',      duration:'2–4 weeks',               sideEffects:'Local irritation, redness'},
+  {id:10, name:'Amlodipine 5mg',         cat:'Chronic',     price:280, stock:55,  icon:'💗', color:'#fcebeb', rx:true,  desc:'Calcium channel blocker for hypertension.',                 dosage:'5–10mg once daily',                duration:'Ongoing — as prescribed', sideEffects:'Ankle swelling, flushing, headache'},
+  {id:11, name:'Zinc Sulphate 200mg',    cat:'Vitamins',    price:200, stock:90,  icon:'🌿', color:'#e1f5ee', rx:false, desc:'Supports immune function and healing.',                      dosage:'200mg once daily',                 duration:'Ongoing',                 sideEffects:'Nausea if taken on empty stomach'},
+  {id:12, name:'Gauze Bandage Roll',     cat:'First Aid',   price:250, stock:0,   icon:'🩹', color:'#f1efe8', rx:false, desc:'Sterile bandage roll for wound care.',                       dosage:'Apply as needed for wound dressing',duration:'Replace every 24–48 hrs', sideEffects:'None'},
+  {id:13, name:'Dettol Antiseptic 100ml',cat:'First Aid',   price:400, stock:45,  icon:'🧴', color:'#e1f5ee', rx:false, desc:'Kills 99.9% of bacteria on contact.',                       dosage:'Dilute 1:20 in water for wounds',  duration:'As needed',               sideEffects:'Skin irritation if undiluted'},
+  {id:14, name:'Hydrocortisone 1% Cream',cat:'Skincare',    price:550, stock:22,  icon:'🧪', color:'#fbeaf0', rx:false, desc:'Mild corticosteroid for skin inflammation.',                 dosage:'Apply thin layer once or twice daily',duration:'Up to 7 days',          sideEffects:'Skin thinning with prolonged use'},
+];
+
+let cart = [];
+let orders = [
+  {id:'#FP-1035', date:'20 Mar 2026', items:['Paracetamol 500mg x2','Vitamin C x1'], total:500, status:'delivered'},
+  {id:'#FP-1028', date:'12 Mar 2026', items:['Amoxicillin 500mg x1','Ibuprofen x2'], total:600, status:'delivered'},
+  {id:'#FP-1020', date:'5 Mar 2026',  items:['Vitamin D3 x1','Zinc x1'],             total:650, status:'processing'},
+];
+let loggedIn = false;
+let currentUser = null;
+let checkoutStep = 0;
+let activeCategory = 'All';
+let currentSort = 'default';
+let pendingRxId = null;
+let reminders = [];
+let notifications = [
+  {id:1, icon:'⚠️', text:'<b>Ciprofloxacin 500mg</b> is running low — only 5 units left.',    time:'2 hrs ago',  unread:true},
+  {id:2, icon:'⚠️', text:'<b>Gauze Bandage Roll</b> is out of stock. Restock required.',       time:'5 hrs ago',  unread:true},
+  {id:3, icon:'📦', text:'Order <b>#FP-1020</b> is now being processed.',                       time:'1 day ago',  unread:true},
+  {id:4, icon:'✅', text:'Order <b>#FP-1028</b> was delivered successfully.',                   time:'2 days ago', unread:false},
+];
+
+// ── Pages ──────────────────────────────────────────────────────────
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-pill').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  const map = {catalog:0, cart:1, orders:2, profile:3, admin:4};
+  if(map[p] !== undefined) document.querySelectorAll('.nav-pill')[map[p]].classList.add('active');
+  if(p === 'cart')    renderCart();
+  if(p === 'orders')  renderOrders();
+  if(p === 'profile') renderProfile();
+  if(p === 'admin')   renderInventoryTable();
+  closeSidebar();
+}
+
+// ── Products ────────────────────────────────────────────────────────
+function getDisplayProducts() {
+  let list = activeCategory === 'All' ? [...PRODUCTS] : PRODUCTS.filter(p => p.cat === activeCategory);
+  if(currentSort === 'price-asc')  list.sort((a,b) => a.price - b.price);
+  if(currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);
+  if(currentSort === 'stock')      list.sort((a,b) => b.stock - a.stock);
+  if(currentSort === 'name')       list.sort((a,b) => a.name.localeCompare(b.name));
+  return list;
+}
+
+function renderProducts(list) {
+  const grid = document.getElementById('products-grid');
+  if(!list.length) { grid.innerHTML = '<div style="color:var(--color-text-secondary);font-size:14px;padding:20px 0;">No products found.</div>'; return; }
+  grid.innerHTML = list.map(p => `
+    <div class="product-card" onclick="showProductDetail(${p.id})">
+      <div class="product-icon" style="background:${p.color}">${p.icon}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-category">${p.cat} ${p.rx ? '<span style="color:var(--amber);font-size:10px;font-weight:500;">Rx</span>' : ''}</div>
+      <div class="product-price">₦${p.price}</div>
+      <div class="product-stock ${p.stock===0?'out-stock':p.stock<10?'low-stock':'in-stock'}">${p.stock===0?'Out of stock':p.stock<10?'Low stock: '+p.stock+' left':'In stock'}</div>
+      <button class="add-btn" ${p.stock===0?'disabled':''} onclick="event.stopPropagation();handleAddToCart(${p.id})">${p.stock===0?'Unavailable':'Add to Cart'}</button>
+    </div>`).join('');
+}
+
+function filterCat(cat) {
+  activeCategory = cat;
+  document.querySelectorAll('.filter-chip, .sidebar-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.filter-chip').forEach(el => { if(el.textContent.trim()===cat||(cat==='All'&&el.textContent.trim()==='All')) el.classList.add('active'); });
+  document.querySelectorAll('.sidebar-item').forEach(el => { if(el.textContent.includes(cat==='All'?'All Medications':cat)) el.classList.add('active'); });
+  renderProducts(getDisplayProducts());
+  showPage('catalog');
+}
+
+function sortProducts(val) {
+  currentSort = val;
+  renderProducts(getDisplayProducts());
+}
+
+// ── Product Detail Modal ────────────────────────────────────────────
+function showProductDetail(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if(!p) return;
+  const stockClass = p.stock===0?'out-stock':p.stock<10?'low-stock':'in-stock';
+  const stockText  = p.stock===0?'Out of stock':p.stock<10?'Low — '+p.stock+' left':p.stock+' units';
+  document.getElementById('prod-modal-body').innerHTML = `
+    <div class="prod-modal-icon" style="background:${p.color}">${p.icon}</div>
+    <div class="prod-modal-name">${p.name}</div>
+    <div class="prod-modal-meta">
+      <span class="prod-modal-tag">${p.cat}</span>
+      ${p.rx
+        ? '<span class="prod-modal-tag" style="background:var(--amber-light);color:var(--amber);">Prescription (Rx)</span>'
+        : '<span class="prod-modal-tag" style="background:var(--green-light);color:var(--green);">Over-the-Counter</span>'}
+    </div>
+    <div class="prod-modal-price">₦${p.price}</div>
+    <div class="prod-modal-desc">${p.desc}</div>
+    <div class="prod-modal-info">
+      <div class="prod-modal-info-row"><span class="prod-modal-info-label">Dosage</span><span>${p.dosage}</span></div>
+      <div class="prod-modal-info-row"><span class="prod-modal-info-label">Duration</span><span>${p.duration}</span></div>
+      <div class="prod-modal-info-row"><span class="prod-modal-info-label">Side Effects</span><span>${p.sideEffects}</span></div>
+      <div class="prod-modal-info-row"><span class="prod-modal-info-label">Availability</span><span class="${stockClass}">${stockText}</span></div>
+    </div>
+    <button class="add-btn" style="padding:10px;font-size:13px;" ${p.stock===0?'disabled':''}
+      onclick="handleAddToCart(${p.id});closeProdModal()">
+      ${p.stock===0?'Out of Stock':'Add to Cart'}
+    </button>`;
+  document.getElementById('prod-modal-overlay').classList.add('open');
+}
+
+function closeProdModal() {
+  document.getElementById('prod-modal-overlay').classList.remove('open');
+}
+
+// ── Cart ────────────────────────────────────────────────────────────
+function handleAddToCart(id) {
+  const prod = PRODUCTS.find(p => p.id === id);
+  if(prod.rx) {
+    pendingRxId = id;
+    document.getElementById('rx-warn-text').textContent =
+      prod.name + ' requires a valid prescription from a licensed doctor. Please ensure you have a prescription before purchasing.';
+    document.getElementById('rx-overlay').classList.add('open');
+  } else {
+    addToCart(id);
+  }
+}
+
+function addToCart(id) {
+  const prod = PRODUCTS.find(p => p.id === id);
+  const existing = cart.find(c => c.id === id);
+  if(existing) existing.qty++;
+  else cart.push({...prod, qty:1});
+  updateCartBadge();
+  showToast(prod.name + ' added to cart');
+}
+
+function closeRxWarning() {
+  pendingRxId = null;
+  document.getElementById('rx-overlay').classList.remove('open');
+}
+
+function proceedAddToCart() {
+  if(pendingRxId) addToCart(pendingRxId);
+  closeRxWarning();
+}
+
+function updateCartBadge() {
+  const total = cart.reduce((s,i) => s+i.qty, 0);
+  document.getElementById('cart-count').textContent = total;
+  const mob = document.getElementById('mob-cart-badge');
+  if(mob) { mob.textContent = total; mob.style.display = total > 0 ? 'flex' : 'none'; }
+}
+
+function renderCart() {
+  const list    = document.getElementById('cart-items-list');
+  const summary = document.getElementById('cart-summary-block');
+  if(!cart.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🛒</div><div class="empty-title">Your cart is empty</div><p style="font-size:13px;color:var(--color-text-secondary)">Browse our catalog and add medications to your cart.</p><button style="margin-top:16px;padding:8px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;" onclick="showPage('catalog')">Browse Catalog</button></div>`;
+    summary.innerHTML = '';
+    return;
+  }
+  list.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-icon">${item.icon}</div>
+      <div class="cart-info">
+        <div class="cart-name">${item.name}${item.rx?' <span style="font-size:10px;color:var(--amber);font-weight:500;">Rx</span>':''}</div>
+        <div class="cart-price">₦${item.price} each</div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+      </div>
+      <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+    </div>`).join('');
+  const subtotal = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const delivery = 500;
+  const total = subtotal + delivery;
+  summary.innerHTML = `
+    <div class="cart-summary">
+      <div class="summary-row"><span>Subtotal</span><span>₦${subtotal.toLocaleString()}</span></div>
+      <div class="summary-row"><span>Delivery fee</span><span>₦${delivery}</span></div>
+      <div class="summary-row total"><span>Total</span><span>₦${total.toLocaleString()}</span></div>
+      <button class="checkout-btn" onclick="startCheckout(${total})">Proceed to Checkout</button>
+    </div>`;
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if(!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  updateCartBadge();
+  renderCart();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(c => c.id !== id);
+  updateCartBadge();
+  renderCart();
+}
+
+// ── Orders with tracking steps ──────────────────────────────────────
+const TRACK_STEPS = ['Order Placed','Processing','Out for Delivery','Delivered'];
+const TRACK_IDX   = {pending:0, processing:1, 'out-for-delivery':2, delivered:3};
+
+function renderOrders() {
+  const list = document.getElementById('orders-list');
+  if(!orders.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">No orders yet</div></div>'; return; }
+  list.innerHTML = orders.map(o => {
+    const stepIdx = TRACK_IDX[o.status] ?? 0;
+    const tracker = TRACK_STEPS.map((step, i) => {
+      const done    = i < stepIdx;
+      const current = i === stepIdx;
+      const dotCls  = done ? 'done' : current ? 'current' : '';
+      const lblCls  = (done || current) ? 'active' : '';
+      const lineCls = done ? 'line-done' : '';
+      return `<div class="tracker-step ${i < TRACK_STEPS.length-1 ? lineCls : ''}">
+        <div class="tracker-dot ${dotCls}"></div>
+        <div class="tracker-label ${lblCls}">${step}</div>
+      </div>`;
+    }).join('');
+    return `
+    <div class="order-card">
+      <div class="order-header">
+        <div><div class="order-id">${o.id}</div><div class="order-date">${o.date}</div></div>
+        <span class="status-badge status-${o.status}">${o.status.charAt(0).toUpperCase()+o.status.slice(1)}</span>
+      </div>
+      <div class="order-tracker">${tracker}</div>
+      <div class="order-items" style="margin-top:8px;">${o.items.join(' · ')}</div>
+      <div class="order-total">₦${o.total.toLocaleString()} <button class="reorder-btn" onclick="reorder('${o.id}')">Reorder</button></div>
+    </div>`;
+  }).join('');
+}
+
+function reorder(id) {
+  showToast('Items added to cart for reorder!');
+  showPage('cart');
+}
+
+// ── Profile ─────────────────────────────────────────────────────────
+function renderProfile() {
+  const content = document.getElementById('profile-content');
+  if(!loggedIn) {
+    content.innerHTML = `
+      <div class="auth-card">
+        <h2>Sign in to your account</h2>
+        <p>Access your order history and personalized recommendations.</p>
+        <div class="form-group"><label class="form-label">Email address</label><input class="form-input" type="email" placeholder="you@email.com" id="login-email" /></div>
+        <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Enter password" /></div>
+        <button class="form-btn" onclick="login()">Sign In</button>
+        <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--color-text-secondary);">
+          Don't have an account? <a href="#" onclick="signUp();return false;" style="color:var(--blue);text-decoration:none;">Create one</a>
+        </div>
+        <div style="margin-top:16px;border-top:0.5px solid var(--color-border-tertiary);padding-top:14px;">
+          <div class="rx-box" onclick="alert('Upload prescription: tap to select file')">📋 Upload Prescription (PNG, JPG or PDF)</div>
+        </div>
+      </div>`;
+  } else {
+    content.innerHTML = `
+      <div class="profile-header">
+        <div class="avatar">JD</div>
+        <div class="profile-info"><h3>John Doe</h3><p>john.doe@email.com · Member since Jan 2026</p></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-row"><span>Phone</span><span>+234 801 234 5678</span></div>
+        <div class="profile-row"><span>Delivery address</span><span>12 Unity Road, Ilorin</span></div>
+        <div class="profile-row"><span>Total orders</span><span>${orders.length}</span></div>
+        <div class="profile-row"><span>Loyalty points</span><span style="color:var(--amber);font-weight:500;">480 pts</span></div>
+      </div>
+      <div class="profile-section">
+        <div style="font-size:13px;font-weight:500;margin-bottom:10px;">Health Profile</div>
+        <div class="profile-row"><span>Allergies</span><span>Penicillin</span></div>
+        <div class="profile-row"><span>Chronic conditions</span><span>Hypertension</span></div>
+        <div class="profile-row"><span>Current medications</span><span>Amlodipine 5mg</span></div>
+      </div>
+      <button style="padding:8px 20px;border:0.5px solid var(--color-border-tertiary);background:none;border-radius:8px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);" onclick="loggedIn=false;renderProfile()">Sign Out</button>`;
+  }
+}
+
+function login() {
+  const email = document.getElementById('login-email').value || 'john.doe@email.com';
+  loggedIn = true; currentUser = email;
+  showToast('Welcome back!');
+  renderProfile();
+}
+
+function signUp() {
+  document.getElementById('profile-content').innerHTML = `
+    <div class="auth-card">
+      <h2>Create your account</h2>
+      <p>Join Fiolu Pharmacy for fast, trusted medication delivery.</p>
+      <div class="form-group"><label class="form-label">Full name</label><input class="form-input" type="text" placeholder="Your full name" /></div>
+      <div class="form-group"><label class="form-label">Email address</label><input class="form-input" type="email" placeholder="you@email.com" /></div>
+      <div class="form-group"><label class="form-label">Phone number</label><input class="form-input" type="tel" placeholder="+234 800 000 0000" /></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Create a password" /></div>
+      <button class="form-btn" onclick="loggedIn=true;showToast('Account created!');renderProfile()">Create Account</button>
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--color-text-secondary);">Already have an account? <a href="#" onclick="renderProfile();return false;" style="color:var(--blue);text-decoration:none;">Sign in</a></div>
+    </div>`;
+}
+
+// ── Admin ────────────────────────────────────────────────────────────
+function adminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.admin-panel').forEach(el => el.classList.remove('active'));
+  const tabs = ['overview','inventory','orders','customers'];
+  document.querySelectorAll('.admin-tab')[tabs.indexOf(tab)].classList.add('active');
+  document.getElementById('apanel-' + tab).classList.add('active');
+  if(tab === 'inventory') renderInventoryTable();
+}
+
+function renderInventoryTable() {
+  const tbody = document.getElementById('inventory-tbody');
+  if(!tbody) return;
+  tbody.innerHTML = PRODUCTS.map(p => `
+    <tr>
+      <td>${p.icon} ${p.name}</td>
+      <td>${p.cat}</td>
+      <td>₦${p.price}</td>
+      <td>${p.stock}</td>
+      <td><span class="status-badge ${p.stock===0?'status-pending':p.stock<10?'status-processing':'status-delivered'}">${p.stock===0?'Out of stock':p.stock<10?'Low stock':'In stock'}</span></td>
+      <td>
+        <button class="action-link" onclick="editProduct(${p.id})">Edit</button>
+        <button class="action-link action-del" onclick="alert('Delete: confirm in full version')">Delete</button>
+      </td>
+    </tr>`).join('');
+}
+
+function editProduct(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  const newPrice = prompt('Edit price for ' + p.name + ' (current: ₦' + p.price + '):', p.price);
+  if(newPrice && !isNaN(newPrice)) { p.price = parseInt(newPrice); renderInventoryTable(); showToast('Price updated!'); }
+}
+
+function adminAddProduct() {
+  const name = prompt('Product name:');
+  if(!name) return;
+  const price = parseInt(prompt('Price (₦):') || 0);
+  const stock = parseInt(prompt('Stock quantity:') || 0);
+  PRODUCTS.push({id:Date.now(), name, cat:'Other', price, stock, icon:'💊', color:'#e6f1fb', rx:false, desc:'',
+    dosage:'As directed', duration:'As directed', sideEffects:'Consult pharmacist'});
+  renderInventoryTable();
+  renderProducts(getDisplayProducts());
+  showToast('Product added!');
+}
+
+// ── WhatsApp config ───────────────────────────────────────────────
+const WHATSAPP_NUMBER = '2348060776418'; // Fiolu Pharmacy WhatsApp
+
+function sendOrderToWhatsApp(orderId, orderItems, total, deliveryName, deliveryAddress, deliveryPhone, paymentMethod) {
+  const itemLines = orderItems.map(c => `  • ${c.name} x${c.qty} — ₦${(c.price * c.qty).toLocaleString()}`).join('\n');
+  const msg =
+`🏥 *New Order — Fiolu Pharmacy*
+
+📋 *Order ID:* ${orderId}
+📅 *Date:* ${new Date().toLocaleDateString('en-NG', {day:'numeric',month:'long',year:'numeric'})}
+
+👤 *Customer:* ${deliveryName}
+📞 *Phone:* ${deliveryPhone}
+📍 *Address:* ${deliveryAddress}
+
+🛒 *Items Ordered:*
+${itemLines}
+
+💳 *Payment:* ${paymentMethod}
+💰 *Subtotal:* ₦${(total - 500).toLocaleString()}
+🚚 *Delivery Fee:* ₦500
+✅ *TOTAL: ₦${total.toLocaleString()}*
+
+Please confirm and process this order. Thank you!`;
+
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+// ── Checkout ─────────────────────────────────────────────────────────
+let checkoutTotal = 0;
+let checkoutDeliveryName = '';
+let checkoutDeliveryAddress = '';
+let checkoutDeliveryPhone = '';
+let checkoutPaymentMethod = '';
+function startCheckout(total) {
+  checkoutTotal = total; checkoutStep = 0;
+  document.getElementById('checkout-overlay').classList.add('open');
+  renderCheckoutStep();
+}
+function closeCheckout() { document.getElementById('checkout-overlay').classList.remove('open'); }
+
+function renderCheckoutStep() {
+  const body  = document.getElementById('checkout-body');
+  const title = document.getElementById('modal-title');
+  for(let i=1;i<=3;i++) document.getElementById('sdot-'+i).classList.remove('done');
+  if(checkoutStep === 0) {
+    title.textContent = 'Delivery details';
+    document.getElementById('sdot-1').classList.add('done');
+    body.innerHTML = `
+      <div class="form-group"><label class="form-label">Full name</label><input class="form-input" type="text" placeholder="Your name" value="John Doe" /></div>
+      <div class="form-group"><label class="form-label">Phone number</label><input class="form-input" type="tel" value="+234 801 234 5678" /></div>
+      <div class="form-group"><label class="form-label">Delivery address</label><input class="form-input" type="text" value="12 Unity Road, Ilorin" /></div>
+      <div class="form-group"><label class="form-label">Delivery time</label>
+        <select class="form-input"><option>Standard delivery (1-2 days)</option><option>Same day delivery</option><option>Pickup from store</option></select>
+      </div>
+      <button class="form-btn" onclick="
+        checkoutDeliveryName    = document.querySelector('#checkout-body input[type=text]').value;
+        checkoutDeliveryPhone   = document.querySelector('#checkout-body input[type=tel]').value;
+        checkoutDeliveryAddress = document.querySelectorAll('#checkout-body input[type=text]')[1].value;
+        checkoutStep=1; renderCheckoutStep()
+      ">Continue to Payment →</button>`;
+  } else if(checkoutStep === 1) {
+    title.textContent = 'Payment';
+    document.getElementById('sdot-1').classList.add('done');
+    document.getElementById('sdot-2').classList.add('done');
+    body.innerHTML = `
+      <div class="form-group"><label class="form-label">Payment method</label>
+        <select class="form-input"><option>Bank Transfer</option><option>Card Payment</option><option>Pay on Delivery</option><option>USSD</option></select>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:12px;margin-bottom:14px;font-size:13px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Order total</span><span style="font-weight:500;">₦${checkoutTotal.toLocaleString()}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary)"><span>Items in cart</span><span>${cart.length} item(s)</span></div>
+      </div>
+      <button class="form-btn" onclick="
+        checkoutPaymentMethod = document.querySelector('#checkout-body select').value;
+        placeOrder()
+      ">Place Order — ₦${checkoutTotal.toLocaleString()}</button>
+      <button onclick="checkoutStep=0;renderCheckoutStep()" style="width:100%;padding:8px;margin-top:8px;background:none;border:none;font-size:13px;cursor:pointer;color:var(--color-text-secondary);">← Back</button>`;
+  } else {
+    title.textContent = 'Order confirmed!';
+    [1,2,3].forEach(i => document.getElementById('sdot-'+i).classList.add('done'));
+    const orderId = '#FP-' + (1043 + Math.floor(Math.random()*10));
+    const orderSnapshot = [...cart];
+    orders.unshift({id:orderId, date:'29 Mar 2026', items:cart.map(c=>c.name+' x'+c.qty), total:checkoutTotal, status:'processing'});
+    cart = []; updateCartBadge();
+    notifications.unshift({id:Date.now(), icon:'📦', text:`Order <b>${orderId}</b> is being prepared.`, time:'Just now', unread:true});
+    updateNotifCount();
+    // Auto-send to WhatsApp
+    sendOrderToWhatsApp(orderId, orderSnapshot, checkoutTotal,
+      checkoutDeliveryName || 'Customer',
+      checkoutDeliveryAddress || 'Not provided',
+      checkoutDeliveryPhone || 'Not provided',
+      checkoutPaymentMethod || 'Not specified'
+    );
+    body.innerHTML = `
+      <div class="success-screen">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Order placed successfully!</div>
+        <div class="success-sub">Order ${orderId} is being prepared.<br>Your order has been sent to us on WhatsApp.</div>
+        <button style="margin-top:20px;padding:12px 24px;background:#25D366;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;margin:20px auto 0;" onclick="sendOrderToWhatsApp('${orderId}', [], ${checkoutTotal}, '${checkoutDeliveryName}','${checkoutDeliveryAddress}','${checkoutDeliveryPhone}','${checkoutPaymentMethod}')">
+          📲 Resend to WhatsApp
+        </button>
+        <button style="margin-top:10px;padding:10px 24px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;width:100%;" onclick="closeCheckout();showPage('orders')">Track My Order</button>
+      </div>`;
+  }
+}
+function placeOrder() { checkoutStep = 2; renderCheckoutStep(); }
+
+// ── Notifications ─────────────────────────────────────────────────
+function toggleNotifications() {
+  const dd = document.getElementById('notif-dropdown');
+  dd.classList.toggle('open');
+  if(dd.classList.contains('open')) renderNotifications();
+}
+
+function renderNotifications() {
+  const list = document.getElementById('notif-list');
+  if(!notifications.length) { list.innerHTML = '<div style="padding:20px;text-align:center;font-size:13px;color:var(--color-text-secondary);">No notifications</div>'; return; }
+  list.innerHTML = notifications.map(n => `
+    <div class="notif-item ${n.unread?'unread':''}">
+      <div class="notif-item-icon">${n.icon}</div>
+      <div>
+        <div style="font-size:12px;">${n.text}</div>
+        <div class="notif-item-time">${n.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+function markAllRead() {
+  notifications.forEach(n => n.unread = false);
+  updateNotifCount();
+  renderNotifications();
+}
+
+function updateNotifCount() {
+  const count = notifications.filter(n => n.unread).length;
+  const el = document.getElementById('notif-count');
+  el.textContent = count;
+  el.style.display = count > 0 ? 'flex' : 'none';
+}
+
+document.addEventListener('click', function(e) {
+  const wrap = document.querySelector('.notif-wrap');
+  if(wrap && !wrap.contains(e.target)) document.getElementById('notif-dropdown').classList.remove('open');
+});
+
+// ── Mobile Sidebar ────────────────────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('mobile-open');
+  document.getElementById('sidebar-mobile-overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('sidebar-mobile-overlay').classList.remove('open');
+}
+
+// ── Pill Reminder Modal ───────────────────────────────────────────
+function openPillReminder() {
+  renderReminderList();
+  document.getElementById('reminder-overlay').classList.add('open');
+  if('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+}
+function closeReminderModal() { document.getElementById('reminder-overlay').classList.remove('open'); }
+
+function addReminder() {
+  const time = document.getElementById('reminder-time-input').value;
+  const med  = document.getElementById('reminder-med-input').value.trim() || 'your medication';
+  if(!time) { showToast('Please select a time'); return; }
+  reminders.push({id:Date.now(), time, med});
+  document.getElementById('reminder-time-input').value = '';
+  document.getElementById('reminder-med-input').value  = '';
+  renderReminderList();
+  showToast('Reminder set for ' + formatTime(time));
+  scheduleBrowserNotification(time, med);
+}
+
+function formatTime(t) {
+  const [h, m] = t.split(':').map(Number);
+  return ((h%12)||12) + ':' + String(m).padStart(2,'0') + (h>=12?' PM':' AM');
+}
+
+function scheduleBrowserNotification(time, med) {
+  if(!('Notification' in window) || Notification.permission !== 'granted') return;
+  const [h, m] = time.split(':').map(Number);
+  const target = new Date(); target.setHours(h, m, 0, 0);
+  if(target <= new Date()) target.setDate(target.getDate() + 1);
+  setTimeout(() => new Notification('💊 Pill Reminder — Fiolu Pharmacy', {body:'Time to take ' + med}), target - new Date());
+}
+
+function deleteReminder(id) {
+  reminders = reminders.filter(r => r.id !== id);
+  renderReminderList();
+}
+
+function renderReminderList() {
+  const list = document.getElementById('reminder-list');
+  if(!reminders.length) { list.innerHTML = '<div style="padding:16px 0;text-align:center;font-size:13px;color:var(--color-text-secondary);">No reminders set yet.</div>'; return; }
+  list.innerHTML = reminders.map(r => `
+    <div class="reminder-item">
+      <span>⏰ <b>${formatTime(r.time)}</b> — ${r.med}</span>
+      <button class="del-reminder-btn" onclick="deleteReminder(${r.id})">Remove</button>
+    </div>`).join('');
+}
+
+// ── Toast & Search ────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+document.getElementById('search-input').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  if(!q) { renderProducts(getDisplayProducts()); return; }
+  renderProducts(PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)));
+  showPage('catalog');
+});
+
+// ── Mobile bottom nav ────────────────────────────────────────────
+function setMobNav(page) {
+  document.querySelectorAll('.mob-nav-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('mobnav-' + page);
+  if(btn) btn.classList.add('active');
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+updateNotifCount();
+renderProducts(PRODUCTS);
+renderProfile();
+</script>
+</body>
+</html>

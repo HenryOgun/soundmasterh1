@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import HomeAchievements from './HomeAchievements';
 
 export default function HomePage() {
@@ -31,18 +32,24 @@ export default function HomePage() {
             Hello, I'm Henry.
           </h1>
           <p className="text-lg font-normal text-white leading-relaxed max-w-2xl mx-auto mb-3">
-            I build broadcast systems that connect communities and software that powers the future.
-            Based in Ilorin, Nigeria, I work at the intersection of sound, technology and innovation.
+            I build the systems that put communities on air and the software that keeps them connected.
           </p>
           <p className="text-[#f4b940] italic font-medium text-sm mb-7">
-            Keeping Africa's airwaves alive, one transmission at a time.
+            Engineering the signal. Building the future. Heard around the world.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            {['🎛️ Broadcast Engineering', '💻 Full Stack Dev', '🌍 Digital Africa', '🎚️ Audio Production'].map((tag) => (
-              <span key={tag} className="text-xs font-medium border border-white/30 text-white hover:border-[#f4b940] hover:text-[#f4b940] px-4 py-2 rounded transition-colors duration-300">
-                {tag}
-              </span>
-            ))}
+            <Link to="/projects/broadcast" className="text-xs font-medium border border-white/30 text-white hover:border-[#f4b940] hover:text-[#f4b940] px-4 py-2 rounded transition-colors duration-300">
+              🎛️ Broadcast Engineering
+            </Link>
+            <Link to="/projects/tech" className="text-xs font-medium border border-white/30 text-white hover:border-[#f4b940] hover:text-[#f4b940] px-4 py-2 rounded transition-colors duration-300">
+              💻 Information Technology
+            </Link>
+            <Link to="/projects/audio" className="text-xs font-medium border border-white/30 text-white hover:border-[#f4b940] hover:text-[#f4b940] px-4 py-2 rounded transition-colors duration-300">
+              🎚️ Audio Production
+            </Link>
+            <Link to="/projects/repair" className="text-xs font-medium border border-white/30 text-white hover:border-[#f4b940] hover:text-[#f4b940] px-4 py-2 rounded transition-colors duration-300">
+              🔧 Computer Repair & Maintenance
+            </Link>
           </div>
         </div>
       </section>

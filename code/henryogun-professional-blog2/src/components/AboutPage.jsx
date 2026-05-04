@@ -7,10 +7,10 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="bg-blue-900 text-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <p className="text-[#f4b940] text-xs font-bold uppercase tracking-[0.25em] mb-3">The Story</p>
+          <p className="text-[#f4b940] text-xs font-bold uppercase tracking-[0.25em] mb-3">Broadcast &amp; Technology Professional</p>
           <h1 className="text-4xl font-bold mb-4">About Henry Ogun</h1>
           <div className="w-20 h-1 bg-[#f4b940] mx-auto mb-6" />
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto">Group Chief Engineer · Full Stack Developer · Audio Producer</p>
+          <p className="text-gray-300 text-base max-w-2xl mx-auto">Broadcast Systems &amp; Technology Expert &nbsp;·&nbsp; Full Stack Developer &nbsp;·&nbsp; Media Technology Specialist</p>
         </div>
       </section>
 
@@ -19,7 +19,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <blockquote className="border-l-4 border-[#f4b940] pl-8">
             <p className="text-2xl text-gray-800 italic leading-relaxed font-light">
-              "I build things that communicate, whether that's a broadcast signal reaching millions, a documentary that wins international recognition, or software that solves real problems."
+              "I keep broadcast stations on air, IT systems running, software built and audio sounding exactly right. Four disciplines. One professional. Everything connected."
             </p>
           </blockquote>
         </div>
@@ -41,18 +41,18 @@ export default function AboutPage() {
           <div className="flex flex-col lg:flex-row gap-12 items-start">
             <div className="flex-1 space-y-5 text-gray-600 leading-relaxed">
               <p className="text-[#f4b940] text-xs font-bold uppercase tracking-[0.25em]">Who I Am</p>
-              <h2 className="text-2xl font-bold text-gray-900">Engineer. Storyteller. Builder.</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Broadcast Engineer. IT Professional. Developer. Audio Producer.</h2>
               <p>
-                I am Henry Olabode Ogun known professionally as <strong className="text-gray-900">SoundMasterH1</strong>, a broadcast engineering professional with over 15 years of experience shaping how radio and television reach audiences across Nigeria. Based in Ilorin, Kwara State, I currently serve as <strong className="text-gray-900">Group Chief Engineer at Diamond FM</strong>, overseeing broadcast operations at Diamond 88.7 FM in Ilorin and Diamond 88.5 FM in Ilesa.
+                I am Henry Olabode Ogun, known professionally as <strong className="text-gray-900">SoundMasterH1</strong>. With over 15 years of experience at the intersection of broadcast engineering, information technology and audio production, I bring a rare combination of disciplines to every project. I currently serve as <strong className="text-gray-900">Group Chief Engineer at Diamond FM</strong>, leading broadcast operations across Diamond 88.7 FM in Ilorin and Diamond 88.5 FM in Ilesa.
               </p>
               <p>
-                My career sits at a rare intersection: the rigour of broadcast systems engineering and the creativity of audio production, multimedia storytelling and full stack software development. I do not just maintain infrastructure. I build it from concept to live transmission, lead the teams behind it and increasingly write the code that powers the digital layer on top.
+                My career spans four distinct but deeply connected domains: broadcast systems engineering, computer repair and IT infrastructure, full stack software development and audio production. Few professionals operate across all four at this level. That breadth is not accidental. It reflects over a decade of deliberate investment in the technical skills that keep media organisations running and growing.
               </p>
               <p>
-                My broadcast career began in the early 2000s, evolving from IT infrastructure work including World Bank funded projects in Kwara State into professional sound engineering and broadcast production. At Royal FM 95.1 in Ilorin, I spent seven years building a career defined by technical excellence and creative ambition. This included managing digital music libraries, designing audio production workflows and producing documentaries that caught international attention.
+                My foundation was built in the early 2000s through <strong className="text-gray-900">World Bank-funded IT infrastructure projects in Kwara State</strong>, where I developed the systems thinking that has defined my career ever since. At Royal FM 95.1 I spent seven years as the engineer behind the station's sound and its technology. I managed broadcast infrastructure and computer systems simultaneously, produced content for <strong className="text-gray-900">BBC Media Action and Radio Netherlands Worldwide</strong> and built the audio identity that won the station national recognition at the Nigerian Broadcasters Merit Awards.
               </p>
               <p>
-                In 2018, a documentary series I produced on climate and migration in Nigeria was recognised with a <strong className="text-gray-900">2nd place award at the ICFJ International Journalism Awards</strong>. Since 2021, as Group Chief Engineer at Diamond FM, I have pioneered complete broadcast infrastructure setups from concept to live transmission and expanded multi-site engineering operations, growing the station's reach to over 4 million listeners.
+                In 2018 a documentary I produced on climate and migration took <strong className="text-gray-900">2nd place at the ICFJ International Journalism Awards</strong>. In 2021 I joined Diamond FM as a pioneer engineer, building two stations from the ground up across broadcast engineering, IT networking and hardware configuration. The stations now reach over 8 million listeners. In parallel I have completed a Full Stack Software Engineering certification and a Generative AI programme, because the future of broadcast is digital and I intend to build it.
               </p>
             </div>
             <div className="w-full lg:w-64 shrink-0">
@@ -75,7 +75,7 @@ export default function AboutPage() {
             {[
               { number: '15+', label: 'Years in Broadcast' },
               { number: '2', label: 'FM Stations Led' },
-              { number: '4M+', label: 'Listeners Reached' },
+              { number: '8M+', label: 'Listeners Reached' },
               { number: '3', label: 'Industry Awards' },
             ].map((stat) => (
               <div key={stat.label} className="py-10 px-6 text-center">
@@ -179,8 +179,8 @@ export default function AboutPage() {
             {[
               { emoji: '🎛️', title: 'Broadcast Engineer', body: '15+ years in radio engineering, RF transmission, and studio infrastructure across multiple stations.' },
               { emoji: '💻', title: 'Full Stack Developer', body: 'React, Node.js, PostgreSQL and cloud platforms. Building tools for media and community.' },
-              { emoji: '🎚️', title: 'Audio Production', body: 'Producing station IDs, jingles, promo spots and broadcast audio for radio and TV.' },
-              { emoji: '🎵', title: 'Music Production', body: 'Composing, arranging and mixing original music from concept to final master.' },
+              { emoji: '🎚️', title: 'Audio & Music Production', body: 'Producing station IDs, jingles, promo spots and broadcast audio for radio and TV, through to composing, arranging and mixing original music from concept to final master.' },
+              { emoji: '🔧', title: 'Computer Repair & Maintenance', body: 'Hardware diagnostics, system configuration, networking and IT support across broadcast stations and office environments.' },
             ].map((role) => (
               <div key={role.title} className="bg-white rounded-lg p-8 shadow-[0_20px_20px_rgba(0,0,0,0.05)] hover:-translate-y-1 hover:shadow-[0_25px_30px_rgba(0,0,0,0.1)] transition-all duration-300 text-center">
                 <div className="text-3xl mb-4">{role.emoji}</div>

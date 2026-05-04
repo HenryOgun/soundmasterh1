@@ -46,7 +46,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-white font-bold">© 2026 Henry Ogun. All rights reserved.</p>
-          <p className="text-xs text-white italic">Keeping Africa's airwaves alive, one transmission at a time.</p>
+          <p className="text-xs text-white italic">Engineering the signal. Building the future. Heard around the world.</p>
         </div>
       </div>
     </footer>

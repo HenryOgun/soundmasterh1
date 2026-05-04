@@ -17,11 +17,12 @@ export default function App() {
           <Route path="/" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/about" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/achievements" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
-          <Route path="/contact" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
+          <Route path="/recentexperience" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/articles" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/projects/audio" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/projects/broadcast" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/projects/tech" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
+          <Route path="/projects/repair" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="*" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
         </Routes>
         <Footer />

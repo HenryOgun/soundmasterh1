@@ -7,3 +7,14 @@ notes.*
 .vite/
 
 node_modules/
+
+# Large files exceeding GitHub 100MB limit
+henryogun-website.zip
+code/henryogun-blog-deploy.zip
+
+# OS files
+.DS_Store
+**/.DS_Store
+
+# Wix
+.wix/
