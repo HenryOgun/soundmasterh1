@@ -1,6 +1,9 @@
-# dependencies
-node_modules/
+.env
+
+notes/
+notes.*
+
 .vscode/
-.idea/
-.wix/
-jsconfig.json
+.vite/
+
+node_modules/

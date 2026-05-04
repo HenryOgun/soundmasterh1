@@ -1,45 +1,71 @@
-# Git Integration & Wix CLI <img align="left" src="https://user-images.githubusercontent.com/89579857/185785022-cab37bf5-26be-4f11-85f0-1fac63c07d3b.png">
+# 📚 Full Stack Software Engineering
 
-This repo is part of Git Integration & Wix CLI, a set of tools that allows you to write, test, and publish code for your Wix site locally on your computer. 
+This is the central repository for IBT Learning's Full Stack Software Engineering program. This cohort begins on April 27, 2024.
 
-Connect your site to GitHub, develop in your favorite IDE, test your code in real time, and publish your site from the command line.
+## Author
 
-## Set up this repository in your IDE
-This repo is connected to a Wix site. That site tracks this repo's default branch. Any code committed and pushed to that branch from your local IDE appears on the site.
+👨‍💻 **Author:** [Danny Burrow](https://github.com/burrowdown)
 
-Before getting started, make sure you have the following things installed:
-* [Git](https://git-scm.com/download)
-* [Node](https://nodejs.org/en/download/), version 14.8 or later.
-* [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) or [yarn](https://yarnpkg.com/getting-started/install)
-* An SSH key [added to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+## Support
 
-To set up your local environment and start coding locally, do the following:
+🛠️ **Support:** [Adesoji1](https://github.com/Adesoji1)
 
-1. Open your terminal and navigate to where you want to store the repo.
-1. Clone the repo by running `git clone <your-repository-url>`.
-1. Navigate to the repo's directory by running `cd <directory-name>`.
-1. Install the repo's dependencies by running `npm install` or `yarn install`.
-1. Install the Wix CLI by running `npm install -g @wix/cli` or `yarn global add @wix/cli`.  
-   Once you've installed the CLI globally, you can use it with any Wix site's repo.
+## Tools
 
-For more information, see [Setting up Git Integration & Wix CLI](https://support.wix.com/en/article/velo-setting-up-git-integration-wix-cli-beta).
+Git is a distributed version control system that tracks versions of files. It is often used to control source code by programmers collaboratively developing software.for more information, click [here](git-resources/gitcheatsheet.md)
 
-## Write Velo code in your IDE
-Once your repo is set up, you can write code in it as you would in any other non-Wix project. The repo's file structure matches the [public](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#public), [backend](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#backend), and [page code](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#page-code) sections in Editor X.
+![Git](git-resources/gitcommands.png)
 
-Learn more about [this repo's file structure](https://support.wix.com/en/article/velo-understanding-your-sites-github-repository-beta).
+## Useful links
 
-## Test your code with the Local Editor
-The Local Editor allows you test changes made to your site in real time. The code in your local IDE is synced with the Local Editor, so you can test your changes before committing them to your repo. You can also change the site design in the Local Editor and sync it with your IDE.
+🔗 [GitHub's git cheat sheet](https://education.github.com/git-cheat-sheet-education.pdf) (this one is more succinct)
 
-Start the Local Editor by navigating to this repo's directory in your terminal and running `wix dev`.
+🔗 [FreeCodeCamp's git cheat sheet](https://www.freecodecamp.org/news/git-cheat-sheet/) (this one goes into more detail)
 
-For more information, see [Working with the Local Editor](https://support.wix.com/en/article/velo-working-with-the-local-editor-beta).
+🔗 [Markdown cheat sheet](https://www.markdownguide.org/cheat-sheet/)
 
-## Preview and publish with the Wix CLI
-The Wix CLI is a tool that allows you to work with your site locally from your computer's terminal. You can use it to build a preview version of your site and publish it. You can also use the CLI to install [approved npm packages](https://support.wix.com/en/article/velo-working-with-npm-packages) to your site.
+🔗 [HTML Elements reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
 
-Learn more about [working with the Wix CLI](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta).
+🔗 [CSS Tricks Guide to Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
 
-## Invite contributors to work with you
-Git Integration & Wix CLI extends Editor X's [concurrent editing](https://support.wix.com/en/article/editor-x-about-concurrent-editing) capabilities. Invite other developers as collaborators on your [site](https://support.wix.com/en/article/inviting-people-to-contribute-to-your-site) and your [GitHub repo](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository). Multiple developers can work on a site's code at once.
+🔗 [CSS Tricks Guide to CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+
+🔗 [CSS Tricks Guide to Media Queries](https://css-tricks.com/a-complete-guide-to-css-media-queries/) (this goes much more in depth than was covered in the lesson)
+
+🔗 [CSS Selector Reference](https://www.w3schools.com/cssref/css_selectors.php)
+
+### Web APIs
+
+| Week | Topic                                 | Link                                                                  |
+| ---- | ------------------------------------- | --------------------------------------------------------------------- |
+| 14   | DOM, Query Selectors, Event Listeners | [Web API Assignment #1](./3-web-apis/assignments/web-assignment-1.md) |
+
+<!--
+| 16   | Fetching API Data                     | [Web API Assignment #2](./3-web-apis/assignments/web-assignment-2.md)   |
+| 16   | Web APIs Final Project                | [Web APIs Final Project](./3-web-apis/assignments/web-final-project.md) |
+ -->
+
+### JavaScript
+
+| Week | Topic               | Link                                                               |
+| ---- | ------------------- | ------------------------------------------------------------------ |
+| 8    | Strings and Numbers | [JS Assignment #1](./2-javascript/assignments/js-assignment-1.md)  |
+| 9    | Booleans            | [JS Assignment #2](./2-javascript/assignments/js-assignment-2.md)  |
+| 9    | Conditionals        | [JS Assignment #3](./2-javascript/assignments/js-assignment-3.md)  |
+| 10   | Loops               | [JS Assignment #4](./2-javascript/assignments/js-assignment-4.md)  |
+| 11   | Functions           | [JS Assignment #5](./2-javascript/assignments/js-assignment-5.md)  |
+| 12   | Objects             | [JS Assignment #6](./2-javascript/assignments/js-assignment-6.md)  |
+| 12   | Classes             | [JS Assignment #7](./2-javascript/assignments/js-assignment-7.md)  |
+| 13   | Callbacks           | [JS Assignment #8](./2-javascript/assignments/js-assignment-8.md)  |
+| 13   | JS Final Project    | [JS Final Project](./2-javascript/assignments/js-final-project.md) |
+
+### HTML & CSS
+
+| Week | Topic            | Link                                                                                                        |
+| ---- | ---------------- | ----------------------------------------------------------------------------------------------------------- |
+| 2    | 📝 Markdown      | [Markdown Assignment](0-getting-ready/markdown-assignment.md)                                               |
+| 3    | 🌐 HTML          | [HTML Assignment #1](1-html-css/basics/assignment-1.md)                                                     |
+| 4    | 🎨 CSS           | [CSS Assignment #1 (Flexbox)](1-html-css/flexbox/flexbox-assignment/css-assignment-1.md)                    |
+| 5    | 🎨 CSS           | [CSS Assignment #2 (Grid)](1-html-css/grid/grid-assignment/css-assignment-2.md)                             |
+| 6    | 🎨 CSS           | [CSS Assignment #3 (Responsive Design)](1-html-css/media-queries/responsive-assignment/css-assignment-3.md) |
+| 7    | 🌐 HTML & 🎨 CSS | [HTML & CSS Final Project](1-html-css/blog-project.md)                                                      |
