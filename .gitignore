@@ -18,3 +18,16 @@ code/henryogun-blog-deploy.zip
 
 # Wix
 .wix/
+# Large audio files - too large for GitHub (use cloud storage instead)
+code/Bibeli/Bíbélì kíkà(1)/
+code/Bibeli/www/audio/
+
+# Android build outputs (binaries)
+**/android/app/build/
+**/android/.gradle/
+**/android/build/
+**/android/local.properties
+
+# Python cache
+**/__pycache__/
+**/*.pyc

@@ -9,7 +9,7 @@ Some strategies you can try include:
 - check your code line-by-line for errors such as mismatched brackets, etc
 - if you have an error, try googling the error message
   - look for results on Stack Overflow (make sure the answer you're looking at is well-rated)
-- or, paste your error message into Claude. You might not always get a helpful explanation, but it's worth a shot! (Remember that Claude won't ask you questions, so make sure to include all relevant context that might help.)
+- or, paste your error message into an AI assistant. You might not always get a helpful explanation, but it's worth a shot! (Make sure to include all relevant context that might help.)
 
 When something in your code that previously worked stops working:
 

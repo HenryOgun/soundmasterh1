@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">VidAI</string>
+    <string name="title_activity_main">VidAI</string>
+    <string name="package_name">com.henryogun.vidai</string>
+    <string name="custom_url_scheme">com.henryogun.vidai</string>
+</resources>

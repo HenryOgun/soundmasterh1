@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Humanizer — Strip the AI, keep the soul</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #f0f2f8;
+  --surface: #ffffff;
+  --surface2: #f7f8fc;
+  --surface3: #eef0f8;
+  --border: #e2e4f0;
+  --border-strong: #c8cbe0;
+  --accent: #5b5ef4;
+  --accent-hover: #4444d6;
+  --accent-light: #ededff;
+  --accent2: #8b5cf6;
+  --text: #0e1117;
+  --text2: #4b5065;
+  --muted: #8890a8;
+  --faint: #c8cbe0;
+  --success: #0fa968;
+  --success-bg: #edfaf4;
+  --danger: #e53935;
+  --danger-bg: #fff0f0;
+  --naija: #008751;
+  --bypass: #e85d26;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(14,17,40,0.06), 0 1px 2px rgba(14,17,40,0.04);
+  --shadow: 0 4px 16px rgba(14,17,40,0.08), 0 1px 4px rgba(14,17,40,0.05);
+  --shadow-lg: 0 16px 48px rgba(14,17,40,0.14), 0 4px 12px rgba(14,17,40,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow-sm);
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.logo-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.logo em { font-style: italic; color: var(--accent); }
+
+.tagline {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.7rem;
+  background: var(--surface3);
+  border-radius: 99px;
+  border: 1px solid var(--border);
+}
+
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 0.6rem; }
+
+.provider-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 0.3rem 0.7rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.provider-badge:hover { border-color: var(--accent); color: var(--accent); }
+.provider-badge .prov-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+
+.btn-settings {
+  width: 36px; height: 36px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.btn-settings:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.toolbar-section { display: flex; align-items: center; gap: 0.6rem; }
+.toolbar-divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+
+.toolbar-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.styled-select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.38rem 0.7rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.styled-select:hover { border-color: var(--accent); }
+.styled-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,94,244,0.12); }
+
+.tone-pills { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.tone-pill {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.3rem 0.75rem;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  line-height: 1;
+}
+.tone-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.tone-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 2px 8px rgba(91,94,244,0.3); }
+.tone-pill.naija.active { background: var(--naija); border-color: var(--naija); box-shadow: 0 2px 8px rgba(0,135,81,0.3); }
+.tone-pill.bypass.active { background: var(--bypass); border-color: var(--bypass); box-shadow: 0 2px 8px rgba(232,93,38,0.3); }
+
+.var-toggle {
+  display: flex;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  gap: 0;
+}
+.var-btn {
+  background: transparent; border: none;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.02em;
+}
+.var-btn + .var-btn { border-left: 1px solid var(--border); }
+.var-btn.active { background: var(--accent); color: #fff; }
+.var-btn:not(.active):hover { background: var(--accent-light); color: var(--accent); }
+
+.toolbar-right { margin-left: auto; }
+
+/* ── SCORE ROW ── */
+.score-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1400px; width: 100%; margin: 0 auto;
+  padding: 0.5rem 2.5rem;
+  gap: 0;
+}
+.score-wrap { display: flex; align-items: center; gap: 0.8rem; padding: 0.3rem 0; }
+.score-wrap.right { padding-left: 1rem; }
+.score-lbl {
+  font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); width: 64px; flex-shrink: 0;
+}
+.score-track { flex: 1; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 99px; width: 0%; transition: width 0.6s cubic-bezier(.4,0,.2,1), background 0.6s; }
+.score-pct { font-size: 0.72rem; font-weight: 600; color: var(--muted); width: 36px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+/* ── MAIN ── */
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  max-width: 1400px; width: 100%;
+  margin: 0 auto;
+  padding: 1.2rem 2.5rem 2rem;
+  gap: 0 1rem;
+}
+
+.panel-label {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 0.5rem;
+}
+.panel-label-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--faint); flex-shrink: 0; }
+.panel-label-dot.active { background: var(--accent); }
+.panel-label-left { grid-column: 1; }
+.panel-label-right { grid-column: 2; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+}
+.panel:focus-within { box-shadow: var(--shadow), 0 0 0 3px rgba(91,94,244,0.1); border-color: rgba(91,94,244,0.3); }
+.panel-left { grid-column: 1; }
+.panel-right { grid-column: 2; background: var(--surface); }
+
+textarea {
+  flex: 1; width: 100%;
+  min-height: 400px;
+  padding: 1.5rem;
+  background: transparent; border: none; outline: none; resize: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.98rem; line-height: 1.8;
+  color: var(--text); font-weight: 400;
+}
+textarea::placeholder { color: var(--faint); }
+
+.output-area {
+  flex: 1; min-height: 400px;
+  padding: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.98rem; line-height: 1.8;
+  color: var(--text); font-weight: 400;
+  white-space: pre-wrap; word-break: break-word;
+  overflow-y: auto; position: relative;
+}
+.placeholder-msg { color: var(--faint); font-style: italic; }
+
+/* cursor */
+.cursor {
+  display: inline-block; width: 2px; height: 1.1em;
+  background: var(--accent); vertical-align: text-bottom;
+  margin-left: 2px;
+  animation: blink 0.9s step-end infinite;
+  border-radius: 1px;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* panel footer */
+.panel-footer {
+  display: flex; align-items: center;
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
+  border-top: 1px solid var(--border);
+  gap: 0.5rem;
+  background: var(--surface2);
+}
+.word-count { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+
+/* ── TABS ── */
+.output-tabs {
+  display: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  padding: 0 1rem;
+  gap: 0;
+}
+.output-tabs.visible { display: flex; }
+.tab-btn {
+  background: transparent; border: none;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  padding: 0.65rem 0.9rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  letter-spacing: 0.02em;
+}
+.tab-btn:hover { color: var(--text2); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── AUDIT / DIFF ── */
+.detail-box {
+  display: none;
+  padding: 1.2rem 1.5rem;
+  font-size: 0.88rem; line-height: 1.75;
+  color: var(--text2);
+  font-family: 'Inter', sans-serif;
+  background: var(--surface);
+  min-height: 200px; max-height: 460px;
+  overflow-y: auto;
+}
+.detail-box.visible { display: block; }
+.diff-del { background: var(--danger-bg); color: var(--danger); text-decoration: line-through; border-radius: 3px; padding: 1px 3px; }
+.diff-add { background: var(--success-bg); color: var(--success); border-radius: 3px; padding: 1px 3px; }
+.diff-legend { font-size: 0.68rem; font-weight: 600; color: var(--muted); margin-bottom: 1rem; display: flex; gap: 1.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── VARIATIONS ── */
+.variations-wrap {
+  display: none;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1rem 1.2rem;
+  background: var(--surface2);
+  max-height: 500px; overflow-y: auto;
+}
+.variations-wrap.visible { display: flex; }
+.var-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.var-card:hover { border-color: rgba(91,94,244,0.4); box-shadow: var(--shadow-sm); }
+.var-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,94,244,0.1); }
+.var-card-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+.var-card-text { font-size: 0.9rem; line-height: 1.7; color: var(--text); }
+.var-card-copy {
+  position: absolute; top: 0.7rem; right: 0.7rem;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--muted); font-size: 0.65rem; font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  padding: 0.22rem 0.55rem; border-radius: var(--radius-sm);
+  cursor: pointer; transition: all 0.12s;
+  letter-spacing: 0.03em;
+}
+.var-card-copy:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── BOTTOM ACTION BAR ── */
+.action-bar {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: 0.6rem;
+  padding-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.8rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem; font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 2px 8px rgba(91,94,244,0.35);
+  flex-shrink: 0;
+  letter-spacing: 0.01em;
+}
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(91,94,244,0.45); }
+.btn-primary:active:not(:disabled) { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
+
+.btn-secondary {
+  display: flex; align-items: center; gap: 0.45rem;
+  background: var(--surface);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  padding: 0.7rem 1.2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+.btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.btn-secondary:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-secondary.active { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+.btn-ghost {
+  background: transparent; border: none;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; font-weight: 500;
+  padding: 0.7rem 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.btn-ghost:hover { color: var(--danger); }
+
+.status-msg {
+  font-size: 0.78rem; font-weight: 500;
+  color: var(--muted); margin-left: auto;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.status-msg.active { color: var(--accent); }
+.status-msg.done { color: var(--success); }
+.status-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(91,94,244,0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.status-msg.active .status-spinner { display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── HISTORY PANEL ── */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(14,17,40,0.25); backdrop-filter: blur(2px); z-index: 200; }
+.overlay.open { display: block; }
+
+.history-panel {
+  position: fixed; top: 0; right: -460px;
+  width: 460px; max-width: 96vw; height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  display: flex; flex-direction: column;
+  transition: right 0.28s cubic-bezier(.4,0,.2,1);
+}
+.history-panel.open { right: 0; }
+.hist-header {
+  padding: 1.4rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.hist-title { font-size: 1.1rem; font-weight: 700; }
+.btn-close-panel {
+  width: 32px; height: 32px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--muted);
+  font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; line-height: 1;
+}
+.btn-close-panel:hover { background: var(--danger-bg); border-color: var(--danger); color: var(--danger); }
+.hist-list { flex: 1; overflow-y: auto; padding: 1rem; }
+.hist-empty { color: var(--muted); font-size: 0.85rem; text-align: center; padding: 2.5rem 1rem; line-height: 1.6; }
+.hist-item {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem; cursor: pointer;
+  transition: all 0.15s; position: relative;
+}
+.hist-item:hover { border-color: var(--accent); background: var(--accent-light); }
+.hist-meta { font-size: 0.65rem; font-weight: 600; color: var(--muted); margin-bottom: 0.35rem; display: flex; gap: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; flex-wrap: wrap; }
+.hist-preview { font-size: 0.83rem; color: var(--text2); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
+.hist-del {
+  position: absolute; top: 0.6rem; right: 0.6rem;
+  width: 24px; height: 24px;
+  background: transparent; border: none; color: var(--faint);
+  font-size: 0.95rem; cursor: pointer; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s;
+}
+.hist-del:hover { background: var(--danger-bg); color: var(--danger); }
+.hist-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); flex-shrink: 0; }
+.btn-clear-hist {
+  width: 100%; padding: 0.6rem;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-clear-hist:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-bg); }
+
+/* ── SETTINGS MODAL ── */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(14,17,40,0.35); backdrop-filter: blur(4px);
+  z-index: 400; align-items: center; justify-content: center;
+}
+.modal-bg.open { display: flex; }
+.modal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  width: 460px; max-width: 95vw;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.2s ease;
+}
+@keyframes modalIn { from { opacity:0; transform:scale(0.96) translateY(8px); } to { opacity:1; transform:none; } }
+.modal-head { margin-bottom: 1.5rem; }
+.modal-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.3rem; }
+.modal-sub { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+.field-label {
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.4rem; display: block;
+}
+.field-label { margin-top: 1rem; }
+.field-input {
+  width: 100%; border: 1.5px solid var(--border);
+  background: var(--surface2); color: var(--text);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+  padding: 0.6rem 0.85rem; border-radius: var(--radius-sm);
+  outline: none; transition: all 0.15s; margin-bottom: 0.35rem;
+}
+.field-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,94,244,0.12); background: var(--surface); }
+.field-hint { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.field-hint strong { color: var(--text2); }
+.key-status { font-size: 0.72rem; font-weight: 500; min-height: 1.2rem; display: flex; align-items: center; gap: 0.35rem; }
+.key-status.ok { color: var(--success); }
+.key-status.bad { color: var(--danger); }
+
+.prov-tabs { display: flex; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.prov-tab {
+  flex: 1; background: transparent; border: none;
+  font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600;
+  padding: 0.5rem 0.8rem; cursor: pointer;
+  color: var(--muted); transition: all 0.15s;
+}
+.prov-tab + .prov-tab { border-left: 1px solid var(--border); }
+.prov-tab.active { background: var(--accent); color: #fff; }
+
+.modal-actions { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1.5rem; }
+.btn-modal-save {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; border: none;
+  padding: 0.6rem 1.5rem; border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+  box-shadow: 0 2px 8px rgba(91,94,244,0.3);
+}
+.btn-modal-save:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(91,94,244,0.4); }
+.btn-modal-cancel {
+  background: var(--surface2); color: var(--text2);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.2rem; border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-modal-cancel:hover { border-color: var(--border-strong); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 820px) {
+  header { padding: 0 1.2rem; }
+  .tagline { display: none; }
+  .toolbar { padding: 0.6rem 1.2rem; }
+  .score-row { padding: 0.4rem 1.2rem; }
+  .workspace { grid-template-columns: 1fr; padding: 1rem 1.2rem 2rem; gap: 1rem; }
+  .panel-label-right { grid-column: 1; }
+  .panel-right { grid-column: 1; }
+  .score-wrap.right { padding-left: 0; }
+  .history-panel { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-bg" id="settingsModal" onclick="if(event.target===this)closeSettings()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title">API Settings</div>
+      <div class="modal-sub">Keys are stored only in your browser and sent directly to the chosen provider.</div>
+    </div>
+
+    <label class="field-label" style="margin-top:0">Provider</label>
+    <div class="prov-tabs" id="provTabs">
+      <button class="prov-tab active" data-prov="anthropic" onclick="selectProvider('anthropic')">⚡ Anthropic (Paid)</button>
+      <button class="prov-tab" data-prov="mistral" onclick="selectProvider('mistral')">🆓 Mistral (Free)</button>
+      <button class="prov-tab" data-prov="together" onclick="selectProvider('together')">Together</button>
+      <button class="prov-tab" data-prov="free" onclick="selectProvider('free')">OpenRouter</button>
+      <button class="prov-tab" data-prov="groq" onclick="selectProvider('groq')">Groq</button>
+    </div>
+
+    <div id="mistralSection">
+      <label class="field-label" for="mistralKeyInput">Mistral API Key</label>
+      <input class="field-input" type="password" id="mistralKeyInput" placeholder="your-mistral-key" autocomplete="off"/>
+      <div class="field-hint">100% free, no card. <strong>console.mistral.ai</strong> → Sign Up → API Keys → Create new key. Works in Nigeria.</div>
+    </div>
+    <div id="togetherSection" style="display:none">
+      <label class="field-label" for="togetherKeyInput">Together AI API Key</label>
+      <input class="field-input" type="password" id="togetherKeyInput" placeholder="your-together-key" autocomplete="off"/>
+      <div class="field-hint">$1 free credit on signup, no card. <strong>api.together.xyz</strong> → Sign Up → API Keys → Copy. $1 lasts thousands of requests.</div>
+    </div>
+    <div id="freeSection" style="display:none">
+      <label class="field-label" for="openrouterKeyInput">OpenRouter API Key</label>
+      <input class="field-input" type="password" id="openrouterKeyInput" placeholder="sk-or-v1-…" autocomplete="off"/>
+      <div class="field-hint">Free forever, no credit card. <strong>openrouter.ai</strong> → Sign Up → Keys → Create Key → Copy. Uses free Llama 3 model.</div>
+    </div>
+    <div id="groqSection" style="display:none">
+      <label class="field-label" for="groqKeyInput">Groq API Key</label>
+      <input class="field-input" type="password" id="groqKeyInput" placeholder="gsk_…" autocomplete="off"/>
+      <div class="field-hint">100% free at <strong>console.groq.com</strong> → Sign up → API Keys → Create. No card. Works in Nigeria.</div>
+    </div>
+    <div id="geminiSection" style="display:none">
+      <label class="field-label" for="geminiKeyInput">Gemini API Key</label>
+      <input class="field-input" type="password" id="geminiKeyInput" placeholder="AIza…" autocomplete="off"/>
+      <div class="field-hint">Free at <strong>aistudio.google.com</strong> → Get API key → Create in new project.</div>
+    </div>
+    <div id="anthropicSection" style="display:none">
+      <label class="field-label" for="anthropicKeyInput">Anthropic API Key</label>
+      <input class="field-input" type="password" id="anthropicKeyInput" placeholder="sk-ant-api03-…" autocomplete="off"/>
+      <div class="field-hint">Get your key at <strong>console.anthropic.com</strong> → API Keys → Create Key. Uses Anthropic's best model for beating AI detectors.</div>
+    </div>
+
+    <div class="key-status" id="keyStatus"></div>
+    <div id="testResult" style="display:none;margin-top:8px;padding:10px 12px;border-radius:8px;font-size:0.82rem;font-family:monospace;word-break:break-all;"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="testKeyNow()" style="background:var(--surface3);color:var(--text2);border:1px solid var(--border);">Test Key</button>
+      <button class="btn-modal-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="btn-modal-save" onclick="saveKey()">Save Key</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY PANEL -->
+<div class="overlay" id="histOverlay" onclick="toggleHistory()"></div>
+<div class="history-panel" id="histPanel">
+  <div class="hist-header">
+    <div class="hist-title">History</div>
+    <button class="btn-close-panel" onclick="toggleHistory()">×</button>
+  </div>
+  <div class="hist-list" id="histList"></div>
+  <div class="hist-footer">
+    <button class="btn-clear-hist" onclick="clearHistory()">Clear all history</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Human<em>izer</em>
+  </div>
+  <div class="tagline">Strip AI · Keep soul</div>
+  <div class="header-right">
+    <div class="provider-badge" onclick="openSettings()" id="provBadge">
+      <span class="prov-dot"></span>
+      <span id="provBadgeText">Gemini · Free</span>
+    </div>
+    <button class="btn-settings" onclick="openSettings()" title="Settings">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar-section">
+    <span class="toolbar-label">Purpose</span>
+    <select class="styled-select" id="purposeSelect">
+      <option value="general">General</option>
+      <option value="job">Job Application</option>
+      <option value="essay">School Essay</option>
+      <option value="blog">Blog Post</option>
+      <option value="social">Social Media</option>
+      <option value="biz-email">Business Email</option>
+      <option value="whatsapp-msg">WhatsApp</option>
+      <option value="plagiarism">Plagiarism Bypass</option>
+      <option value="academic">🎓 Academic AI Bypass</option>
+    </select>
+  </div>
+  <div class="toolbar-divider"></div>
+  <div class="toolbar-section">
+    <span class="toolbar-label">Tone</span>
+    <div class="tone-pills">
+      <button class="tone-pill active" data-tone="professional" onclick="setTone('professional')">Professional</button>
+      <button class="tone-pill" data-tone="casual" onclick="setTone('casual')">Casual</button>
+      <button class="tone-pill" data-tone="linkedin" onclick="setTone('linkedin')">LinkedIn</button>
+      <button class="tone-pill" data-tone="email" onclick="setTone('email')">Email</button>
+      <button class="tone-pill" data-tone="academic" onclick="setTone('academic')">Academic</button>
+      <button class="tone-pill" data-tone="whatsapp" onclick="setTone('whatsapp')">WhatsApp</button>
+      <button class="tone-pill naija" data-tone="naija" onclick="setTone('naija')">🇳🇬 Naija</button>
+      <button class="tone-pill bypass" data-tone="bypass" onclick="setTone('bypass')">Bypass</button>
+    </div>
+  </div>
+  <div class="toolbar-section toolbar-right">
+    <span class="toolbar-label">Versions</span>
+    <div class="var-toggle">
+      <button class="var-btn active" id="var1btn" onclick="setVariations(1)">1×</button>
+      <button class="var-btn" id="var3btn" onclick="setVariations(3)">3×</button>
+    </div>
+  </div>
+  <div class="toolbar-section toolbar-right">
+    <button id="stealthBtn" onclick="toggleStealth()" style="display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.85rem;border-radius:99px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .2s;">
+      🕵️ Stealth: OFF
+    </button>
+  </div>
+</div>
+
+<!-- SCORE ROW -->
+<div class="score-row">
+  <div class="score-wrap">
+    <span class="score-lbl" title="Estimated risk of detection by Turnitin, GPTZero, Originality.ai, Grammarly, Copyleaks, ZeroGPT">AI Risk</span>
+    <div class="score-track"><div class="score-fill" id="inScoreFill"></div></div>
+    <span class="score-pct" id="inScorePct">—</span>
+  </div>
+  <div class="score-wrap right">
+    <span class="score-lbl" title="AI risk score after humanizing — aim for under 15%">After</span>
+    <div class="score-track"><div class="score-fill" id="outScoreFill"></div></div>
+    <span class="score-pct" id="outScorePct">—</span>
+  </div>
+</div>
+
+<!-- WORKSPACE -->
+<div class="workspace">
+  <div class="panel-label panel-label-left">
+    <span class="panel-label-dot"></span>
+    Input — paste AI text
+  </div>
+  <div class="panel-label panel-label-right">
+    <span class="panel-label-dot active"></span>
+    Humanized output
+  </div>
+
+  <!-- LEFT PANEL -->
+  <div class="panel panel-left">
+    <textarea id="inputText" placeholder="Paste any AI-generated text here — a bio, LinkedIn post, essay, email, WhatsApp broadcast, or anything that sounds robotic.&#10;&#10;Great question! Here is a comprehensive overview…"></textarea>
+    <div class="panel-footer">
+      <span class="word-count" id="inputWc">0 words</span>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel panel-right">
+    <div class="output-tabs" id="outputTabs">
+      <button class="tab-btn active" data-tab="final" onclick="switchTab('final')">Final</button>
+      <button class="tab-btn" data-tab="diff" onclick="switchTab('diff')">Diff</button>
+      <button class="tab-btn" data-tab="audit" onclick="switchTab('audit')">Audit</button>
+    </div>
+    <div class="output-area" id="outputArea">
+      <span class="placeholder-msg">Your humanized text will stream here word by word…</span>
+    </div>
+    <div class="variations-wrap" id="variationsWrap"></div>
+    <div class="detail-box" id="diffBox"></div>
+    <div class="detail-box" id="auditBox"></div>
+    <div class="panel-footer">
+      <span class="word-count" id="outputWc"></span>
+    </div>
+  </div>
+
+  <!-- ACTION BAR -->
+  <div class="action-bar">
+    <button class="btn-primary" id="humanizeBtn" onclick="humanize()">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2zm0 12c-6 0-9 2.5-9 4v2h18v-2c0-1.5-3-4-9-4z"/></svg>
+      Humanize
+    </button>
+    <button class="btn-secondary" id="pushBtn" onclick="pushToZero()" style="display:none;background:linear-gradient(135deg,#f0fdf4,#dcfce7);color:#166534;border-color:#86efac;font-weight:600;" title="Second pass — removes remaining AI words">
+      ↓ Push to 0%
+    </button>
+    <button class="btn-secondary" id="copyBtn" disabled onclick="copyOut()">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy
+    </button>
+    <button class="btn-secondary" id="histBtn" onclick="toggleHistory()">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      History
+    </button>
+    <button class="btn-ghost" onclick="clearAll()">Clear</button>
+    <div class="status-msg" id="statusMsg">
+      <div class="status-spinner" id="statusSpinner"></div>
+      <span id="statusText"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PROVIDER & KEYS ──────────────────────────────────────────
+let API_KEY = localStorage.getItem('h_anthropic') || '';
+let GEMINI_KEY = localStorage.getItem('h_gemini') || '';
+let GROQ_KEY = localStorage.getItem('h_groq') || '';
+let OPENROUTER_KEY = localStorage.getItem('h_openrouter') || '';
+let TOGETHER_KEY = localStorage.getItem('h_together') || '';
+let MISTRAL_KEY = localStorage.getItem('h_mistral') || '';
+let currentProvider = localStorage.getItem('h_provider') || 'anthropic';
+
+function selectProvider(prov) {
+  currentProvider = prov;
+  localStorage.setItem('h_provider', prov);
+  document.querySelectorAll('.prov-tab').forEach(b => b.classList.toggle('active', b.dataset.prov === prov));
+  document.getElementById('mistralSection').style.display = prov === 'mistral' ? '' : 'none';
+  document.getElementById('togetherSection').style.display = prov === 'together' ? '' : 'none';
+  document.getElementById('freeSection').style.display = prov === 'free' ? '' : 'none';
+  document.getElementById('groqSection').style.display = prov === 'groq' ? '' : 'none';
+  document.getElementById('geminiSection').style.display = prov === 'gemini' ? '' : 'none';
+  document.getElementById('anthropicSection').style.display = prov === 'anthropic' ? '' : 'none';
+  updateBadge(); updateKeyStatus();
+}
+
+function updateBadge() {
+  const text = document.getElementById('provBadgeText');
+  const dot = document.querySelector('.prov-dot');
+  const keys = {mistral: MISTRAL_KEY, together: TOGETHER_KEY, free: OPENROUTER_KEY, groq: GROQ_KEY, gemini: GEMINI_KEY, anthropic: API_KEY};
+  const labels = {mistral: 'Mistral · Free', together: 'Together AI', free: 'OpenRouter', groq: 'Groq', gemini: 'Gemini', anthropic: 'Anthropic'};
+  text.textContent = labels[currentProvider] || currentProvider;
+  dot.style.background = keys[currentProvider] ? 'var(--success)' : 'var(--danger)';
+}
+
+function openSettings() {
+  document.getElementById('mistralKeyInput').value = MISTRAL_KEY;
+  document.getElementById('togetherKeyInput').value = TOGETHER_KEY;
+  document.getElementById('openrouterKeyInput').value = OPENROUTER_KEY;
+  document.getElementById('groqKeyInput').value = GROQ_KEY;
+  document.getElementById('geminiKeyInput').value = GEMINI_KEY;
+  document.getElementById('anthropicKeyInput').value = API_KEY;
+  selectProvider(currentProvider);
+  document.getElementById('settingsModal').classList.add('open');
+}
+function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); }
+function cleanKey(v){ return v.replace(/[^\x21-\x7E]/g,'').trim(); }
+function saveKey() {
+  MISTRAL_KEY = cleanKey(document.getElementById('mistralKeyInput').value);
+  TOGETHER_KEY = cleanKey(document.getElementById('togetherKeyInput').value);
+  OPENROUTER_KEY = cleanKey(document.getElementById('openrouterKeyInput').value);
+  GROQ_KEY = cleanKey(document.getElementById('groqKeyInput').value);
+  GEMINI_KEY = cleanKey(document.getElementById('geminiKeyInput').value);
+  API_KEY = cleanKey(document.getElementById('anthropicKeyInput').value);
+  localStorage.setItem('h_mistral', MISTRAL_KEY);
+  localStorage.setItem('h_together', TOGETHER_KEY);
+  localStorage.setItem('h_openrouter', OPENROUTER_KEY);
+  localStorage.setItem('h_groq', GROQ_KEY);
+  localStorage.setItem('h_gemini', GEMINI_KEY);
+  localStorage.setItem('h_anthropic', API_KEY);
+  updateBadge(); updateKeyStatus(); closeSettings();
+  setStatus('Key saved ✦', 'done');
+}
+async function testKeyNow() {
+  const box = document.getElementById('testResult');
+  const inputId = currentProvider==='mistral'?'mistralKeyInput':currentProvider==='together'?'togetherKeyInput':currentProvider==='free'?'openrouterKeyInput':currentProvider==='groq'?'groqKeyInput':currentProvider==='gemini'?'geminiKeyInput':'anthropicKeyInput';
+  const key = cleanKey(document.getElementById(inputId).value);
+  box.style.display='block';
+  box.style.background='#f7f8fc'; box.style.color='#444';
+  const preview = key.slice(0,6)+'…'+key.slice(-4)+' ('+key.length+' chars)';
+  if(!key){box.style.background='#fff0f0';box.style.color='#c00';box.textContent='No key entered.';return;}
+  // Save immediately so humanize uses the right key
+  if(currentProvider==='mistral') { MISTRAL_KEY=key; localStorage.setItem('h_mistral',key); }
+  else if(currentProvider==='together') { TOGETHER_KEY=key; localStorage.setItem('h_together',key); }
+  else if(currentProvider==='free') { OPENROUTER_KEY=key; localStorage.setItem('h_openrouter',key); }
+  else if(currentProvider==='groq') { GROQ_KEY=key; localStorage.setItem('h_groq',key); }
+  else if(currentProvider==='gemini') { GEMINI_KEY=key; localStorage.setItem('h_gemini',key); }
+  else { API_KEY=key; localStorage.setItem('h_anthropic',key); }
+  box.textContent='Testing key: '+preview;
+  try {
+    let res;
+    if(currentProvider==='mistral'){
+      res=await fetch('https://api.mistral.ai/v1/models',{headers:{'Authorization':`Bearer ${key}`}});
+    } else if(currentProvider==='together'){
+      res=await fetch('https://api.together.xyz/v1/models',{headers:{'Authorization':`Bearer ${key}`}});
+    } else if(currentProvider==='free'){
+      res=await fetch('https://openrouter.ai/api/v1/models',{headers:{'Authorization':`Bearer ${key}`}});
+    } else if(currentProvider==='groq'){
+      res=await fetch('https://api.groq.com/openai/v1/models',{headers:{'Authorization':`Bearer ${key}`}});
+    } else if(currentProvider==='gemini'){
+      res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+    } else {
+      res=await fetch('https://api.anthropic.com/v1/models',{headers:{'x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}});
+    }
+    const data=await res.json();
+    if(res.ok){
+      box.style.background='#edfaf4';box.style.color='#0a7a4e';
+      box.textContent='✓ Key works! ('+preview+') — Save it now.';
+    } else {
+      box.style.background='#fff0f0';box.style.color='#c00';
+      box.textContent='✗ Error '+res.status+': '+(data?.error?.message||data?.error?.status||JSON.stringify(data).slice(0,200))+'\nKey sent: '+preview;
+    }
+  } catch(e){
+    box.style.background='#fff0f0';box.style.color='#c00';
+    box.textContent='✗ Network error: '+e.message;
+  }
+}
+function updateKeyStatus() {
+  const el = document.getElementById('keyStatus');
+  const cfg = {
+    mistral:   { key: MISTRAL_KEY,    prefix: '',          hint: 'Free at console.mistral.ai — no card needed' },
+    together:  { key: TOGETHER_KEY,   prefix: '',          hint: 'Sign up free at api.together.xyz — $1 credit, no card' },
+    free:      { key: OPENROUTER_KEY, prefix: 'sk-or-v1-', hint: 'Get a free key at openrouter.ai' },
+    groq:      { key: GROQ_KEY,       prefix: 'gsk_',      hint: 'Get a free key at console.groq.com' },
+    gemini:    { key: GEMINI_KEY,     prefix: 'AIza',      hint: 'Get a free key at aistudio.google.com' },
+    anthropic: { key: API_KEY,        prefix: 'sk-ant',    hint: 'Sign up at console.anthropic.com' }
+  };
+  const {key, prefix, hint} = cfg[currentProvider] || cfg.mistral;
+  if (key && key.startsWith(prefix)) {
+    el.className = 'key-status ok';
+    el.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Key saved and ready`;
+  } else if (key) {
+    el.className = 'key-status bad';
+    el.textContent = `⚠ Key should start with "${prefix}"`;
+  } else {
+    el.className = 'key-status bad';
+    el.textContent = hint;
+  }
+}
+
+// ── TONE ─────────────────────────────────────────────────────
+let currentTone = 'professional';
+function setTone(t) {
+  currentTone = t;
+  document.querySelectorAll('.tone-pill').forEach(p => p.classList.toggle('active', p.dataset.tone === t));
+}
+
+// ── STEALTH MODE ─────────────────────────────────────────────
+let stealthMode = false;
+function toggleStealth() {
+  stealthMode = !stealthMode;
+  const btn = document.getElementById('stealthBtn');
+  btn.textContent = stealthMode ? '🕵️ Stealth: ON' : '🕵️ Stealth: OFF';
+  btn.style.background = stealthMode ? 'linear-gradient(135deg,#1e1b4b,#312e81)' : 'var(--surface)';
+  btn.style.color = stealthMode ? '#fff' : 'var(--muted)';
+  btn.style.borderColor = stealthMode ? '#4338ca' : 'var(--border)';
+  btn.style.boxShadow = stealthMode ? '0 0 12px rgba(99,102,241,0.4)' : 'none';
+}
+
+// ── VARIATIONS ───────────────────────────────────────────────
+let variationCount = 1;
+let currentVariations = [];
+function setVariations(n) {
+  variationCount = n;
+  document.getElementById('var1btn').classList.toggle('active', n === 1);
+  document.getElementById('var3btn').classList.toggle('active', n === 3);
+}
+
+// ── AI SCORE ─────────────────────────────────────────────────
+const AI_SIGNALS = [
+  // Classic AI giveaway words
+  'testament to','pivotal','evolving landscape','vital role','underscores','highlights',
+  'vibrant','breathtaking','nestled','groundbreaking','stunning','boasts',
+  'symbolizing','contributing to','showcasing','experts say','industry observers',
+  'serves as','functions as','stands as',"it's not just",
+  'catalyst','tapestry','nuanced','multifaceted','journey','unpack','reimagine','leverage',
+  'delve','deep dive','great question','i hope this helps','let me know if',
+  "in today's world",'at its core','in the realm of','data-driven','cross-functional',
+  'it is important to note','the future looks bright','exciting times',
+  'could potentially','may potentially','foster','facilitate','utilize','endeavor',
+  'paradigm','synergy','holistic','robust','comprehensive','transformative','innovative',
+  'seamlessly','proactively','strategically','cutting-edge','state-of-the-art',
+  'furthermore','moreover','additionally','in conclusion','to summarize',
+  'it goes without saying','needless to say','as previously mentioned',
+  "in today's fast-paced",'rapidly changing','unprecedented','navigate',
+  'empower','streamline','unlock','harness','propel','spearhead',
+  'at the end of the day','first and foremost','in this day and age','on the other hand',
+  // Academic AI patterns — flagged by Turnitin, GPTZero, Originality.ai, Copyleaks
+  'it is essential to','it is crucial','plays a crucial role','plays a key role',
+  'plays an important role','plays a vital role','plays a significant role',
+  'in recent years','over the years','throughout history','over time',
+  'as a result of this','as a consequence','it is worth noting',
+  'it should be noted','it can be argued','it is evident that','it is clear that',
+  'this paper will','this essay will','this report will','this study will',
+  'we will explore','we will examine','we will discuss','we will analyze',
+  'in this essay','in this paper','in this study','in this report',
+  'significant','significantly','numerous','various','diverse','essential',
+  'crucial','critical role','complex','complexity','effective','effectively',
+  'ensure','ensuring','obtain','in order to','in summary','in brief',
+  'as mentioned above','as stated above','as previously stated',
+  'the aforementioned','shed light on','gain a deeper understanding',
+  'a wide range of','a variety of','a number of','a plethora of',
+  'it is important','it is necessary','it is possible to','this allows for',
+  'this enables','this ensures','this highlights','this demonstrates',
+  'this suggests','this indicates','this shows that','this reveals',
+  'can be seen','can be observed','can be found','can be noted'
+];
+function aiScore(text) {
+  if (!text || text.trim().length < 10) return null;
+  const lower = text.toLowerCase();
+  let hits = 0;
+  for (const s of AI_SIGNALS) if (lower.includes(s)) hits++;
+  const sents = text.split(/[.!?]+/).filter(s => s.trim().length > 3);
+  let penalty = 0;
+  // GPTZero/Turnitin: low burstiness = uniform sentence lengths
+  if (sents.length > 4) {
+    const lens = sents.map(s => s.trim().split(/\s+/).length);
+    const avg = lens.reduce((a,b)=>a+b,0)/lens.length;
+    const variance = lens.reduce((a,b)=>a+Math.pow(b-avg,2),0)/lens.length;
+    if (variance < 12) penalty += 15;
+  }
+  // Turnitin/Originality.ai: all sentences starting with The/This/It (low opener diversity)
+  if (sents.length > 4) {
+    const robotStarters = sents.filter(s => /^\s*(The |This |It |These |Those |Such |In |Furthermore|Moreover|Additionally)/i.test(s));
+    if (robotStarters.length / sents.length > 0.6) penalty += 15;
+  }
+  // GPTZero: thesis-sentence-first in every paragraph (AI pattern)
+  const paras = text.split(/\n\n+/).filter(p => p.trim().length > 20);
+  if (paras.length > 2) {
+    const topicFirst = paras.filter(p => {
+      const firstSent = p.trim().split(/[.!?]/)[0];
+      return firstSent && firstSent.split(' ').length > 6;
+    });
+    if (topicFirst.length === paras.length) penalty += 10;
+  }
+  // Copyleaks/Originality.ai: repeated academic opener phrases
+  const academicOpeners = ['in conclusion','in summary','overall','to summarize','in this','this paper','this essay'];
+  const openerHits = academicOpeners.filter(o => lower.includes(o)).length;
+  if (openerHits >= 2) penalty += 10;
+  return Math.min(100, Math.max(0, Math.round((hits / 9) * 100) + penalty));
+}
+function renderScore(fillId, pctId, score) {
+  const fill = document.getElementById(fillId);
+  const pct = document.getElementById(pctId);
+  if (score === null) { fill.style.width='0%'; pct.textContent='—'; pct.style.color='var(--muted)'; return; }
+  fill.style.width = score+'%';
+  pct.textContent = score+'%';
+  const h = Math.round(120 - score*1.2);
+  const col = `hsl(${h},65%,42%)`;
+  fill.style.background = col;
+  pct.style.color = col;
+}
+
+// ── PROMPTS ──────────────────────────────────────────────────
+const BASE = `You are a human editor making MINIMAL, SURGICAL edits to text so it passes all major AI detectors: Turnitin, GPTZero, Originality.ai, Grammarly, Copyleaks, ZeroGPT, and Scribbr.
+
+CRITICAL RULE: Do NOT rewrite the whole text. Do NOT change sentences that already sound human. Only touch what needs fixing. Preserve the writer's original voice, rhythm, and phrasing as much as possible. Over-rewriting replaces one AI voice with another — that makes scores WORSE.
+
+═══ ONLY CHANGE THESE THINGS ═══
+
+1. BANNED WORDS — replace with plain everyday alternatives:
+   testament to, pivotal, evolving landscape, vital role, underscores, highlights, vibrant, breathtaking, nestled, groundbreaking, stunning, boasts, catalyst, tapestry, nuanced, multifaceted, leverage, delve, deep dive, in today's world, at its core, in the realm of, data-driven, it is important to note, could potentially, may potentially, foster, facilitate, utilize, endeavor, paradigm, synergy, holistic, robust, comprehensive, transformative, innovative, seamlessly, proactively, strategically, cutting-edge, state-of-the-art, furthermore, moreover, additionally, in conclusion, to summarize, it goes without saying, needless to say, in today's fast-paced, rapidly changing, unprecedented, navigate, empower, streamline, unlock, harness, propel, spearhead, first and foremost, in this day and age
+
+2. ACADEMIC AI PHRASES (flagged by Turnitin + GPTZero + Originality.ai) — remove or rephrase:
+   it is essential to, it is crucial, plays a crucial/key/vital role, in recent years, over the years, as a result of this, it should be noted, it can be argued, it is evident that, it is clear that, this paper will, this essay will, we will explore, we will examine, in this essay, in this paper, significant/significantly (replace with plain words), numerous (use "many"), various (use "different"), in order to (use "to"), a wide range of, a variety of, a plethora of, this allows for, this enables, this highlights, this demonstrates, shed light on, gain a deeper understanding, the aforementioned
+
+3. UNIFORM SENTENCE LENGTH (GPTZero/Turnitin burstiness check) — if 3+ consecutive sentences are similar length, make one very short (under 6 words) and one noticeably longer
+
+4. UNIFORM PARAGRAPH STRUCTURE (Grammarly/Originality.ai) — if every paragraph starts with a thesis sentence and ends with a summary/zinger, break that pattern: start at least one paragraph mid-thought, end 2-3 paragraphs with a plain statement
+
+5. SENTENCE OPENERS (Copyleaks/ZeroGPT) — if more than half the sentences start with "The/This/It/These/In/Furthermore", vary them: start some with a verb, a name, a date, a short clause
+
+6. MISSING CONTRACTIONS — "do not" → "don't", "it is" → "it's", "cannot" → "can't", "will not" → "won't" throughout
+
+7. ROBOT TRANSITIONS — remove or rephrase: "furthermore", "moreover", "additionally", "in conclusion", "to summarize", "in summary", "as mentioned above", "as previously stated"
+
+═══ DO NOT CHANGE ═══
+• Sentences that already sound natural and human
+• The writer's original words, idioms, or personal references
+• The overall structure and argument flow
+• Paragraph order
+• Technical terms, names, data, and citations
+
+═══ NO HYPHENS OR DASHES ═══
+Never use - or — anywhere in the output.
+
+═══ OUTPUT FORMAT ═══
+Return ONLY the edited text. No preamble, no explanation, no extra commentary.`;
+
+const TONES = {
+  professional: '\nTONE: Professional and authoritative. Clear, direct, no fluff. Senior expert speaking plainly.',
+  casual: '\nTONE: Casual and conversational. Like texting a smart friend. Contractions always. Short sentences. Chill energy.',
+  linkedin: '\nTONE: LinkedIn — professional but personal. First-person insights. Hook first line. Achievement-oriented but not braggy.',
+  email: '\nTONE: Email — warm opener, direct body, brief close. Purposeful but human. No corporate formality.',
+  academic: '\nTONE: Academic but readable. Precise, evidence-referenced. Remove over-hedging. Confident researcher.',
+  whatsapp: '\nTONE: WhatsApp style — short, warm, informal. Emoji ok. Feels typed on a phone.',
+  naija: '\nTONE: Nigerian voice. Blend Pidgin naturally: "as e dey go", "e don do", "no be small thing", "wahala dey", "abeg", "abi", "na so e be", "dem say". Mix English with Pidgin. Unmistakably Naija.',
+  bypass: '\nTONE: BYPASS MODE — goal is 0% on ALL detectors: Turnitin, GPTZero, Originality.ai, Grammarly, Copyleaks, ZeroGPT. Be surgical: preserve every sentence that already sounds human. Only rewrite sentences with AI patterns. Specifically: break any run of similar-length sentences, remove every punchy paragraph-ending zinger and replace with a plain close, add one informal phrase per section ("honestly", "kind of", "turns out"), replace academic AI phrases ("in recent years", "it is crucial", "plays a key role") with plain alternatives, use contractions everywhere. NO hyphens or dashes.'
+};
+const PURPOSES = {
+  general: '',
+  job: '\nPURPOSE: Job application. Genuinely motivated and specific. Personality visible. Show don\'t tell.',
+  essay: '\nPURPOSE: Academic essay. Keep argument intact but inject a real student\'s voice.',
+  blog: '\nPURPOSE: Blog post. Opinionated, engaging, shareable. Strong hook. Clear point of view.',
+  social: '\nPURPOSE: Social media caption. Short, punchy, shareable. Hook in first line.',
+  'biz-email': '\nPURPOSE: Business email. One clear ask. Warm but efficient.',
+  'whatsapp-msg': '\nPURPOSE: WhatsApp message. Casual and brief. Typed on a phone, not a desk.',
+  plagiarism: '\nPURPOSE: PLAGIARISM BYPASS (Turnitin / Copyscape / iThenticate). Plagiarism checkers match exact and near-exact phrases against source databases. You must: (1) Restructure EVERY sentence completely — change word order, split long sentences, merge short ones; (2) Replace nouns, verbs, adjectives with synonyms but keep technical terms intact; (3) Change passive voice to active and vice versa throughout; (4) Reorder supporting ideas within paragraphs; (5) Change numerical expressions (e.g. "50 percent" to "half"); (6) Remove any phrases longer than 4 words that could exist verbatim in source material — rephrase them entirely. Keep all facts, data, and meaning 100% accurate. The output should be unrecognizable as the source text phrase-by-phrase while conveying identical information.',
+  academic: '\nPURPOSE: ACADEMIC AI BYPASS — this will be submitted through Turnitin (LMS-integrated), checked on GPTZero, and reviewed on Originality.ai. Two separate problems must be solved simultaneously: (A) Remove AI detection signals while keeping academic register. Replace "significant" with "major" or just name the thing directly. Replace "it is crucial" with "this matters because". Replace "in recent years" with a specific time frame. Replace "plays a key role" with what it actually does. Never use: "this essay will", "in this paper", "we will explore", "in conclusion", "furthermore", "moreover", "a wide range of", "shed light on". (B) Make burstiness high — one very short paragraph, one very long paragraph, sentence lengths must vary 3x across the text. (C) Add academic voice that reads like a real student: cite a specific example rather than saying "for example, many studies show", reference something concrete, show a personal viewpoint with mild hedging like "I think" or "from what I can tell". Keep the academic argument and all facts completely intact.'
+};
+
+const STEALTH_ADDON = `
+
+═══ STEALTH MODE — ACADEMIC DETECTOR EVASION ═══
+This text must score 0% on ALL of these: Turnitin, GPTZero, Originality.ai, Grammarly, Copyleaks, ZeroGPT, and Scribbr. Apply every technique below systematically.
+
+── TURNITIN EVASION ──
+Turnitin checks perplexity, burstiness, and AI fingerprints. Counter it:
+• Add one specific detail that only a real person would know or notice (an observation, a specific example, a personal experience — even brief)
+• Use at least one imprecise qualifier a real student would write: "kind of", "pretty much", "more or less", "sort of"
+• Vary paragraph length dramatically — one paragraph should be 4x longer than another
+• Do NOT start paragraphs all the same way. Mix: start one with a question, one with a number, one with a short observation
+• Avoid "significant", "crucial", "essential" — replace with: "big", "key", "needed", "worth it", "makes a difference"
+• Change "in order to" → "to", "numerous" → "many", "various" → "different", "obtain" → "get"
+
+── GPTZERO EVASION (perplexity + burstiness) ──
+GPTZero measures how PREDICTABLE each sentence is. Low predictability = human.
+• Use at least one unexpected word choice per paragraph — something a thesaurus wouldn't suggest as first option
+• Include one very short sentence (3-4 words) immediately followed by a very long one (25+ words)
+• One sentence should start with a number or statistic
+• One sentence should be a direct question the writer asks themselves then answers
+• Avoid starting 3 consecutive sentences with the same word type (e.g. three nouns in a row, three "The"s)
+
+── ORIGINALITY.AI EVASION ──
+Originality.ai detects semantic fingerprints and consistent register. Counter it:
+• Slightly mix register in one place — one casual phrase in an otherwise formal paragraph
+• Use one informal connective: "so", "because", "anyway", "but here's the thing"
+• One sentence should be noticeably shorter than expected (abrupt, not padded out)
+• Avoid ending every sentence with the same rhythm/stress pattern — vary the ending word types
+
+── GRAMMARLY EVASION ──
+Grammarly detects uniform paragraph arcs (setup → evidence → conclusion every time). Counter it:
+• At least one paragraph must NOT start with its topic sentence — begin mid-thought
+• At least two paragraphs must NOT end with a punchy conclusion — end with a plain factual statement
+• One paragraph can end with an unresolved question
+
+── COPYLEAKS / ZEROGPT EVASION ──
+These tools use model-specific fingerprinting. Counter it:
+• Add one sentence that contains mildly incorrect word collocation (how a human might phrase it wrong-but-clearly)
+• One comma splice is acceptable if it sounds natural
+• One instance of "and" or "but" starting a sentence
+• Avoid perfectly parallel list structures — make list items different lengths and styles
+
+── UNIVERSAL IMPERFECTIONS ──
+• One sentence fragment used for rhetorical emphasis. Like this.
+• One run-on sentence where a human would connect two thoughts with "and" instead of a period
+• One place a comma is missing where grammar strictly requires it
+• One very short standalone paragraph (1 sentence)
+• One personal aside in parentheses or as a casual digression
+
+NO HYPHENS OR DASHES ANYWHERE in the output.`;
+
+function buildPrompt(tone, purpose, vars) {
+  let p = BASE + (stealthMode ? STEALTH_ADDON : '') + (TONES[tone]||'') + (PURPOSES[purpose]||'');
+  if (vars === 3) {
+    p += `\n\nSTEP 2 — AUDIT: List 2-3 remaining AI tells.\n\nSTEP 3 — THREE VERSIONS: Distinct angle/voice/rhythm each, all human.\n\nOUTPUT (exact separators only):\n===VAR1===\n[version 1]\n===VAR2===\n[version 2]\n===VAR3===\n[version 3]\n===AUDIT===\n[audit]`;
+  } else {
+    p += `\n\nSTEP 2 — AUDIT: List 2-3 remaining AI tells.\n\nSTEP 3 — FINAL REWRITE: Fix remaining tells. Must feel like a real person.\n\nOUTPUT (exact separators only):\n===FINAL===\n[final text]\n===AUDIT===\n[audit]`;
+  }
+  return p;
+}
+
+// ── HISTORY ──────────────────────────────────────────────────
+const loadHist = () => { try { return JSON.parse(localStorage.getItem('h_hist')||'[]'); } catch { return []; }};
+const saveHist = h => localStorage.setItem('h_hist', JSON.stringify(h));
+function addHist(input, output, tone, purpose) {
+  const h = loadHist();
+  h.unshift({ id: Date.now(), ts: new Date().toLocaleString(), input, output, tone, purpose });
+  if (h.length > 10) h.pop();
+  saveHist(h);
+}
+function renderHist() {
+  const h = loadHist();
+  const el = document.getElementById('histList');
+  if (!h.length) { el.innerHTML = '<div class="hist-empty">No history yet.<br>Humanize some text to see it here.</div>'; return; }
+  el.innerHTML = h.map(item => `
+    <div class="hist-item" onclick="restoreHist(${item.id})">
+      <button class="hist-del" onclick="event.stopPropagation();delHist(${item.id})" title="Delete">×</button>
+      <div class="hist-meta">
+        <span>${esc(item.ts)}</span>·<span>${esc(item.tone)}</span>${item.purpose!=='general'?`·<span>${esc(item.purpose)}</span>`:''}
+      </div>
+      <div class="hist-preview">${esc(item.output.slice(0,130))}…</div>
+    </div>`).join('');
+}
+function restoreHist(id) {
+  const item = loadHist().find(x=>x.id===id); if (!item) return;
+  inputEl.value = item.input;
+  const wc = wordCount(item.input);
+  inputWcEl.textContent = `${wc} word${wc!==1?'s':''}`;
+  renderScore('inScoreFill','inScorePct',aiScore(item.input));
+  finalText = item.output;
+  originalInput = item.input;
+  outputAreaEl.style.display=''; outputAreaEl.textContent=item.output;
+  variationsWrapEl.classList.remove('visible');
+  const owc=wordCount(item.output);
+  outputWcEl.textContent=`${owc} word${owc!==1?'s':''}`;
+  renderScore('outScoreFill','outScorePct',aiScore(item.output));
+  diffBox.innerHTML='<div class="diff-legend"><span><span class="diff-del">removed</span> words cut</span><span><span class="diff-add">added</span> new words</span></div>'+renderDiff(item.input,item.output);
+  auditBox.textContent='(Restored from history — run again to see audit)';
+  outputTabsEl.classList.add('visible'); switchTab('final');
+  copyBtn.disabled=false; setTone(item.tone);
+  document.getElementById('purposeSelect').value=item.purpose;
+  toggleHistory(); setStatus('Restored from history','done');
+}
+function delHist(id) { saveHist(loadHist().filter(x=>x.id!==id)); renderHist(); }
+function clearHistory() { saveHist([]); renderHist(); }
+function toggleHistory() {
+  const p=document.getElementById('histPanel'),o=document.getElementById('histOverlay'),b=document.getElementById('histBtn');
+  const open=p.classList.toggle('open');
+  o.classList.toggle('open',open); b.classList.toggle('active',open);
+  if(open) renderHist();
+}
+
+// ── DIFF ─────────────────────────────────────────────────────
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function renderDiff(orig, humanized) {
+  const A=orig.split(/\s+/).slice(0,700), B=humanized.split(/\s+/).slice(0,700);
+  const dp=Array.from({length:A.length+1},()=>new Uint16Array(B.length+1));
+  for(let i=1;i<=A.length;i++) for(let j=1;j<=B.length;j++)
+    dp[i][j]=A[i-1].replace(/[^a-z]/gi,'').toLowerCase()===B[j-1].replace(/[^a-z]/gi,'').toLowerCase()
+      ?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);
+  const ops=[]; let i=A.length,j=B.length;
+  while(i>0||j>0) {
+    if(i>0&&j>0&&A[i-1].replace(/[^a-z]/gi,'').toLowerCase()===B[j-1].replace(/[^a-z]/gi,'').toLowerCase()) { ops.unshift({t:'eq',v:B[j-1]});i--;j--; }
+    else if(j>0&&(i===0||dp[i][j-1]>=dp[i-1][j])) { ops.unshift({t:'add',v:B[j-1]});j--; }
+    else { ops.unshift({t:'del',v:A[i-1]});i--; }
+  }
+  return ops.map(op=>op.t==='eq'?esc(op.v)+' ':op.t==='del'?`<span class="diff-del">${esc(op.v)}</span> `:`<span class="diff-add">${esc(op.v)}</span> `).join('');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────
+function stripDashes(s) { return s.replace(/\s*—\s*/g,' ').replace(/\s*–\s*/g,' ').replace(/(?<=[a-zA-Z])-(?=[a-zA-Z])/g,' '); }
+
+// ── PROGRAMMATIC HUMANIZER ────────────────────────────────────
+// Runs on every output — no AI needed, fixes patterns detectors catch
+function programmaticHumanize(text) {
+  // 1. Force contractions — AI writes "do not", humans write "don't"
+  const contractions = [
+    [/\bI am\b/g,"I'm"],[/\bI have\b/g,"I've"],[/\bI will\b/g,"I'll"],[/\bI would\b/g,"I'd"],
+    [/\bdo not\b/gi,"don't"],[/\bdoes not\b/gi,"doesn't"],[/\bdid not\b/gi,"didn't"],
+    [/\bcannot\b/gi,"can't"],[/\bwill not\b/gi,"won't"],[/\bwould not\b/gi,"wouldn't"],
+    [/\bshould not\b/gi,"shouldn't"],[/\bcould not\b/gi,"couldn't"],[/\bmust not\b/gi,"mustn't"],
+    [/\bit is\b/g,"it's"],[/\bit has\b/g,"it's"],[/\bthat is\b/g,"that's"],[/\bthat has\b/g,"that's"],
+    [/\bthey are\b/g,"they're"],[/\bthey have\b/g,"they've"],[/\bthey will\b/g,"they'll"],
+    [/\bwe are\b/g,"we're"],[/\bwe have\b/g,"we've"],[/\bwe will\b/g,"we'll"],
+    [/\byou are\b/g,"you're"],[/\byou have\b/g,"you've"],[/\byou will\b/g,"you'll"],
+    [/\bhe is\b/g,"he's"],[/\bshe is\b/g,"she's"],[/\bwho is\b/g,"who's"],
+    [/\bwas not\b/gi,"wasn't"],[/\bwere not\b/gi,"weren't"],[/\bhave not\b/gi,"haven't"],
+    [/\bhas not\b/gi,"hasn't"],[/\bhad not\b/gi,"hadn't"],[/\bare not\b/gi,"aren't"],
+    [/\bI am not\b/g,"I'm not"],[/\blet us\b/gi,"let's"],[/\bthere is\b/g,"there's"],
+    [/\bthere are\b/g,"there are"],[/\bhere is\b/g,"here's"],[/\bwhat is\b/g,"what's"]
+  ];
+  for(const [pat,rep] of contractions) text=text.replace(pat,rep);
+
+  // 2. Replace leftover AI words with plain alternatives (includes academic AI patterns)
+  const wordSwaps = [
+    // Classic AI words
+    [/\butilize[sd]?\b/gi,'use'],[/\butilization\b/gi,'use'],[/\bfurthermore\b/gi,''],
+    [/\bmoreover\b/gi,''],[/\badditionally\b/gi,'also'],[/\bin conclusion\b/gi,'so'],
+    [/\bto summarize\b/gi,''],[/\bin summary\b/gi,''],[/\bit is worth noting that\b/gi,''],
+    [/\beveryone can agree that\b/gi,''],[/\bit is important to note that\b/gi,''],
+    [/\bleverage[sd]?\b/gi,'use'],[/\binnovative\b/gi,'new'],[/\bseamlessly\b/gi,'smoothly'],
+    [/\brobust\b/gi,'solid'],[/\bcomprehensive\b/gi,'thorough'],[/\btransformative\b/gi,'major'],
+    [/\bcutting.edge\b/gi,'new'],[/\bstate.of.the.art\b/gi,'advanced'],[/\bempower[s]?\b/gi,'help'],
+    [/\bstreamline[sd]?\b/gi,'simplify'],[/\bholistic\b/gi,'broad'],[/\bsynergy\b/gi,'teamwork'],
+    [/\bparadigm\b/gi,'model'],[/\bproactively\b/gi,''],[/\bstrategically\b/gi,''],
+    // Academic AI phrases — Turnitin + GPTZero + Originality.ai flags
+    [/\bit is crucial to\b/gi,'you need to'],[/\bit is essential to\b/gi,'you need to'],
+    [/\bplays a crucial role\b/gi,'matters a lot'],[/\bplays a key role\b/gi,'matters'],
+    [/\bplays a vital role\b/gi,'is important'],[/\bplays a significant role\b/gi,'shapes'],
+    [/\bin recent years\b/gi,'lately'],[/\bover the years\b/gi,'over time'],
+    [/\bthroughout history\b/gi,'historically'],[/\bit should be noted\b/gi,'notably'],
+    [/\bit is evident that\b/gi,''],[/\bit is clear that\b/gi,'clearly'],
+    [/\bit can be argued\b/gi,'some argue'],[/\bas a result of this\b/gi,'because of this'],
+    [/\bin order to\b/gi,'to'],[/\ba wide range of\b/gi,'many'],
+    [/\ba variety of\b/gi,'many'],[/\ba plethora of\b/gi,'many'],
+    [/\bnumerous\b/gi,'many'],[/\bvarious\b/gi,'different'],[/\bdiverse\b/gi,'different'],
+    [/\bsignificantly\b/gi,'a lot'],[/\bsubstantially\b/gi,'a lot'],
+    [/\beffectively\b/gi,''],[/\bensure[sd]?\b/gi,'make sure'],
+    [/\bobtain[sed]*\b/gi,'get'],[/\bprovide[sd]?\b/gi,'give'],
+    [/\bshed light on\b/gi,'explain'],[/\bgain a deeper understanding\b/gi,'understand better'],
+    [/\bthe aforementioned\b/gi,'the above'],[/\bas mentioned above\b/gi,'as noted'],
+    [/\bas previously stated\b/gi,'as said before'],[/\bthis demonstrates\b/gi,'this shows'],
+    [/\bthis highlights\b/gi,'this shows'],[/\bthis indicates\b/gi,'this means'],
+    [/\bthis suggests\b/gi,'this means'],[/\bthis reveals\b/gi,'this shows']
+  ];
+  for(const [pat,rep] of wordSwaps) text=text.replace(pat,rep);
+
+  // 3. Break up 3+ consecutive sentences of similar length
+  const sentences = text.split(/(?<=[.!?])\s+/);
+  if(sentences.length > 4) {
+    for(let i=1; i<sentences.length-1; i++) {
+      const prev = sentences[i-1].split(' ').length;
+      const curr = sentences[i].split(' ').length;
+      const next = sentences[i+1].split(' ').length;
+      if(Math.abs(prev-curr)<5 && Math.abs(curr-next)<5 && curr>12) {
+        const words = sentences[i].split(' ');
+        const mid = Math.floor(words.length/2);
+        let splitAt = mid;
+        for(let j=mid-2;j<=mid+2;j++) {
+          if(j>0 && j<words.length-1 && /^(and|but|so|yet|which|where|when|because|although|since|while)$/i.test(words[j])) { splitAt=j; break; }
+        }
+        if(splitAt > 2 && splitAt < words.length-2) {
+          sentences[i] = words.slice(0,splitAt).join(' ').replace(/,\s*$/,'') + '. ' + words[splitAt].charAt(0).toUpperCase() + words[splitAt].slice(1) + ' ' + words.slice(splitAt+1).join(' ');
+        }
+      }
+    }
+    text = sentences.join(' ');
+  }
+
+  // 4. Break repetitive "The/This/It" sentence openers (Copyleaks/ZeroGPT flag)
+  const sentArr = text.split(/(?<=[.!?])\s+/);
+  if(sentArr.length > 5) {
+    for(let i=1; i<sentArr.length-1; i++) {
+      const getOpener = s => s.trim().split(' ')[0].toLowerCase();
+      const prev = getOpener(sentArr[i-1]);
+      const curr = getOpener(sentArr[i]);
+      const next = getOpener(sentArr[i+1]);
+      if(prev===curr && curr===next && /^(the|this|it|these|those|in|such)$/i.test(curr)) {
+        const w = sentArr[i].trim();
+        sentArr[i] = 'Still, ' + w.charAt(0).toLowerCase() + w.slice(1);
+      }
+    }
+    text = sentArr.join(' ');
+  }
+
+  // 6. Remove academic essay opener phrases at start of text
+  text = text.replace(/^(In this (essay|paper|report|study),?\s*)/i,'');
+  text = text.replace(/^(This (essay|paper|report|study) (will|aims to|seeks to|explores?|examines?|discusses?|analyzes?)[^.]*\.\s*)/i,'');
+
+  // 7. Clean up
+  text = text.replace(/\s{2,}/g,' ').replace(/\.\s+\./g,'.').replace(/,\s*\./g,'.').trim();
+  return stripDashes(text);
+}
+function wordCount(s) { return s.trim()?s.trim().split(/\s+/).length:0; }
+function setStatus(msg, cls='') {
+  document.getElementById('statusText').textContent = msg;
+  document.getElementById('statusMsg').className = 'status-msg'+(cls?' '+cls:'');
+}
+
+// ── ELEMENTS ─────────────────────────────────────────────────
+const inputEl = document.getElementById('inputText');
+const outputAreaEl = document.getElementById('outputArea');
+const inputWcEl = document.getElementById('inputWc');
+const outputWcEl = document.getElementById('outputWc');
+const humanizeBtn = document.getElementById('humanizeBtn');
+const copyBtn = document.getElementById('copyBtn');
+const pushBtn = document.getElementById('pushBtn');
+const outputTabsEl = document.getElementById('outputTabs');
+const auditBox = document.getElementById('auditBox');
+const diffBox = document.getElementById('diffBox');
+const variationsWrapEl = document.getElementById('variationsWrap');
+
+let finalText='', auditText='', isStreaming=false, currentTab='final', originalInput='';
+
+inputEl.addEventListener('input', () => {
+  const wc=wordCount(inputEl.value);
+  inputWcEl.textContent=`${wc} word${wc!==1?'s':''}`;
+  renderScore('inScoreFill','inScorePct',aiScore(inputEl.value));
+});
+
+// ── TABS ─────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  if(tab==='final') {
+    if(variationCount===3&&currentVariations.length>0) { outputAreaEl.style.display='none'; variationsWrapEl.classList.add('visible'); }
+    else { outputAreaEl.style.display=''; variationsWrapEl.classList.remove('visible'); }
+    diffBox.classList.remove('visible'); auditBox.classList.remove('visible');
+  } else if(tab==='diff') {
+    outputAreaEl.style.display='none'; variationsWrapEl.classList.remove('visible');
+    diffBox.classList.add('visible'); auditBox.classList.remove('visible');
+  } else {
+    outputAreaEl.style.display='none'; variationsWrapEl.classList.remove('visible');
+    diffBox.classList.remove('visible'); auditBox.classList.add('visible');
+  }
+}
+
+// ── CLEAR ────────────────────────────────────────────────────
+function clearAll() {
+  inputEl.value=''; inputWcEl.textContent='0 words';
+  outputAreaEl.innerHTML='<span class="placeholder-msg">Your humanized text will stream here word by word…</span>';
+  outputAreaEl.style.display=''; outputWcEl.textContent='';
+  auditBox.textContent=''; auditBox.classList.remove('visible');
+  diffBox.innerHTML=''; diffBox.classList.remove('visible');
+  variationsWrapEl.innerHTML=''; variationsWrapEl.classList.remove('visible');
+  outputTabsEl.classList.remove('visible');
+  copyBtn.disabled=true; pushBtn.style.display='none'; finalText=''; auditText=''; currentVariations=[]; originalInput='';
+  renderScore('inScoreFill','inScorePct',null); renderScore('outScoreFill','outScorePct',null);
+  setStatus('');
+}
+
+// ── COPY ────────────────────────────────────────────────────
+function copyOut() {
+  if(!finalText) return;
+  navigator.clipboard.writeText(finalText).then(()=>{
+    const orig=copyBtn.innerHTML;
+    copyBtn.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    setTimeout(()=>copyBtn.innerHTML=orig,2000);
+  });
+}
+
+// ── VARIATION CARDS ──────────────────────────────────────────
+function selectVar(idx) {
+  if(!currentVariations[idx]) return;
+  finalText=currentVariations[idx];
+  document.querySelectorAll('.var-card').forEach((c,i)=>c.classList.toggle('selected',i===idx));
+  diffBox.innerHTML='<div class="diff-legend"><span><span class="diff-del">removed</span> words cut</span><span><span class="diff-add">added</span> new words</span></div>'+renderDiff(originalInput,currentVariations[idx]);
+  renderScore('outScoreFill','outScorePct',aiScore(currentVariations[idx]));
+}
+function copyVar(idx) {
+  if(!currentVariations[idx]) return;
+  navigator.clipboard.writeText(currentVariations[idx]).then(()=>{
+    const btn=document.querySelectorAll('.var-card-copy')[idx];
+    if(btn){const o=btn.textContent;btn.textContent='✓';setTimeout(()=>btn.textContent=o,2000);}
+  });
+}
+
+// ── HUMANIZE ─────────────────────────────────────────────────
+async function pushToZero() {
+  if(!finalText || isStreaming) return;
+  // Find which AI signals are still present
+  const lower = finalText.toLowerCase();
+  const remaining = AI_SIGNALS.filter(s => lower.includes(s));
+  const key=currentProvider==='mistral'?MISTRAL_KEY:currentProvider==='together'?TOGETHER_KEY:currentProvider==='free'?OPENROUTER_KEY:currentProvider==='groq'?GROQ_KEY:currentProvider==='gemini'?GEMINI_KEY:API_KEY;
+  if(!key){openSettings();return;}
+  isStreaming=true; pushBtn.style.display='none'; humanizeBtn.disabled=true; copyBtn.disabled=true;
+  originalInput=finalText;
+  outputAreaEl.style.display=''; outputAreaEl.innerHTML='';
+  const cursor=document.createElement('span'); cursor.className='cursor'; outputAreaEl.appendChild(cursor);
+  setStatus('Pushing to 0%…','active');
+  const targetList = remaining.length ? `FLAGGED WORDS still present — replace every one: ${remaining.join(', ')}` : 'No flagged words remain — focus purely on rhythm and structure.';
+  const sys=`You are doing a targeted final pass to make this text score 0% on ALL of these: Turnitin, GPTZero, Originality.ai, Grammarly, Copyleaks, ZeroGPT, and Scribbr.
+
+${targetList}
+
+Apply ALL of these fixes in one pass:
+
+TURNITIN: Replace any remaining academic AI phrases: "it is crucial", "plays a key role", "in recent years", "this paper", "this essay", "furthermore", "moreover", "a wide range of", "it is important", "as a result", "this demonstrates". Use plain simple words instead.
+
+GPTZERO (burstiness + perplexity): Check sentence length variation. If many sentences are similar length, insert one 3-word sentence and one 30+ word sentence. Use at least one unexpected or slightly uncommon word that a thesaurus wouldn't list first.
+
+GRAMMARLY (paragraph arc pattern): Find paragraphs ending with a punchy "zinger" or bold conclusion — rewrite at least 2 to end with a plain factual statement instead. If all paragraphs start with a clear thesis sentence, change at least one to begin mid-thought.
+
+ORIGINALITY.AI (semantic fingerprinting): Add one mild informal phrase in an otherwise formal section ("honestly", "kind of", "turns out", "the thing is"). Mix register slightly — it reads as human when tone isn't perfectly consistent.
+
+COPYLEAKS / ZEROGPT (opener fingerprinting): If 3+ sentences start with "The/This/It/These", vary at least one opener. Start one sentence with a verb, a name, a number, or a short clause.
+
+UNIVERSAL RULES:
+• Use contractions everywhere: it's, can't, won't, don't, that's
+• No hyphens or dashes anywhere in the output
+• Keep all facts, data, and meaning 100% intact
+• Do NOT rewrite sentences that already sound human
+
+Return ONLY the rewritten text. No explanation, no preamble.`;
+  let raw='';
+  try {
+    const cursor2=cursor;
+    if(currentProvider==='mistral') raw=await callMistral(key,sys,finalText,cursor2);
+    else if(currentProvider==='together') raw=await callTogether(key,sys,finalText,cursor2);
+    else if(currentProvider==='free') raw=await callOpenRouter(key,sys,finalText,cursor2);
+    else if(currentProvider==='groq') raw=await callGroq(key,sys,finalText,cursor2);
+    else if(currentProvider==='gemini') raw=await callGemini(key,sys,finalText,cursor2);
+    else raw=await callAnthropic(key,sys,finalText,cursor2);
+    cursor.remove();
+    finalText=programmaticHumanize(raw.trim());
+    outputAreaEl.textContent=finalText;
+    const sc=aiScore(finalText); renderScore('outScoreFill','outScorePct',sc);
+    const wc=wordCount(finalText); outputWcEl.textContent=`${wc} word${wc!==1?'s':''}`;
+    diffBox.innerHTML='<div class="diff-legend"><span><span class="diff-del">removed</span> words cut</span><span><span class="diff-add">added</span> new words</span></div>'+renderDiff(originalInput,finalText);
+    copyBtn.disabled=false; pushBtn.style.display='';
+    setStatus(sc===0?'Score: 0% ✦ Undetectable!':'Score: '+sc+'% — try Push again','done');
+  } catch(err) {
+    cursor.remove();
+    outputAreaEl.innerHTML=`<span style="color:var(--danger);font-size:0.85rem;font-family:monospace">Error: ${esc(err.message)}</span>`;
+    setStatus('Error',''); pushBtn.style.display='';
+  }
+  isStreaming=false; humanizeBtn.disabled=false;
+}
+
+async function humanize() {
+  const text=inputEl.value.trim();
+  if(!text){setStatus('Paste some text first.');return;}
+  const key=currentProvider==='mistral'?MISTRAL_KEY:currentProvider==='together'?TOGETHER_KEY:currentProvider==='free'?OPENROUTER_KEY:currentProvider==='groq'?GROQ_KEY:currentProvider==='gemini'?GEMINI_KEY:API_KEY;
+  if(!key){openSettings();setStatus('Add your API key first.');return;}
+  if(isStreaming) return;
+  isStreaming=true; originalInput=text;
+  humanizeBtn.disabled=true; copyBtn.disabled=true;
+  outputTabsEl.classList.remove('visible');
+  auditBox.textContent=''; auditBox.classList.remove('visible');
+  diffBox.innerHTML=''; diffBox.classList.remove('visible');
+  variationsWrapEl.innerHTML=''; variationsWrapEl.classList.remove('visible');
+  finalText=''; auditText=''; currentVariations=[];
+  outputAreaEl.style.display=''; outputAreaEl.innerHTML='';
+  const cursor=document.createElement('span'); cursor.className='cursor'; outputAreaEl.appendChild(cursor);
+  setStatus('Humanizing…','active');
+  const purpose=document.getElementById('purposeSelect').value;
+  const sysPrompt=buildPrompt(currentTone,purpose,variationCount);
+  let raw='';
+  try {
+    if(currentProvider==='mistral') raw=await callMistral(key,sysPrompt,text,cursor);
+    else if(currentProvider==='together') raw=await callTogether(key,sysPrompt,text,cursor);
+    else if(currentProvider==='free') raw=await callOpenRouter(key,sysPrompt,text,cursor);
+    else if(currentProvider==='groq') raw=await callGroq(key,sysPrompt,text,cursor);
+    else if(currentProvider==='gemini') raw=await callGemini(key,sysPrompt,text,cursor);
+    else raw=await callAnthropic(key,sysPrompt,text,cursor);
+    cursor.remove();
+    variationCount===3?parseVars(raw,text):parseSingle(raw,text);
+    if(stealthMode && variationCount!==3) { setStatus('Stealth pass 2/2…','active'); await pushToZero(); }
+  } catch(err) {
+    cursor.remove();
+    outputAreaEl.innerHTML=`<span style="color:var(--danger);font-size:0.85rem;font-family:monospace">Error: ${esc(err.message)}</span>`;
+    setStatus('Error — check API key.','');
+    console.error(err);
+  }
+  isStreaming=false; humanizeBtn.disabled=false;
+}
+
+async function callMistral(key,sys,text,cursor) {
+  const res=await fetch('https://api.mistral.ai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+cleanKey(key)},
+    body:JSON.stringify({
+      model:'open-mistral-7b',
+      stream:true,
+      max_tokens:variationCount===3?4000:2000,
+      messages:[{role:'system',content:sys},{role:'user',content:text}]
+    })
+  });
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||e.error?.message||`Mistral HTTP ${res.status}`);}
+  let raw='';
+  const reader=res.body.getReader(),dec=new TextDecoder();
+  while(true){const{done,value}=await reader.read();if(done)break;const chunk=dec.decode(value,{stream:true});
+    for(const line of chunk.split('\n')){if(!line.startsWith('data: '))continue;const d=line.slice(6).trim();if(d==='[DONE]')break;
+      try{const j=JSON.parse(d);const p=j.choices?.[0]?.delta?.content;if(p){raw+=p;streamRender(raw,cursor);}}catch{}}}
+  return raw;
+}
+
+async function callTogether(key,sys,text,cursor) {
+  const cleanedKey = cleanKey(key);
+  if(!cleanedKey) throw new Error('Together AI key is empty — open ⚙ settings, paste your key, click Test Key, then close.');
+  const res=await fetch('https://api.together.xyz/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+cleanedKey},
+    body:JSON.stringify({
+      model:'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+      stream:true,
+      max_tokens:variationCount===3?4000:2000,
+      messages:[{role:'system',content:sys},{role:'user',content:text}]
+    })
+  });
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error((e.error?.message||e.message||`HTTP ${res.status}`)+' [key len:'+cleanedKey.length+']');}
+  let raw='';
+  const reader=res.body.getReader(),dec=new TextDecoder();
+  while(true){const{done,value}=await reader.read();if(done)break;const chunk=dec.decode(value,{stream:true});
+    for(const line of chunk.split('\n')){if(!line.startsWith('data: '))continue;const d=line.slice(6).trim();if(d==='[DONE]')break;
+      try{const j=JSON.parse(d);const p=j.choices?.[0]?.delta?.content;if(p){raw+=p;streamRender(raw,cursor);}}catch{}}}
+  return raw;
+}
+const OR_FREE_MODELS = [
+  'deepseek/deepseek-r1:free',
+  'deepseek/deepseek-chat:free',
+  'google/gemma-3-27b-it:free',
+  'google/gemma-2-9b-it:free',
+  'meta-llama/llama-3.2-3b-instruct:free',
+  'qwen/qwen-2.5-7b-instruct:free',
+  'mistralai/mistral-7b-instruct:free'
+];
+const OR_SKIP = ['No endpoints','Provider returned error','overloaded','unavailable','rate limit','context length','No available'];
+async function callOpenRouter(key,sys,text,cursor) {
+  let lastErr='All free models unavailable — try again in a moment.';
+  for(const model of OR_FREE_MODELS){
+    setStatus(`Trying ${model.split('/')[1].split(':')[0]}…`,'active');
+    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`,'HTTP-Referer':'https://humanizer.app','X-Title':'Humanizer'},
+      body:JSON.stringify({model,stream:true,max_tokens:variationCount===3?4000:2000,messages:[{role:'system',content:sys},{role:'user',content:text}]})
+    });
+    if(!res.ok){
+      const e=await res.json().catch(()=>({}));
+      lastErr=e.error?.message||`HTTP ${res.status}`;
+      if(OR_SKIP.some(s=>lastErr.includes(s))) continue;
+      throw new Error(lastErr);
+    }
+    let raw='';
+    const reader=res.body.getReader(),dec=new TextDecoder();
+    while(true){const{done,value}=await reader.read();if(done)break;const chunk=dec.decode(value,{stream:true});
+      for(const line of chunk.split('\n')){if(!line.startsWith('data: '))continue;const d=line.slice(6).trim();if(d==='[DONE]')break;
+        try{const j=JSON.parse(d);const p=j.choices?.[0]?.delta?.content;if(p){raw+=p;streamRender(raw,cursor);}}catch{}}}
+    if(raw.trim()) return raw;
+    lastErr='Empty response from '+model;
+  }
+  throw new Error('OpenRouter free models unavailable. Fix: go to openrouter.ai → Credits → add $0.10 (minimum) to unlock free models. Or switch to Groq tab.');
+}
+
+async function callGroq(key,sys,text,cursor) {
+  const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},
+    body:JSON.stringify({
+      model:'llama-3.3-70b-versatile',
+      max_tokens:variationCount===3?4000:2000,
+      stream:true,
+      messages:[{role:'system',content:sys},{role:'user',content:text}]
+    })
+  });
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
+  let raw='';
+  const reader=res.body.getReader(),dec=new TextDecoder();
+  while(true){const{done,value}=await reader.read();if(done)break;const chunk=dec.decode(value,{stream:true});
+    for(const line of chunk.split('\n')){if(!line.startsWith('data: '))continue;const d=line.slice(6).trim();if(d==='[DONE]')break;
+      try{const j=JSON.parse(d);const p=j.choices?.[0]?.delta?.content;if(p){raw+=p;streamRender(raw,cursor);}}catch{}}}
+  return raw;
+}
+
+async function callAnthropic(key,sys,text,cursor) {
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:variationCount===3?8000:4096,stream:true,system:sys,messages:[{role:'user',content:text}]})
+  });
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
+  let raw='';
+  const reader=res.body.getReader(),dec=new TextDecoder();
+  while(true){const{done,value}=await reader.read();if(done)break;const chunk=dec.decode(value,{stream:true});
+    for(const line of chunk.split('\n')){if(!line.startsWith('data: '))continue;const d=line.slice(6).trim();if(d==='[DONE]')break;
+      try{const j=JSON.parse(d);if(j.type==='content_block_delta'&&j.delta?.text){raw+=j.delta.text;streamRender(raw,cursor);}}catch{}}}
+  return raw;
+}
+// Models to try in order — first one that works wins
+const GEMINI_MODELS = [
+  'gemini-2.0-flash-lite','gemini-2.0-flash',
+  'gemini-1.5-flash','gemini-1.5-flash-001','gemini-1.5-flash-8b'
+];
+
+async function callGemini(key,sys,text,cursor) {
+  const fullText=`${sys}\n\n---\n\nText to humanize:\n${text}`;
+  const body=JSON.stringify({contents:[{role:'user',parts:[{text:fullText}]}],generationConfig:{maxOutputTokens:variationCount===3?4000:2000}});
+  let lastErr='No models available';
+  for(const model of GEMINI_MODELS){
+    const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${key}`;
+    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body});
+    if(!res.ok){
+      const e=await res.json().catch(()=>({}));
+      lastErr=e.error?.message||`HTTP ${res.status}`;
+      if(lastErr.includes('not found')||lastErr.includes('not supported')) continue;
+      if(lastErr.includes('quota')||lastErr.includes('RESOURCE_EXHAUSTED'))
+        throw new Error('Free quota is 0 on this key. Go to aistudio.google.com → click your profile → "Get API key" → create a NEW key from there. That one has the free tier.');
+      throw new Error(lastErr);
+    }
+    let raw='';
+    const reader=res.body.getReader(),dec=new TextDecoder();
+    while(true){const{done,value}=await reader.read();if(done)break;const chunk=dec.decode(value,{stream:true});
+      for(const line of chunk.split('\n')){if(!line.startsWith('data: '))continue;const d=line.slice(6).trim();if(!d||d==='[DONE]')continue;
+        try{const j=JSON.parse(d);const p=j.candidates?.[0]?.content?.parts?.[0]?.text;if(p){raw+=p;streamRender(raw,cursor);}}catch{}}}
+    return raw;
+  }
+  throw new Error(lastErr);
+}
+
+function parseSingle(raw,orig) {
+  const fm=raw.match(/===FINAL===\s*([\s\S]*?)(?:===AUDIT===|$)/);
+  const am=raw.match(/===AUDIT===\s*([\s\S]*?)$/);
+  finalText=programmaticHumanize(fm?fm[1].trim():raw.trim()); auditText=am?am[1].trim():'';
+  outputAreaEl.textContent=finalText;
+  const wc=wordCount(finalText); outputWcEl.textContent=`${wc} word${wc!==1?'s':''}`;
+  renderScore('outScoreFill','outScorePct',aiScore(finalText));
+  auditBox.textContent=auditText||'(No audit generated)';
+  diffBox.innerHTML='<div class="diff-legend"><span><span class="diff-del">removed</span> words cut</span><span><span class="diff-add">added</span> new words</span></div>'+renderDiff(orig,finalText);
+  outputTabsEl.classList.add('visible'); switchTab('final');
+  copyBtn.disabled=false; pushBtn.style.display=''; setStatus('Done ✦','done');
+  addHist(orig,finalText,currentTone,document.getElementById('purposeSelect').value);
+}
+function parseVars(raw,orig) {
+  const am=raw.match(/===AUDIT===\s*([\s\S]*?)$/); auditText=am?am[1].trim():'';
+  const pat=/===VAR(\d+)===\s*([\s\S]*?)(?====VAR\d+===|===AUDIT===|$)/g;
+  let m; const vars=[];
+  while((m=pat.exec(raw))!==null) vars.push(m[2].trim());
+  currentVariations=vars;
+  if(!vars.length){parseSingle(raw,orig);return;}
+  finalText=programmaticHumanize(vars[0]); outputAreaEl.style.display='none';
+  variationsWrapEl.innerHTML=vars.map((v,idx)=>`
+    <div class="var-card ${idx===0?'selected':''}" onclick="selectVar(${idx})">
+      <button class="var-card-copy" onclick="event.stopPropagation();copyVar(${idx})">Copy</button>
+      <div class="var-card-label">Version ${idx+1}</div>
+      <div class="var-card-text">${esc(v)}</div>
+    </div>`).join('');
+  variationsWrapEl.classList.add('visible');
+  const wc=wordCount(vars[0]); outputWcEl.textContent=`${wc} word${wc!==1?'s':''}`;
+  renderScore('outScoreFill','outScorePct',aiScore(vars[0]));
+  auditBox.textContent=auditText||'(No audit)';
+  diffBox.innerHTML='<div class="diff-legend"><span><span class="diff-del">removed</span> words cut</span><span><span class="diff-add">added</span> new words</span></div>'+renderDiff(orig,vars[0]);
+  outputTabsEl.classList.add('visible'); switchTab('final');
+  copyBtn.disabled=false; pushBtn.style.display=''; setStatus(`Done ✦ — ${vars.length} versions ready`,'done');
+  addHist(orig,vars[0],currentTone,document.getElementById('purposeSelect').value);
+}
+
+function streamRender(raw,cursor) {
+  let display=raw;
+  if(variationCount===3) {
+    const matches=[...raw.matchAll(/===VAR(\d+)===\s*([\s\S]*?)(?====VAR\d+===|===AUDIT===|$)/g)];
+    if(matches.length>0){const last=matches[matches.length-1];display=`[Version ${last[1]}]\n\n${last[2]}`;}
+    else display='';
+  } else {
+    const fi=raw.indexOf('===FINAL==='),ai=raw.indexOf('===AUDIT===');
+    if(fi!==-1) display=raw.slice(fi+11,ai!==-1?ai:raw.length).replace(/^\n/,'');
+  }
+  outputAreaEl.textContent=display; outputAreaEl.appendChild(cursor); outputAreaEl.scrollTop=outputAreaEl.scrollHeight;
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+renderHist();
+selectProvider(currentProvider);
+updateBadge();
+setTimeout(()=>setStatus('Ready ✦ — paste text and click Humanize','done'),700);
+</script>
+</body>
+</html>

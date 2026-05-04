@@ -1,0 +1,17 @@
+{
+  "name": "orderflow",
+  "version": "1.0.0",
+  "description": "WhatsApp Order Manager for small businesses",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx cap sync android"
+  },
+  "keywords": [],
+  "author": "Henry Ogun",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^8.3.0",
+    "@capacitor/cli": "^8.3.0",
+    "@capacitor/core": "^8.3.0"
+  }
+}

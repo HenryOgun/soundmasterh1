@@ -1,0 +1,15 @@
+{
+  "appId": "com.henryogun.humanizer",
+  "appName": "Humanizer",
+  "webDir": "www",
+  "server": {
+    "cleartext": true,
+    "allowNavigation": ["api.anthropic.com", "*.googleapis.com", "*.groq.com", "*.mistral.ai", "*.together.ai", "openrouter.ai"]
+  },
+  "android": {
+    "allowMixedContent": true
+  },
+  "ios": {
+    "allowsLinkPreview": false
+  }
+}

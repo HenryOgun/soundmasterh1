@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Bibeli</string>
+    <string name="title_activity_main">Bibeli</string>
+    <string name="package_name">com.henryogun.bibeli</string>
+    <string name="custom_url_scheme">com.henryogun.bibeli</string>
+</resources>

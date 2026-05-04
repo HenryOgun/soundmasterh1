@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI Video Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+<style>
+  :root {
+    --bg:       #0a0a0f;
+    --bg2:      #12121a;
+    --bg3:      #1a1a26;
+    --border:   #2a2a3a;
+    --txt:      #e8e8f0;
+    --txt2:     #888899;
+    --accent:   #7c3aed;
+    --accent2:  #a855f7;
+    --grad:     linear-gradient(135deg,#7c3aed,#a855f7,#ec4899);
+    --radius:   14px;
+    --nav-h:    64px;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--txt); min-height:100vh; overflow-x:hidden; }
+
+  /* ── Auth Screen ── */
+  #authScreen {
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background: radial-gradient(ellipse at 30% 20%, #1e0a3c 0%, #0a0a0f 60%),
+                radial-gradient(ellipse at 70% 80%, #0a1a2e 0%, transparent 60%);
+    padding:20px;
+  }
+  .auth-card {
+    background:var(--bg2); border:1px solid var(--border); border-radius:24px;
+    padding:40px; width:100%; max-width:420px;
+    box-shadow:0 24px 80px rgba(124,58,237,0.15);
+  }
+  .auth-logo {
+    font-size:32px; font-weight:700; text-align:center; margin-bottom:8px;
+    background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .auth-sub { text-align:center; color:var(--txt2); font-size:14px; margin-bottom:32px; }
+  .auth-tabs { display:flex; background:var(--bg3); border-radius:10px; padding:4px; margin-bottom:28px; }
+  .auth-tab {
+    flex:1; padding:10px; border:none; background:transparent; color:var(--txt2);
+    border-radius:8px; cursor:pointer; font-size:14px; font-weight:500; transition:.2s;
+  }
+  .auth-tab.active { background:var(--accent); color:#fff; }
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:13px; color:var(--txt2); margin-bottom:6px; font-weight:500; }
+  .field input {
+    width:100%; padding:13px 16px; background:var(--bg3); border:1px solid var(--border);
+    border-radius:10px; color:var(--txt); font-size:15px; outline:none; transition:.2s;
+    font-family:inherit;
+  }
+  .field input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,58,237,0.15); }
+  .btn-primary {
+    width:100%; padding:14px; background:var(--grad); border:none; border-radius:10px;
+    color:#fff; font-size:15px; font-weight:600; cursor:pointer; transition:.2s; font-family:inherit;
+  }
+  .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
+  .btn-primary:active { transform:scale(.98); }
+  .btn-primary:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+  .auth-err { background:#2a0f0f; border:1px solid #5a1f1f; color:#ff6b6b; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px; display:none; }
+
+  /* ── Main App ── */
+  #app { display:none; padding-bottom:calc(var(--nav-h) + 16px); min-height:100vh; }
+
+  /* Header */
+  .app-header {
+    position:sticky; top:0; z-index:100; background:rgba(10,10,15,0.85);
+    backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .app-header-logo {
+    font-size:18px; font-weight:700;
+    background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .btn-signout {
+    padding:7px 14px; background:transparent; border:1px solid var(--border);
+    border-radius:8px; color:var(--txt2); font-size:13px; cursor:pointer; transition:.2s;
+    font-family:inherit;
+  }
+  .btn-signout:hover { border-color:var(--accent); color:var(--txt); }
+
+  /* Screens */
+  .screen { display:none; padding:20px; }
+  .screen.active { display:block; }
+
+  /* Nav */
+  .nav-bar {
+    position:fixed; bottom:0; left:0; right:0; height:var(--nav-h);
+    background:rgba(18,18,26,0.95); backdrop-filter:blur(12px);
+    border-top:1px solid var(--border); display:flex; z-index:100;
+  }
+  .nav-item {
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:4px; cursor:pointer; transition:.2s; padding:8px 0;
+  }
+  .nav-item .nav-icon { font-size:20px; }
+  .nav-item .nav-label { font-size:10px; color:var(--txt2); font-weight:500; letter-spacing:.3px; text-transform:uppercase; transition:.2s; }
+  .nav-item.active .nav-icon { filter:drop-shadow(0 0 6px var(--accent2)); }
+  .nav-item.active .nav-label { color:var(--accent2); }
+
+  /* ── Generate Screen ── */
+  .gen-hero {
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(168,85,247,0.08));
+    border:1px solid rgba(124,58,237,0.3); border-radius:20px; padding:28px 24px;
+    margin-bottom:24px; text-align:center;
+  }
+  .gen-hero h1 { font-size:26px; font-weight:700; margin-bottom:8px; }
+  .gen-hero p { color:var(--txt2); font-size:14px; }
+
+  .mode-tabs { display:flex; background:var(--bg2); border-radius:12px; padding:4px; margin-bottom:24px; border:1px solid var(--border); }
+  .mode-tab {
+    flex:1; padding:11px; border:none; background:transparent; color:var(--txt2);
+    border-radius:9px; cursor:pointer; font-size:14px; font-weight:500; transition:.2s; font-family:inherit;
+  }
+  .mode-tab.active { background:var(--accent); color:#fff; box-shadow:0 4px 12px rgba(124,58,237,0.4); }
+
+  .gen-panel { display:none; }
+  .gen-panel.active { display:block; }
+
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:16px; }
+  .card-title { font-size:13px; font-weight:600; color:var(--txt2); text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; }
+
+  textarea {
+    width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:10px;
+    color:var(--txt); font-size:15px; padding:14px; resize:none; outline:none;
+    font-family:inherit; transition:.2s; min-height:120px;
+  }
+  textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,58,237,0.12); }
+
+  .prompt-hints { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .hint-chip {
+    padding:6px 12px; background:var(--bg3); border:1px solid var(--border);
+    border-radius:20px; font-size:12px; color:var(--txt2); cursor:pointer; transition:.2s;
+  }
+  .hint-chip:hover { border-color:var(--accent); color:var(--accent2); }
+
+  .upload-zone {
+    border:2px dashed var(--border); border-radius:var(--radius); padding:40px 20px;
+    text-align:center; cursor:pointer; transition:.2s;
+  }
+  .upload-zone:hover { border-color:var(--accent); background:rgba(124,58,237,0.05); }
+  .upload-zone .uz-icon { font-size:36px; margin-bottom:10px; }
+  .upload-zone p { color:var(--txt2); font-size:14px; }
+  .upload-zone input { display:none; }
+  .preview-img { width:100%; border-radius:10px; max-height:260px; object-fit:cover; margin-top:12px; }
+
+  .btn-generate {
+    width:100%; padding:16px; background:var(--grad); border:none; border-radius:12px;
+    color:#fff; font-size:16px; font-weight:700; cursor:pointer; transition:.2s;
+    letter-spacing:.3px; font-family:inherit; margin-top:4px;
+    box-shadow:0 8px 24px rgba(124,58,237,0.3);
+  }
+  .btn-generate:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(124,58,237,0.4); }
+  .btn-generate:active { transform:scale(.98); }
+  .btn-generate:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  /* Progress */
+  .progress-box {
+    background:var(--bg2); border:1px solid rgba(124,58,237,0.3); border-radius:var(--radius);
+    padding:24px; text-align:center; margin-top:16px; display:none;
+  }
+  .progress-spinner {
+    width:48px; height:48px; border:3px solid var(--border);
+    border-top-color:var(--accent2); border-radius:50%; animation:spin 1s linear infinite;
+    margin:0 auto 16px;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .progress-title { font-weight:600; margin-bottom:6px; }
+  .progress-sub { font-size:13px; color:var(--txt2); }
+
+  /* Result */
+  .result-box {
+    background:var(--bg2); border:1px solid rgba(124,58,237,0.3); border-radius:var(--radius);
+    padding:20px; margin-top:16px; display:none;
+  }
+  .result-box video { width:100%; border-radius:10px; margin-bottom:14px; }
+  .result-actions { display:flex; gap:10px; }
+  .btn-dl {
+    flex:1; padding:12px; background:var(--accent); border:none; border-radius:10px;
+    color:#fff; font-weight:600; cursor:pointer; font-size:14px; transition:.2s; font-family:inherit;
+  }
+  .btn-dl:hover { background:var(--accent2); }
+  .btn-save {
+    padding:12px 18px; background:var(--bg3); border:1px solid var(--border);
+    border-radius:10px; color:var(--txt); font-size:14px; font-weight:500; cursor:pointer; transition:.2s; font-family:inherit;
+  }
+  .btn-save:hover { border-color:var(--accent); }
+
+  /* ── Gallery Screen ── */
+  .gallery-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .gallery-header h2 { font-size:20px; font-weight:700; }
+  .gallery-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .vid-card {
+    background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; cursor:pointer; transition:.2s;
+  }
+  .vid-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .vid-thumb { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:var(--bg3); }
+  .vid-thumb-placeholder { width:100%; aspect-ratio:16/9; background:linear-gradient(135deg,#1a1a26,#12121a); display:flex; align-items:center; justify-content:center; font-size:28px; }
+  .vid-info { padding:10px; }
+  .vid-type { font-size:10px; color:var(--accent2); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+  .vid-prompt { font-size:12px; color:var(--txt2); margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .vid-date { font-size:11px; color:var(--border); margin-top:4px; }
+  .empty-state { text-align:center; padding:60px 20px; }
+  .empty-state .es-icon { font-size:48px; margin-bottom:16px; }
+  .empty-state p { color:var(--txt2); font-size:14px; }
+
+  /* Video Modal */
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:200;
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .modal-overlay.show { display:flex; }
+  .modal-content { background:var(--bg2); border-radius:20px; padding:20px; width:100%; max-width:500px; }
+  .modal-content video { width:100%; border-radius:12px; margin-bottom:16px; }
+  .modal-actions { display:flex; gap:10px; }
+  .btn-modal-close {
+    flex:1; padding:12px; background:var(--bg3); border:1px solid var(--border);
+    border-radius:10px; color:var(--txt); cursor:pointer; font-size:14px; font-family:inherit;
+  }
+  .btn-modal-delete {
+    padding:12px 18px; background:#2a0f0f; border:1px solid #5a1f1f;
+    border-radius:10px; color:#ff6b6b; cursor:pointer; font-size:14px; font-family:inherit;
+  }
+
+  /* ── Profile Screen ── */
+  .profile-avatar {
+    width:80px; height:80px; border-radius:50%; background:var(--grad);
+    display:flex; align-items:center; justify-content:center; font-size:32px;
+    margin:0 auto 16px;
+  }
+  .profile-email { text-align:center; font-size:16px; font-weight:600; margin-bottom:4px; }
+  .profile-joined { text-align:center; font-size:13px; color:var(--txt2); margin-bottom:28px; }
+  .stat-row { display:flex; gap:12px; margin-bottom:24px; }
+  .stat-card { flex:1; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; text-align:center; }
+  .stat-num { font-size:28px; font-weight:700; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .stat-label { font-size:12px; color:var(--txt2); margin-top:4px; }
+
+  /* Toast */
+  .toast {
+    position:fixed; bottom:calc(var(--nav-h) + 16px); left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--bg2); border:1px solid var(--border); border-radius:10px;
+    padding:12px 20px; font-size:14px; z-index:300; opacity:0; transition:.3s; white-space:nowrap;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* Powered by */
+  .powered {
+    text-align:center; font-size:11px; color:var(--txt2); padding:8px 0;
+    letter-spacing:.4px; pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── AUTH ── -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">✦ VidAI</div>
+    <div class="auth-sub">Generate AI videos in seconds</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+
+    <div id="authErr" class="auth-err"></div>
+
+    <div id="loginForm">
+      <div class="field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+      <button class="btn-primary" onclick="signIn()">Sign In</button>
+    </div>
+
+    <div id="signupForm" style="display:none">
+      <div class="field"><label>Email</label><input type="email" id="signupEmail" placeholder="you@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="signupPass" placeholder="At least 6 characters"></div>
+      <button class="btn-primary" onclick="signUp()">Create Account</button>
+    </div>
+
+    <div class="powered" style="margin-top:20px">Powered by SoundMasterH1</div>
+  </div>
+</div>
+
+<!-- ── MAIN APP ── -->
+<div id="app">
+  <div class="app-header">
+    <div class="app-header-logo">✦ VidAI</div>
+    <button class="btn-signout" onclick="signOut()">Sign out</button>
+  </div>
+
+  <!-- Generate Screen -->
+  <div id="screen-generate" class="screen active">
+    <div class="gen-hero">
+      <h1>Create AI Videos</h1>
+      <p>Turn text or images into stunning videos using AI</p>
+    </div>
+
+    <div class="mode-tabs">
+      <button class="mode-tab active" onclick="switchMode('text')">✍️ Text to Video</button>
+      <button class="mode-tab" onclick="switchMode('image')">🖼️ Image to Video</button>
+    </div>
+
+    <!-- Text to Video -->
+    <div id="panel-text" class="gen-panel active">
+      <div class="card">
+        <div class="card-title">Describe your video</div>
+        <textarea id="t2vPrompt" placeholder="A golden sunset over the ocean, waves crashing on the shore, cinematic style..." rows="5"></textarea>
+        <div class="prompt-hints">
+          <div class="hint-chip" onclick="useHint(this)">🌅 Sunset over ocean</div>
+          <div class="hint-chip" onclick="useHint(this)">🌆 City timelapse at night</div>
+          <div class="hint-chip" onclick="useHint(this)">🌿 Forest with sunlight rays</div>
+          <div class="hint-chip" onclick="useHint(this)">🌊 Ocean waves close-up</div>
+          <div class="hint-chip" onclick="useHint(this)">🔥 Campfire in the dark</div>
+          <div class="hint-chip" onclick="useHint(this)">⛅ Clouds moving fast</div>
+        </div>
+      </div>
+      <button class="btn-generate" id="t2vBtn" onclick="generateText()">✦ Generate Video</button>
+    </div>
+
+    <!-- Image to Video -->
+    <div id="panel-image" class="gen-panel">
+      <div class="card">
+        <div class="card-title">Upload your image</div>
+        <div class="upload-zone" onclick="document.getElementById('imgInput').click()">
+          <div class="uz-icon">📁</div>
+          <p>Tap to upload an image</p>
+          <p style="font-size:12px;margin-top:4px">JPG, PNG up to 10MB</p>
+          <input type="file" id="imgInput" accept="image/*" onchange="previewImage(this)">
+        </div>
+        <img id="imgPreview" class="preview-img" style="display:none">
+      </div>
+      <button class="btn-generate" id="i2vBtn" onclick="generateImage()" disabled>✦ Animate Image</button>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-box" id="progressBox">
+      <div class="progress-spinner"></div>
+      <div class="progress-title">Generating your video...</div>
+      <div class="progress-sub">Generating clip then extending to 1 minute — please wait</div>
+    </div>
+
+    <!-- Result -->
+    <div class="result-box" id="resultBox">
+      <video id="resultVideo" controls playsinline></video>
+      <div class="result-actions">
+        <button class="btn-dl" onclick="downloadVideo()">⬇ Download</button>
+        <button class="btn-save" onclick="viewGallery()">View in Gallery</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gallery Screen -->
+  <div id="screen-gallery" class="screen">
+    <div class="gallery-header">
+      <h2>My Videos</h2>
+      <span id="galleryCount" style="font-size:13px;color:var(--txt2)"></span>
+    </div>
+    <div id="galleryGrid" class="gallery-grid"></div>
+  </div>
+
+  <!-- Profile Screen -->
+  <div id="screen-profile" class="screen">
+    <div class="profile-avatar">👤</div>
+    <div class="profile-email" id="profileEmail"></div>
+    <div class="profile-joined" id="profileJoined"></div>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">Videos Made</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statT2V">0</div>
+        <div class="stat-label">Text → Video</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statI2V">0</div>
+        <div class="stat-label">Image → Video</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">About</div>
+      <p style="font-size:14px;color:var(--txt2);line-height:1.6">
+        VidAI uses Hugging Face's free AI models to generate videos from text prompts and images.
+        Generation may take 1–3 minutes on the free tier.
+      </p>
+    </div>
+    <div class="powered" style="margin-top:20px">Powered by SoundMasterH1</div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="nav-bar">
+    <div class="nav-item active" data-screen="generate" onclick="showScreen('generate',this)">
+      <span class="nav-icon">✦</span>
+      <span class="nav-label">Generate</span>
+    </div>
+    <div class="nav-item" data-screen="gallery" onclick="showScreen('gallery',this)">
+      <span class="nav-icon">🎬</span>
+      <span class="nav-label">Gallery</span>
+    </div>
+    <div class="nav-item" data-screen="profile" onclick="showScreen('profile',this)">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profile</span>
+    </div>
+  </nav>
+</div>
+
+<!-- Video Modal -->
+<div class="modal-overlay" id="vidModal" onclick="closeModal(event)">
+  <div class="modal-content">
+    <video id="modalVideo" controls playsinline style="width:100%;border-radius:12px;margin-bottom:16px"></video>
+    <div style="font-size:13px;color:var(--txt2);margin-bottom:14px" id="modalPrompt"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-close" onclick="closeModalDirect()">Close</button>
+      <button class="btn-modal-delete" onclick="deleteVideo()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://ezkmlwnighnotpntrmwq.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6a21sd25pZ2hub3RwbnRybXdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MTQ5ODUsImV4cCI6MjA5MzM5MDk4NX0.UG62S86NE5o1cFS9RIGrowRmJRBC_nY4_7o7VyY9W34';
+const BACKEND_URL   = 'http://localhost:3001';
+// ─────────────────────────────────────────────────────────────────
+
+let sb = null;
+let currentUser = null;
+let currentVideoUrl = null;
+let currentVideoId  = null;
+
+// ── Auth helpers ──────────────────────────────────────────────────
+function switchAuthTab(tab) {
+  document.getElementById('loginForm').style.display   = tab === 'login'  ? 'block' : 'none';
+  document.getElementById('signupForm').style.display  = tab === 'signup' ? 'block' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0)===(tab==='login')));
+  document.getElementById('authErr').style.display = 'none';
+}
+
+function showAuthErr(msg) {
+  const el = document.getElementById('authErr');
+  if (!msg) { el.style.display = 'none'; return; }
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function signIn() {
+  if (!sb) return showAuthErr('⚠️ App not ready — check internet and refresh.');
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  if (!email || !pass) return showAuthErr('⚠️ Please fill in all fields');
+  const btn = document.querySelector('#loginForm .btn-primary');
+  btn.textContent = 'Signing in…';
+  btn.disabled = true;
+  showAuthErr('');
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+      showAuthErr('❌ ' + error.message);
+    } else if (!data?.session) {
+      showAuthErr('❌ Sign in failed — check your email and password.');
+    }
+  } catch(e) {
+    showAuthErr('❌ Network error: ' + e.message);
+  } finally {
+    btn.textContent = 'Sign In';
+    btn.disabled = false;
+  }
+}
+
+async function signUp() {
+  if (!sb) return showAuthErr('⚠️ App not ready — check internet and refresh.');
+  const email = document.getElementById('signupEmail').value.trim();
+  const pass  = document.getElementById('signupPass').value;
+  if (!email || !pass) return showAuthErr('⚠️ Please fill in all fields');
+  if (pass.length < 6)  return showAuthErr('⚠️ Password must be at least 6 characters');
+  const btn = document.querySelector('#signupForm .btn-primary');
+  btn.textContent = 'Creating account…';
+  btn.disabled = true;
+  showAuthErr('');
+  try {
+    const { error } = await sb.auth.signUp({ email, password: pass });
+    if (error) showAuthErr('❌ ' + error.message);
+    else showAuthErr('✅ Account created! Check your email then sign in.');
+  } catch(e) {
+    showAuthErr('❌ Network error: ' + e.message);
+  } finally {
+    btn.textContent = 'Create Account';
+    btn.disabled = false;
+  }
+}
+
+async function signOut() {
+  if (sb) await sb.auth.signOut();
+}
+
+// ── Navigation ────────────────────────────────────────────────────
+function showScreen(name, el) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+  if (name === 'gallery') loadGallery();
+  if (name === 'profile') loadProfile();
+}
+
+// ── Mode switch ───────────────────────────────────────────────────
+function switchMode(mode) {
+  document.querySelectorAll('.mode-tab').forEach((t,i) => t.classList.toggle('active', (mode==='text')?(i===0):(i===1)));
+  document.getElementById('panel-text').classList.toggle('active', mode === 'text');
+  document.getElementById('panel-image').classList.toggle('active', mode === 'image');
+  hideProgress(); hideResult();
+}
+
+function useHint(el) {
+  document.getElementById('t2vPrompt').value = el.textContent.replace(/^[^\w]*/, '').trim();
+}
+
+// ── Image preview ─────────────────────────────────────────────────
+function previewImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('imgPreview');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('i2vBtn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Generate Text → Video ─────────────────────────────────────────
+async function generateText() {
+  const prompt = document.getElementById('t2vPrompt').value.trim();
+  if (!prompt) return toast('Please enter a prompt');
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return toast('Please sign in');
+
+  showProgress(); hideResult();
+  document.getElementById('t2vBtn').disabled = true;
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/generate/text`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    showResult(data.url);
+  } catch (err) {
+    toast('Error: ' + err.message);
+  } finally {
+    hideProgress();
+    document.getElementById('t2vBtn').disabled = false;
+  }
+}
+
+// ── Generate Image → Video ────────────────────────────────────────
+async function generateImage() {
+  const file = document.getElementById('imgInput').files[0];
+  if (!file) return toast('Please upload an image');
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return toast('Please sign in');
+
+  showProgress(); hideResult();
+  document.getElementById('i2vBtn').disabled = true;
+
+  try {
+    const form = new FormData();
+    form.append('image', file);
+    const res = await fetch(`${BACKEND_URL}/api/generate/image`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}` },
+      body: form
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    showResult(data.url);
+  } catch (err) {
+    toast('Error: ' + err.message);
+  } finally {
+    hideProgress();
+    document.getElementById('i2vBtn').disabled = false;
+  }
+}
+
+// ── Progress / Result ─────────────────────────────────────────────
+function showProgress() { document.getElementById('progressBox').style.display = 'block'; }
+function hideProgress() { document.getElementById('progressBox').style.display = 'none'; }
+function showResult(url) {
+  currentVideoUrl = url;
+  const box = document.getElementById('resultBox');
+  document.getElementById('resultVideo').src = url;
+  box.style.display = 'block';
+  box.scrollIntoView({ behavior: 'smooth' });
+}
+function hideResult() { document.getElementById('resultBox').style.display = 'none'; }
+
+function downloadVideo() {
+  if (!currentVideoUrl) return;
+  const a = document.createElement('a');
+  a.href = currentVideoUrl;
+  a.download = 'vidai-' + Date.now() + '.mp4';
+  a.click();
+}
+function viewGallery() { showScreen('gallery', document.querySelector('[data-screen="gallery"]')); }
+
+// ── Gallery ───────────────────────────────────────────────────────
+async function loadGallery() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
+  const res = await fetch(`${BACKEND_URL}/api/videos`, {
+    headers: { 'Authorization': `Bearer ${session.access_token}` }
+  });
+  const data = await res.json();
+  const videos = data.videos || [];
+  document.getElementById('galleryCount').textContent = `${videos.length} video${videos.length!==1?'s':''}`;
+  const grid = document.getElementById('galleryGrid');
+  if (!videos.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:span 2">
+      <div class="es-icon">🎬</div>
+      <p>No videos yet. Generate your first one!</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = videos.map(v => `
+    <div class="vid-card" onclick="openModal('${v.url}','${(v.prompt||'').replace(/'/g,"\\'")}','${v.id}')">
+      <div class="vid-thumb-placeholder">🎬</div>
+      <div class="vid-info">
+        <div class="vid-type">${v.type === 'text-to-video' ? '✍️ Text' : '🖼️ Image'}</div>
+        <div class="vid-prompt">${v.prompt || 'Image upload'}</div>
+        <div class="vid-date">${new Date(v.created_at).toLocaleDateString()}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Modal ─────────────────────────────────────────────────────────
+function openModal(url, prompt, id) {
+  currentVideoId = id;
+  document.getElementById('modalVideo').src = url;
+  document.getElementById('modalPrompt').textContent = prompt;
+  document.getElementById('vidModal').classList.add('show');
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('vidModal')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('vidModal').classList.remove('show');
+  document.getElementById('modalVideo').pause();
+  document.getElementById('modalVideo').src = '';
+}
+async function deleteVideo() {
+  if (!currentVideoId) return;
+  const { data: { session } } = await sb.auth.getSession();
+  await fetch(`${BACKEND_URL}/api/videos/${currentVideoId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${session.access_token}` }
+  });
+  closeModalDirect();
+  loadGallery();
+  toast('Video deleted');
+}
+
+// ── Profile ───────────────────────────────────────────────────────
+async function loadProfile() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
+  const res = await fetch(`${BACKEND_URL}/api/videos`, {
+    headers: { 'Authorization': `Bearer ${session.access_token}` }
+  });
+  const data = await res.json();
+  const videos = data.videos || [];
+  document.getElementById('statTotal').textContent = videos.length;
+  document.getElementById('statT2V').textContent = videos.filter(v => v.type === 'text-to-video').length;
+  document.getElementById('statI2V').textContent = videos.filter(v => v.type === 'image-to-video').length;
+}
+
+// ── Toast ─────────────────────────────────────────────────────────
+let _toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+// ── Init (LAST — so CDN failure never kills the functions above) ───
+(function init() {
+  if (typeof supabase === 'undefined' || typeof supabase.createClient !== 'function') {
+    showAuthErr('⚠️ Could not load Supabase. Check your internet connection and refresh the page.');
+    return;
+  }
+  try {
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  } catch(e) {
+    showAuthErr('⚠️ Supabase init error: ' + e.message);
+    return;
+  }
+  sb.auth.onAuthStateChange((event, session) => {
+    if (session?.user) {
+      currentUser = session.user;
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('profileEmail').textContent = session.user.email;
+      document.getElementById('profileJoined').textContent =
+        'Joined ' + new Date(session.user.created_at).toLocaleDateString('en', { year:'numeric', month:'long' });
+    } else {
+      currentUser = null;
+      document.getElementById('authScreen').style.display = 'flex';
+      document.getElementById('app').style.display = 'none';
+    }
+  });
+})();
+</script>
+</body>
+</html>
