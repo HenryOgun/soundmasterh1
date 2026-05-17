@@ -21,9 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: false
       - uses: actions/configure-pages@v4
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'code/bloom-horizon-app'
       - id: deployment
         uses: actions/deploy-pages@v4
