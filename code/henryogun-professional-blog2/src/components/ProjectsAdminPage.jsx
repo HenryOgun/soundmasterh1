@@ -47,8 +47,8 @@ function ProjectCard({ item, isAdmin, onDelete }) {
   return (
     <div className="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-[0_20px_20px_rgba(0,0,0,0.05)] hover:-translate-y-1.5 hover:shadow-[0_25px_30px_rgba(0,0,0,0.1)] transition-all duration-300">
       {image && (
-        <div className="relative overflow-hidden" style={{ paddingBottom: '62%' }}>
-          <img src={image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        <div className="relative overflow-hidden bg-gray-50" style={{ paddingBottom: '62%' }}>
+          <img src={image} alt={item.title} className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
           {item.tag && (
             <span className={`absolute top-3 left-3 text-xs font-semibold px-3 py-1 rounded-full ${tagColors[item.tag] || 'bg-gray-100 text-gray-600'}`}>
               {item.tag}

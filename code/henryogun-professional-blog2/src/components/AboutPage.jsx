@@ -57,7 +57,7 @@ export default function AboutPage() {
             </div>
             <div className="w-full lg:w-64 shrink-0">
               <img
-                src="/IMG_4968.PNG"
+                src="/90F71B82-67F5-4FB2-A37C-137DD755D878.jpg"
                 alt="Henry Ogun"
                 className="w-full rounded-lg object-cover shadow-[0_20px_20px_rgba(0,0,0,0.1)]"
                 style={{ aspectRatio: '4/5' }}

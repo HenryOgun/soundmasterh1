@@ -1,5 +1,5 @@
 export const allCards = [
-  // --- Broadcast Projects ---
+  // Broadcast Projects
   {
     id: 1,
     page: 'projects-broadcast',
@@ -13,13 +13,8 @@ export const allCards = [
     readTime: '4 min read',
     content: `As Group Chief Engineer at Diamond FM, I manage the full technical ecosystem of one of Ilorin's leading radio stations. My role spans studio infrastructure design, transmitter maintenance, digital broadcasting and team leadership.
 
-**Key Responsibilities:**
-- Oversee all broadcast transmission equipment and signal chain
-- Design and implement IP based audio distribution across studios
-- Manage a team of broadcast technicians
-- Lead integration of digital automation and streaming platforms
+I oversee all broadcast transmission equipment and signal chain, design and implement IP based audio distribution across studios, manage a team of broadcast technicians, and lead the integration of digital automation and streaming platforms.
 
-**Impact:**
 The station now reaches 4 million listeners across the region with a 40% improvement in signal quality since I took on the engineering role.`,
   },
   {
@@ -35,10 +30,7 @@ The station now reaches 4 million listeners across the region with a 40% improve
     readTime: '3 min read',
     content: `This collaboration with Radio Netherlands Worldwide was a landmark moment in my broadcast career. We worked together on content production, signal distribution, and quality benchmarking.
 
-**What We Built:**
-- Joint content production pipeline connecting Ilorin studios with Amsterdam
-- Technical quality assurance framework aligned to EBU standards
-- Staff training programme on international broadcast practices
+We built a joint content production pipeline connecting Ilorin studios with Amsterdam, a technical quality assurance framework aligned to EBU standards, and a staff training programme on international broadcast practices.
 
 This project helped set the bar for community radio technical excellence in West Africa.`,
   },
@@ -55,86 +47,97 @@ This project helped set the bar for community radio technical excellence in West
     readTime: '2 min read',
     content: `In 2013, I was honoured with the Nigerian Broadcasters Merit Award, recognition of over a decade of dedication to broadcast engineering excellence.
 
-The award highlighted my contributions to:
-- Community radio infrastructure development
-- Training the next generation of broadcast engineers
-- Improving signal quality and reach for underserved communities
+The award highlighted my contributions to community radio infrastructure development, training the next generation of broadcast engineers, and improving signal quality and reach for underserved communities.
 
 This award remains one of the milestones that shaped my commitment to using technology for social impact.`,
   },
 
-  // --- Tech Projects ---
+  // Tech Projects
   {
-    id: 4,
+    id: 17,
     page: 'projects-tech',
     category: 'Tech',
     tag: 'Project',
-    title: 'TechBridge Skills Hub',
+    title: 'WhatsApp Order Manager',
     description:
-      'Founded TechBridge Skills Hub to equip underserved youth in Ilorin with practical digital and tech skills spanning coding and digital marketing.',
-    image: '/h5.jpg',
-    date: '2020 to Present',
-    readTime: '5 min read',
-    content: `TechBridge Skills Hub was born out of a simple observation: talented young people in Ilorin lacked access to quality tech education. I founded TechBridge to change that.
+      'A clean order management dashboard for small businesses that run on WhatsApp — log orders, track payments, and follow up with customers without the chat thread chaos.',
+    image: '/whatsapp-order-manager.png',
+    date: '2026',
+    readTime: '3 min read',
+    content: `Managing orders in a WhatsApp chat thread works — until it doesn't. Missed payments, forgotten follow-ups, and lost order details are the reality for most small businesses in Nigeria.
 
-**What We Offer:**
-- Full stack web development bootcamps
-- Digital marketing and content creation training
-- Broadcast and media production workshops
-- Mentorship from industry professionals
-
-**Impact to Date:**
-- 500 youth trained across 12 cohorts
-- 70% of graduates secured employment or launched businesses
-- Recognised by NITDA and the State Government as a model skills programme
-
-TechBridge is more than a school. It is a launchpad.`,
+WhatsApp Order Manager gives that workflow a proper home. Log orders, mark payments, track outstanding balances, and follow up with customers from a single clean dashboard built for the way business actually works in Africa.`,
   },
   {
-    id: 5,
+    id: 16,
     page: 'projects-tech',
     category: 'Tech',
     tag: 'Project',
-    title: 'Full Stack Development Portfolio',
+    title: 'SalesTrack — Real-Time Sales System for Radio',
     description:
-      'Building modern web applications using React, Node.js and cloud platforms spanning broadcast dashboards to community platforms.',
-    image: '/h6.jpg',
-    date: '2022 to Present',
+      'A real-time advertising sales tracker for Diamond FM built in a single HTML file. Team members log sales from their phones, everything syncs instantly, and reports go straight to WhatsApp.',
+    image: '/08A5B405-D054-4B6D-B488-F9D3EBC51BCF.PNG',
+    date: '2026',
     readTime: '4 min read',
-    content: `My full stack development work bridges the gap between broadcast technology and modern web platforms. I build tools that solve real problems in media and community contexts.
+    content: `A real-time advertising sales tracker for Diamond FM, built in a single HTML file. The team logs sales from their phones, revenue charts update instantly via Firebase, credit payments are flagged at 30 days, and reports go straight to WhatsApp or CSV.
 
-**Recent Projects:**
-- Broadcast operations dashboard built with React, Node.js and WebSockets
-- Community radio listener engagement platform
-- Internal HR and scheduling system for Diamond FM
-- This very portfolio built with React and Tailwind CSS
+No backend servers. No app store. No monthly bills. Hosted on GitHub Pages and wrapped as an Android APK using Trusted Web Activity — every web update goes live on all devices immediately, no reinstall needed.
 
-**Tech Stack:**
-React, Node.js, Express, PostgreSQL, MongoDB, Tailwind CSS, Vite and AWS.`,
+Stack: Vanilla JS · Firebase Realtime Database · PWA · Trusted Web Activity · GitHub Pages`,
   },
   {
-    id: 6,
+    id: 13,
     page: 'projects-tech',
     category: 'Tech',
-    tag: 'Certification',
-    title: 'IBT Full Stack Engineering Programme',
+    tag: 'Project',
+    title: 'Bíbélì — Yoruba Audio Bible App',
     description:
-      'Currently enrolled in the IBT Full Stack Software Engineering programme, deepening expertise in modern web development practices.',
-    image: '/1.jpg',
-    date: '2024 to Present',
-    readTime: '2 min read',
-    content: `The IBT Full Stack Software Engineering programme has been a transformative experience, allowing me to formalise and deepen my development expertise.
+      'A full Bible app in Yoruba from scratch. 66 books, 1,189 chapters, and 31,103 verses of the Yoruba Bible Contemporary Version — fetched, structured, searchable, and available as a native Android APK.',
+    image: '/ima.jpg',
+    date: '2026',
+    readTime: '4 min read',
+    content: `Bíbélì is a complete Yoruba Audio Bible app built from scratch, making Scripture accessible to millions of Yoruba speakers around the world.
 
-**Topics Covered:**
-- Advanced React patterns and state management
-- RESTful API design and Node.js backend development
-- Database architecture and query optimisation
-- DevOps basics including CI/CD, Docker and cloud deployment
+It covers all 66 books, 1,189 chapters, and 31,103 verses of the Yoruba Bible Contemporary Version with chapter-by-chapter audio playback, a Text-to-Speech fallback, daily verse, bookmarks, and dark/light mode. Available as a native Android APK — install once and use offline.
 
-This programme complements my 15 years of broadcast engineering by giving me a rigorous foundation in software craftsmanship.`,
+Yoruba is spoken by over 40 million people, yet quality digital Bible tools in Yoruba are almost nonexistent. This app changes that.`,
+  },
+  {
+    id: 14,
+    page: 'projects-tech',
+    category: 'Tech',
+    tag: 'Project',
+    title: 'Humanizer App — AI Text Rewriter',
+    description:
+      'An AI-powered text humanizer that rewrites content to sound more natural and bypass AI detection. Supports multiple AI providers, packaged as a mobile app for Android and iOS.',
+    image: '/IMG_5474.jpg',
+    date: '2026',
+    readTime: '3 min read',
+    content: `The Humanizer App tackles one of the most pressing challenges in AI-assisted writing: making AI-generated content sound genuinely human.
+
+It rewrites text to sound natural and conversational, supports multiple AI provider backends, and is packaged as a mobile app for both Android and iOS with a clean, fast interface built for quick rewrites on the go.
+
+Writers, students, marketers, and content creators use it to refine AI drafts into polished, human-sounding copy.`,
+  },
+  {
+    id: 15,
+    page: 'projects-tech',
+    category: 'Tech',
+    tag: 'Project',
+    title: 'Fiolu Pharmacy App',
+    description:
+      'A dedicated mobile app for Fiolu Pharmacy — making it easier to manage and access pharmacy services digitally for staff and customers.',
+    image: '/h6.jpg',
+    date: '2026',
+    readTime: '3 min read',
+    content: `The Fiolu Pharmacy App brings a local pharmacy into the digital age, streamlining how staff manage operations and how customers access services.
+
+It digitises pharmacy service access for customers, simplifies internal management for staff, and delivers a clean purpose-built mobile interface available as a native app.
+
+This project demonstrates how targeted digital tools can transform how local healthcare businesses operate and serve their communities — no unnecessary complexity, just the right tool for the job.`,
   },
 
-  // --- Social Ventures ---
+  // Social Ventures
   {
     id: 7,
     page: 'projects-social',
@@ -148,10 +151,7 @@ This programme complements my 15 years of broadcast engineering by giving me a r
     readTime: '4 min read',
     content: `Community radio is one of the most powerful tools for grassroots communication. Through this initiative, I have helped establish and technically support over 5 community radio stations in Kwara State.
 
-**Focus Areas:**
-- Technical setup and training for community run stations
-- Content development for civic education programming
-- Advocacy for policy support of community broadcasting
+The work covers technical setup and training for community run stations, content development for civic education programming, and advocacy for policy support of community broadcasting.
 
 This work was recognised by the ICFJ Knight International Journalism Award in 2018.`,
   },
@@ -168,7 +168,6 @@ This work was recognised by the ICFJ Knight International Journalism Award in 20
     readTime: '3 min read',
     content: `The ICFJ Knight International Journalism Award is one of the most prestigious honours in global journalism. In 2018, I received this award for my work leveraging broadcast technology to serve underserved communities in Nigeria.
 
-**Why This Matters:**
 The award recognised that good engineering is not just about signal quality. It is about access, equity and human connection. My approach to broadcast engineering has always centred the community it serves.
 
 This award opened doors to international collaborations and reinforced my commitment to using technology as a force for good.`,
@@ -186,15 +185,12 @@ This award opened doors to international collaborations and reinforced my commit
     readTime: '3 min read',
     content: `The digital divide is real and closing it requires boots on the ground. This initiative brings basic digital literacy to those left behind by the tech revolution.
 
-**Programme Highlights:**
-- Smartphone and internet basics for market traders and small business owners
-- Social media for business workshops for women entrepreneurs
-- Coding introduction sessions for secondary school students
+The programme covers smartphone and internet basics for market traders, social media for business workshops for women entrepreneurs, and coding introduction sessions for secondary school students.
 
 Over 1,200 people have passed through these workshops with measurable improvements in business outcomes for participants.`,
   },
 
-  // --- Articles ---
+  // Articles
   {
     id: 10,
     page: 'articles',
@@ -208,14 +204,7 @@ Over 1,200 people have passed through these workshops with measurable improvemen
     readTime: '5 min read',
     content: `The landscape of broadcast engineering has undergone a revolutionary transformation. As Group Chief Engineer at Diamond FM, I have witnessed firsthand how digital technologies have reshaped every aspect of radio broadcasting.
 
-**From Analog to Digital Excellence**
-Gone are the days of purely analog equipment. Today's broadcast engineering integrates sophisticated digital audio workstations, automated playlist management and real-time streaming.
-
-**Key Technologies:**
-- Digital Audio Workstations
-- IP based audio distribution
-- Cloud based content management
-- Real-time analytics and listener engagement tools
+Gone are the days of purely analog equipment. Today's broadcast engineering integrates sophisticated digital audio workstations, automated playlist management, real-time streaming, IP based audio distribution, cloud based content management, and real-time listener engagement tools.
 
 The future lies in hybrid approaches combining broadcasting excellence with AI assisted content curation and immersive audio.`,
   },
@@ -232,15 +221,9 @@ The future lies in hybrid approaches combining broadcasting excellence with AI a
     readTime: '6 min read',
     content: `Nigeria has over 550 licensed radio stations and more than 120 television stations. Yet the number of trained broadcast engineers entering the industry each year is declining.
 
-**The Gap Is Growing**
-As stations migrate to digital IP based workflows, the demand for engineers who understand both RF transmission and software systems is skyrocketing. The supply is not keeping up.
+As stations migrate to digital IP based workflows, the demand for engineers who understand both RF transmission and software systems is skyrocketing. The supply is not keeping up. University curricula must include practical broadcast engineering, licensing bodies should incentivise technical training, and experienced engineers must mentor the next generation.
 
-**What Needs to Change:**
-1. University curricula must include practical broadcast engineering
-2. Licensing bodies should incentivise technical training
-3. Experienced engineers must mentor the next generation
-
-Through TechBridge and direct mentorship I have made it my mission to help close this gap.`,
+Through direct mentorship I have made it my mission to help close this gap.`,
   },
   {
     id: 12,
@@ -255,16 +238,7 @@ Through TechBridge and direct mentorship I have made it my mission to help close
     readTime: '5 min read',
     content: `When you spend 15 years maintaining broadcast infrastructure, you develop an obsessive attention to reliability. Every system must work every time. That mindset has made me a better software developer.
 
-**Lessons From the Studio:**
-- Redundancy is not optional. Build fallbacks.
-- Latency matters. Profile early and often.
-- Users are non-technical. Design for clarity.
-- Documentation saves lives and overnight call-outs.
-
-**What I Built at Diamond FM:**
-- A custom scheduling and automation dashboard replacing legacy software
-- A listener SMS interaction platform integrated with on-air systems
-- An internal asset management system for audio archives
+Broadcast engineering taught me that redundancy is not optional, latency matters, users are non-technical so design for clarity, and documentation saves lives. At Diamond FM I built a custom scheduling and automation dashboard, a listener SMS interaction platform integrated with on-air systems, and an internal asset management system for audio archives.
 
 Each project taught me something new about bridging the physical and digital worlds.`,
   },
