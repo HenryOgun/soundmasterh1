@@ -24,11 +24,12 @@ jobs:
         run: npm run build
         working-directory: code/henryogun-professional-blog2
       - name: Deploy to Whogohost via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-          local-dir: code/henryogun-professional-blog2/dist/
-          server-dir: public_html/
+        run: |
+          sudo apt-get install -y lftp
+          lftp -c "
+            set ftp:ssl-allow no;
+            set net:timeout 10;
+            set net:max-retries 3;
+            open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
+            mirror --reverse --delete --verbose --no-perms code/henryogun-professional-blog2/dist/ public_html/
+          "
