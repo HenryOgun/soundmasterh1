@@ -1,23 +1,11 @@
-name: Deploy to GitHub Pages
+name: Deploy to Whogohost
 
 on:
   push:
     branches: [main]
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,9 +22,12 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: code/henryogun-professional-blog2
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
+      - name: Deploy to Whogohost via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          path: code/henryogun-professional-blog2/dist
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          local-dir: code/henryogun-professional-blog2/dist/
+          server-dir: public_html/
