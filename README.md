@@ -1,71 +1,125 @@
-# 📚 Full Stack Software Engineering
+# Diamond FM Broadcast Automation System
 
-This is the central repository for IBT Learning's Full Stack Software Engineering program. This cohort begins on April 27, 2024.
+A complete, production-grade broadcast automation platform built for **Diamond FM 88.7 Ilorin** and **Diamond FM 88.5 Ilesa**, Nigeria. Developed in-house to replace commercial broadcast software.
+
+> **Status: Live in production** — running daily across two broadcast stations.
+
+---
+
+## System Overview
+
+The system is made up of four integrated applications:
+
+| App | Description | Port |
+|---|---|---|
+| **Diamond FM Server** | Central media library and file server | 5743 |
+| **Diamond FM Playout** | On-air playout with cart machine and scheduling | 4000 |
+| **Diamond FM Traffic Manager** | Ad traffic, campaign management, order/slot scheduling | — |
+| **Diamond FM Listener Monitor** | Live listener count and stream health dashboard | 4100 |
+
+---
+
+## Diamond FM Server
+
+Central media server that stores and serves all audio files to connected playout stations.
+
+**Features:**
+- Upload and organise audio library (Songs, Jingles, Promos, Stingers)
+- Stream audio to any connected Playout PC on the network
+- Real-time push to Playout systems via Server-Sent Events (SSE)
+- License activation system with HMAC-SHA256 key validation
+- Station logo management
+- Built-in upload throttling (4 MB/s) to protect streaming bandwidth
+- Packaged as a Windows `.exe` installer (electron-builder + NSIS)
+
+**Stack:** Electron · Node.js · Express · SQLite (better-sqlite3) · Multer
+
+---
+
+## Diamond FM Playout
+
+Professional on-air playout software for broadcast stations.
+
+**Features:**
+- Dual-deck audio playback with crossfade
+- Cart machine (18 instant-play pads) for jingles and stingers
+- Playlist scheduling with auto-play
+- Browse and stream tracks directly from Diamond FM Server
+- Local audio library with waveform editor
+- Audio output device selection per deck
+- VU meters on all decks and cart pads
+- Ad break management
+- Single-instance lock, auto-start on boot
+
+**Stack:** Electron · Node.js · Express · SQLite · Web Audio API
+
+---
+
+## Diamond FM Traffic Manager
+
+Ad traffic and campaign management for broadcast commercials.
+
+**Features:**
+- Client and order management
+- Campaign calendar with visual grid per material
+- Slot scheduling with conflict detection
+- Traffic log generation and export
+- Material duration tracking
+- Multi-station support
+
+**Stack:** Node.js · Express · SQLite · JavaScript
+
+---
+
+## Diamond FM Listener Monitor
+
+Real-time listener analytics dashboard.
+
+**Features:**
+- Live listener count display
+- Stream health monitoring
+- Cloudflare Tunnel integration for remote access
+- Auto-start on system boot
+
+**Stack:** Electron · Node.js · Express · JavaScript
+
+---
+
+## Architecture
+
+```
+Diamond FM Server (PC 1)
+    ├── Serves audio files over local network (port 5743)
+    ├── SSE push for real-time library updates
+    └── REST API for authenticated management
+
+Diamond FM Playout (PC 2, 3, ...)
+    ├── Connects to Server at IP:5743
+    ├── Streams audio on demand
+    └── Local SQLite for schedule and settings
+
+Diamond FM Traffic Manager (Any PC)
+    └── Standalone traffic/ad scheduling system
+
+Diamond FM Listener Monitor (Server PC)
+    └── Cloudflare Tunnel → public dashboard URL
+```
+
+---
+
+## Tech Stack
+
+- **Runtime:** Node.js, Electron 32
+- **Backend:** Express.js, REST API, Server-Sent Events
+- **Database:** SQLite via better-sqlite3
+- **Frontend:** Vanilla JavaScript, Web Audio API, HTML5/CSS3
+- **Packaging:** electron-builder (Windows NSIS installer)
+- **Security:** JWT authentication, HMAC-SHA256 license keys
+
+---
 
 ## Author
 
-👨‍💻 **Author:** [Danny Burrow](https://github.com/burrowdown)
-
-## Support
-
-🛠️ **Support:** [Adesoji1](https://github.com/Adesoji1)
-
-## Tools
-
-Git is a distributed version control system that tracks versions of files. It is often used to control source code by programmers collaboratively developing software.for more information, click [here](git-resources/gitcheatsheet.md)
-
-![Git](git-resources/gitcommands.png)
-
-## Useful links
-
-🔗 [GitHub's git cheat sheet](https://education.github.com/git-cheat-sheet-education.pdf) (this one is more succinct)
-
-🔗 [FreeCodeCamp's git cheat sheet](https://www.freecodecamp.org/news/git-cheat-sheet/) (this one goes into more detail)
-
-🔗 [Markdown cheat sheet](https://www.markdownguide.org/cheat-sheet/)
-
-🔗 [HTML Elements reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
-
-🔗 [CSS Tricks Guide to Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
-
-🔗 [CSS Tricks Guide to CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
-
-🔗 [CSS Tricks Guide to Media Queries](https://css-tricks.com/a-complete-guide-to-css-media-queries/) (this goes much more in depth than was covered in the lesson)
-
-🔗 [CSS Selector Reference](https://www.w3schools.com/cssref/css_selectors.php)
-
-### Web APIs
-
-| Week | Topic                                 | Link                                                                  |
-| ---- | ------------------------------------- | --------------------------------------------------------------------- |
-| 14   | DOM, Query Selectors, Event Listeners | [Web API Assignment #1](./3-web-apis/assignments/web-assignment-1.md) |
-
-<!--
-| 16   | Fetching API Data                     | [Web API Assignment #2](./3-web-apis/assignments/web-assignment-2.md)   |
-| 16   | Web APIs Final Project                | [Web APIs Final Project](./3-web-apis/assignments/web-final-project.md) |
- -->
-
-### JavaScript
-
-| Week | Topic               | Link                                                               |
-| ---- | ------------------- | ------------------------------------------------------------------ |
-| 8    | Strings and Numbers | [JS Assignment #1](./2-javascript/assignments/js-assignment-1.md)  |
-| 9    | Booleans            | [JS Assignment #2](./2-javascript/assignments/js-assignment-2.md)  |
-| 9    | Conditionals        | [JS Assignment #3](./2-javascript/assignments/js-assignment-3.md)  |
-| 10   | Loops               | [JS Assignment #4](./2-javascript/assignments/js-assignment-4.md)  |
-| 11   | Functions           | [JS Assignment #5](./2-javascript/assignments/js-assignment-5.md)  |
-| 12   | Objects             | [JS Assignment #6](./2-javascript/assignments/js-assignment-6.md)  |
-| 12   | Classes             | [JS Assignment #7](./2-javascript/assignments/js-assignment-7.md)  |
-| 13   | Callbacks           | [JS Assignment #8](./2-javascript/assignments/js-assignment-8.md)  |
-| 13   | JS Final Project    | [JS Final Project](./2-javascript/assignments/js-final-project.md) |
-
-### HTML & CSS
-
-| Week | Topic            | Link                                                                                                        |
-| ---- | ---------------- | ----------------------------------------------------------------------------------------------------------- |
-| 2    | 📝 Markdown      | [Markdown Assignment](0-getting-ready/markdown-assignment.md)                                               |
-| 3    | 🌐 HTML          | [HTML Assignment #1](1-html-css/basics/assignment-1.md)                                                     |
-| 4    | 🎨 CSS           | [CSS Assignment #1 (Flexbox)](1-html-css/flexbox/flexbox-assignment/css-assignment-1.md)                    |
-| 5    | 🎨 CSS           | [CSS Assignment #2 (Grid)](1-html-css/grid/grid-assignment/css-assignment-2.md)                             |
-| 6    | 🎨 CSS           | [CSS Assignment #3 (Responsive Design)](1-html-css/media-queries/responsive-assignment/css-assignment-3.md) |
-| 7    | 🌐 HTML & 🎨 CSS | [HTML & CSS Final Project](1-html-css/blog-project.md)                                                      |
+**Henry Olabode Ogun**  
+Head of Engineering, Diamond FM · Full Stack & Broadcast Systems Engineer  
+[henryogun.com](https://www.henryogun.com) · [henryoogun@gmail.com](mailto:henryoogun@gmail.com)
