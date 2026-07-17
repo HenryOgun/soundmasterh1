@@ -177,11 +177,21 @@ Stack: Electron · Node.js · Express · SQLite · Socket.IO · Vanilla JS`,
     image: '/Server.png',
     date: '2026',
     readTime: '3 min read',
-    content: `Henolla Server is a local network media server designed for radio station infrastructure. It centralises all audio assets: music, jingles, ads, station IDs, so every workstation in the building accesses the same library without copying files around on USB drives.
+    content: `Henolla Server: One Media Library for Your Whole Station
 
-It handles file uploads from any device on the local network, streams audio directly to playout systems, manages metadata, and provides a clean web-based interface that non-technical staff can use without training.
+Henolla Server is a self-hosted media server built for radio station infrastructure. It centralises every audio asset, including music, jingles, ads, and station IDs, in one local library, so every workstation in the building pulls from the same source instead of passing files around on USB drives.
 
-Part of the Henolla Suite alongside Henolla Playout and Traffic Manager, it is designed to run on any standard Windows or Linux machine already in the station, turning it into a proper broadcast infrastructure server.
+What it does
+
+Centralised storage: one shared audio library, accessible from any machine on the network.
+Uploads from any device: add and organise files without touching the server directly.
+Live streaming to playout: feeds audio straight into your playout system.
+Metadata management: keep assets tagged, searchable, and organised.
+Simple web interface: built for non-technical staff, no training required.
+
+Runs on what you already have
+
+Henolla Server runs on any standard Windows or Linux machine already in the station, turning it into proper broadcast infrastructure. It's part of the Henolla Suite alongside Henolla Playout and Traffic Manager.
 
 Stack: Node.js · Express · SQLite · Socket.IO · Multer · Vanilla JS`,
   },
