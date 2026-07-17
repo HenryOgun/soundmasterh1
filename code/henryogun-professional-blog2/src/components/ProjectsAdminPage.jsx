@@ -81,8 +81,8 @@ function ProjectCard({ item, isAdmin, onDelete }) {
 
         {isAdmin && item._id && !item._id.startsWith('local-') && (
           <button onClick={handleDelete} disabled={deleting}
-            className="mt-3 flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50">
-            {deleting ? <Loader size={12} className="animate-spin" /> : <Trash2 size={12} />} Remove
+            className="mt-3 flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-red-500 transition-colors disabled:opacity-50">
+            {deleting ? <Loader size={16} className="animate-spin" /> : <Trash2 size={16} />} Remove
           </button>
         )}
       </div>
