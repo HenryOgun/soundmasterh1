@@ -154,15 +154,15 @@ Henolla Playout is a professional desktop radio automation system built for the 
 
 What it does
 
-Music scheduling — plan and manage rotations with full control over your playlist.
-Jingle carts — trigger station IDs, sweepers, and liners instantly.
-Live assist — hands-on control for presenters without breaking automation.
-Clock management — structure programming to a precise broadcast clock.
-Traffic integration — automate ad spot scheduling straight from traffic logs.
+Music scheduling: plan and manage rotations with full control over your playlist.
+Jingle carts: trigger station IDs, sweepers, and liners instantly.
+Live assist: hands-on control for presenters without breaking automation.
+Clock management: structure programming to a precise broadcast clock.
+Traffic integration: automate ad spot scheduling straight from traffic logs.
 
 Built to run offline
 
-As an Electron desktop app, Henolla Playout runs entirely offline — no cloud dependency, no subscription, no monthly fees. Just a one-time, per-station license.
+As an Electron desktop app, Henolla Playout runs entirely offline. No cloud dependency, no subscription, no monthly fees. Just a one-time, per-station license.
 
 Stack: Electron · Node.js · Express · SQLite · Socket.IO · Vanilla JS`,
   },
@@ -173,11 +173,11 @@ Stack: Electron · Node.js · Express · SQLite · Socket.IO · Vanilla JS`,
     tag: 'Project',
     title: 'Henolla Server Central Broadcast Media Server',
     description:
-      'A self-hosted media server for radio stations — centralise audio storage, manage uploads, stream to playout systems, and control station assets from a single local server.',
+      'A self-hosted media server for radio stations. Centralise audio storage, manage uploads, stream to playout systems, and control station assets from a single local server.',
     image: '/Server.png',
     date: '2026',
     readTime: '3 min read',
-    content: `Henolla Server is a local network media server designed for radio station infrastructure. It centralises all audio assets — music, jingles, ads, station IDs — so every workstation in the building accesses the same library without copying files around on USB drives.
+    content: `Henolla Server is a local network media server designed for radio station infrastructure. It centralises all audio assets: music, jingles, ads, station IDs, so every workstation in the building accesses the same library without copying files around on USB drives.
 
 It handles file uploads from any device on the local network, streams audio directly to playout systems, manages metadata, and provides a clean web-based interface that non-technical staff can use without training.
 
@@ -192,11 +192,11 @@ Stack: Node.js · Express · SQLite · Socket.IO · Multer · Vanilla JS`,
     tag: 'Project',
     title: 'Henolla Traffic Manager Broadcast Ad Sales System',
     description:
-      'A dedicated advertising traffic and sales management system for radio stations — log bookings, manage clients, schedule spot campaigns, and sync automatically with the playout system.',
+      'A dedicated advertising traffic and sales management system for radio stations. Log bookings, manage clients, schedule spot campaigns, and sync automatically with the playout system.',
     image: '/Traffic.png',
     date: '2026',
     readTime: '4 min read',
-    content: `Radio advertising traffic is one of the most operationally complex parts of running a station — managing clients, agencies, booking orders, scheduling spots across day-parts, and making sure every campaign actually airs on time.
+    content: `Radio advertising traffic is one of the most operationally complex parts of running a station: managing clients, agencies, booking orders, scheduling spots across day-parts, and making sure every campaign actually airs on time.
 
 Henolla Traffic Manager replaces spreadsheets and paper logs with a purpose-built web application. The sales team logs bookings, assigns spots to day-parts, tracks credit clients, and generates broadcast logs — all of which sync in real time to Henolla Playout so the right ads air at the right time automatically.
 
