@@ -137,6 +137,65 @@ It digitises pharmacy service access for customers, simplifies internal manageme
 This project demonstrates how targeted digital tools can transform how local healthcare businesses operate and serve their communities — no unnecessary complexity, just the right tool for the job.`,
   },
 
+  // Henolla Suite
+  {
+    id: 18,
+    page: 'projects-tech',
+    category: 'Tech',
+    tag: 'Project',
+    title: 'Henolla Playout Radio Automation Software',
+    description:
+      'A professional desktop radio playout and automation system built for Nigerian broadcast stations — schedule music, manage jingles, run live assist, and handle traffic all from one app.',
+    image: '/Playout.png',
+    date: '2026',
+    readTime: '4 min read',
+    content: `Henolla Playout is a full-featured radio automation desktop application built specifically for the realities of Nigerian broadcast engineering — unreliable internet, tight budgets, and the need for rock-solid reliability on air.
+
+It handles music scheduling, jingle carts, live assist mode, hour-by-hour clock management, and integrates directly with the Traffic Manager for ad spot automation. Built as an Electron app so it runs offline with no subscription, no cloud dependency, and no monthly fees.
+
+Developed initially as Diamond FM Playout for Diamond FM Ilorin and Ilesa, then repackaged as Henolla Playout for broader deployment. The system is licensed per station and replaces expensive international playout software with something built for how African radio actually works.
+
+Stack: Electron · Node.js · Express · SQLite · Socket.IO · Vanilla JS`,
+  },
+  {
+    id: 19,
+    page: 'projects-tech',
+    category: 'Tech',
+    tag: 'Project',
+    title: 'Henolla Server Central Broadcast Media Server',
+    description:
+      'A self-hosted media server for radio stations — centralise audio storage, manage uploads, stream to playout systems, and control station assets from a single local server.',
+    image: '/Server.png',
+    date: '2026',
+    readTime: '3 min read',
+    content: `Henolla Server is a local network media server designed for radio station infrastructure. It centralises all audio assets — music, jingles, ads, station IDs — so every workstation in the building accesses the same library without copying files around on USB drives.
+
+It handles file uploads from any device on the local network, streams audio directly to playout systems, manages metadata, and provides a clean web-based interface that non-technical staff can use without training.
+
+Part of the Henolla Suite alongside Henolla Playout and Traffic Manager, it is designed to run on any standard Windows or Linux machine already in the station, turning it into a proper broadcast infrastructure server.
+
+Stack: Node.js · Express · SQLite · Socket.IO · Multer · Vanilla JS`,
+  },
+  {
+    id: 20,
+    page: 'projects-tech',
+    category: 'Tech',
+    tag: 'Project',
+    title: 'Henolla Traffic Manager Broadcast Ad Sales System',
+    description:
+      'A dedicated advertising traffic and sales management system for radio stations — log bookings, manage clients, schedule spot campaigns, and sync automatically with the playout system.',
+    image: '/Traffic.png',
+    date: '2026',
+    readTime: '4 min read',
+    content: `Radio advertising traffic is one of the most operationally complex parts of running a station — managing clients, agencies, booking orders, scheduling spots across day-parts, and making sure every campaign actually airs on time.
+
+Henolla Traffic Manager replaces spreadsheets and paper logs with a purpose-built web application. The sales team logs bookings, assigns spots to day-parts, tracks credit clients, and generates broadcast logs — all of which sync in real time to Henolla Playout so the right ads air at the right time automatically.
+
+The system manages clients, agencies, agents, campaigns, and generates compliance reports for advertisers. It runs as a local web app accessible from any device in the station on the same network, with role-based access for sales, traffic, and management teams.
+
+Stack: Node.js · Express · better-sqlite3 · Socket.IO · JWT Auth · Vanilla JS`,
+  },
+
   // Social Ventures
   {
     id: 7,
