@@ -145,15 +145,25 @@ This project demonstrates how targeted digital tools can transform how local hea
     tag: 'Project',
     title: 'Henolla Playout Radio Automation Software',
     description:
-      'A professional desktop radio playout and automation system built for Nigerian broadcast stations — schedule music, manage jingles, run live assist, and handle traffic all from one app.',
+      'A professional desktop radio playout and automation system built for Nigerian broadcast stations.',
     image: '/Playout.png',
     date: '2026',
     readTime: '4 min read',
-    content: `Henolla Playout is a full-featured radio automation desktop application built specifically for the realities of Nigerian broadcast engineering — unreliable internet, tight budgets, and the need for rock-solid reliability on air.
+    content: `Running a Radio Station Just Got Better
 
-It handles music scheduling, jingle carts, live assist mode, hour-by-hour clock management, and integrates directly with the Traffic Manager for ad spot automation. Built as an Electron app so it runs offline with no subscription, no cloud dependency, and no monthly fees.
+Henolla Playout is a professional desktop radio automation system built for the realities of broadcast engineering: unstable connectivity, tight budgets, and the need for rock-solid reliability, on air, every hour of every day.
 
-Developed initially as Diamond FM Playout for Diamond FM Ilorin and Ilesa, then repackaged as Henolla Playout for broader deployment. The system is licensed per station and replaces expensive international playout software with something built for how African radio actually works.
+What it does
+
+Music scheduling — plan and manage rotations with full control over your playlist.
+Jingle carts — trigger station IDs, sweepers, and liners instantly.
+Live assist — hands-on control for presenters without breaking automation.
+Clock management — structure programming to a precise broadcast clock.
+Traffic integration — automate ad spot scheduling straight from traffic logs.
+
+Built to run offline
+
+As an Electron desktop app, Henolla Playout runs entirely offline — no cloud dependency, no subscription, no monthly fees. Just a one-time, per-station license.
 
 Stack: Electron · Node.js · Express · SQLite · Socket.IO · Vanilla JS`,
   },
