@@ -144,7 +144,7 @@ This project demonstrates how targeted digital tools can transform how local hea
     category: 'Tech',
     tag: 'Project',
     title: 'Henolla Playout Radio Automation Software',
-    description: '',
+    description: 'A professional desktop radio automation system built for Nigerian broadcast stations. Music scheduling, jingle carts, live assist and traffic integration. Runs entirely offline on a one-time per-station license.',
     image: '/Playout.png',
     date: '2026',
     readTime: '4 min read',
