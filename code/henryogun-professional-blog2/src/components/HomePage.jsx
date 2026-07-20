@@ -54,14 +54,14 @@ export default function HomePage() {
             {/* Text content */}
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
               {/* Label */}
-              <p className="inline-flex items-center gap-2 text-[#f4b940] text-[11px] font-bold uppercase tracking-[0.35em] mb-5">
-                <span className="w-6 h-px bg-[#f4b940]" />
+              <p className="flex flex-wrap items-center justify-center md:justify-start gap-2 text-[#f4b940] text-[11px] font-bold uppercase tracking-[0.25em] mb-5">
+                <span className="hidden sm:block w-6 h-px bg-[#f4b940]" />
                 Broadcast Engineer · Developer · Audio Producer
-                <span className="w-6 h-px bg-[#f4b940]" />
+                <span className="hidden sm:block w-6 h-px bg-[#f4b940]" />
               </p>
 
               {/* Headline */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.08] mb-6 tracking-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.08] mb-6 tracking-tight">
                 Hello, I'm{' '}
                 <span className="text-[#f4b940]">Henry.</span>
               </h1>
