@@ -23,6 +23,8 @@ export default function App() {
           <Route path="/projects/broadcast" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/projects/tech" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/projects/repair" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
+          <Route path="/services" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
+          <Route path="/booking" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="*" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
         </Routes>
         <Footer />

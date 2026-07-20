@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-blue-900 text-white py-24">
+      <section className="bg-[#08142a] text-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
           <p className="text-[#f4b940] text-xs font-bold uppercase tracking-[0.25em] mb-3">Broadcast &amp; Technology Professional</p>
           <h1 className="text-4xl font-bold mb-4">About Henry Ogun</h1>
@@ -61,7 +61,7 @@ export default function AboutPage() {
                 alt="Henry Ogun"
                 className="w-full rounded-lg object-cover shadow-[0_20px_20px_rgba(0,0,0,0.1)]"
                 style={{ aspectRatio: '4/5' }}
-                onError={(e) => { e.target.src = '/without-the-name.png'; }}
+                onError={(e) => { e.target.src = '/henryogun-trans-new.png'; }}
               />
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function AboutPage() {
       </section>
 
       {/* Highlight Band */}
-      <section className="bg-blue-900 py-16">
+      <section className="bg-[#08142a] py-16">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <p className="text-xl text-white/90 italic leading-relaxed font-light text-center">
             "Broadcast engineering gave me precision. Software development gave me new tools. Together, they let me build systems that are both technically sound and genuinely impactful."

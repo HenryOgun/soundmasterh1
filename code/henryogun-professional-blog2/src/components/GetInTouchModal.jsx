@@ -25,7 +25,7 @@ export default function GetInTouchModal({ onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header strip */}
-        <div className="bg-blue-900 rounded-t-xl px-8 py-8 text-white text-center relative">
+        <div className="bg-[#08142a] rounded-t-xl px-8 py-8 text-white text-center relative">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"

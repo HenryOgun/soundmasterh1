@@ -8,6 +8,8 @@ import AudioProductionPage from './AudioProductionPage';
 import ComputerRepairPage from './ComputerRepairPage';
 import ArticlesPage from './ArticlesPage';
 import ProjectsAdminPage from './ProjectsAdminPage';
+import ServicesPage from './ServicesPage';
+import BookingPage from './BookingPage';
 
 const routeToPage = {
   '/': 'home',
@@ -19,6 +21,8 @@ const routeToPage = {
   '/projects/broadcast': 'projects-broadcast',
   '/projects/tech': 'projects-tech',
   '/projects/repair': 'projects-repair',
+  '/services': 'services',
+  '/booking': 'booking',
 };
 
 export default function MainGrid({ onSelectArticle }) {
@@ -34,6 +38,8 @@ export default function MainGrid({ onSelectArticle }) {
   if (activePage === 'projects-repair') return <ComputerRepairPage />;
   if (activePage === 'projects-broadcast') return <ProjectsAdminPage pageType="broadcast" localData={getCardsByPage('projects-broadcast')} />;
   if (activePage === 'projects-tech') return <ProjectsAdminPage pageType="tech" localData={getCardsByPage('projects-tech')} />;
+  if (activePage === 'services') return <ServicesPage />;
+  if (activePage === 'booking') return <BookingPage />;
 
   return null;
 }

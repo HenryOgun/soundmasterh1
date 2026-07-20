@@ -28,7 +28,7 @@ export default function Sidebar() {
             src="/h7.jpg"
             alt="Henry Ogun"
             className="w-full h-full object-cover"
-            onError={(e) => { e.target.src = '/without-the-name.png'; }}
+            onError={(e) => { e.target.src = '/henryogun-trans-new.png'; }}
           />
         </div>
         <h2 className="text-base font-bold text-gray-900">Henry Ogun</h2>
