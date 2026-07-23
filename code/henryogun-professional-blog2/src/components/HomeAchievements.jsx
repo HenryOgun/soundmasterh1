@@ -59,6 +59,7 @@ const footprintLogos = [
   { src: '/logo/kwara tv 2.png', alt: 'Kwara TV' },
   { src: '/logo/diamond ilr 2.png', alt: 'Diamond FM Ilorin' },
   { src: '/logo/Radio_Netherlands_Worldwide.svg', alt: 'Radio Netherlands Worldwide' },
+  { src: '/logo/Redesign 2.png', alt: 'Aqualife Initiative' },
   { src: '/Fiolu Pharmacy.jpeg', alt: 'Fiolu Pharmacy' },
   { src: '/Tuyil Pharmaceuticals Limited.png', alt: 'Tuyil Pharmaceuticals' },
   { src: '/sigma Pension.png', alt: 'Sigma Pension' },
