@@ -32,7 +32,7 @@ const services = [
   {
     icon: Wrench,
     title: 'Computer Repair & Networking',
-    desc: 'Hardware diagnostics, repair, and MikroTik network setup for broadcast facilities, offices, and homes across Kwara State.',
+    desc: 'Hardware diagnostics, repair, and MikroTik network setup for broadcast facilities, offices, and homes.',
   },
 ];
 

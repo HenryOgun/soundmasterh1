@@ -15,8 +15,8 @@ const navLinks = [
       { label: 'Broadcast', path: '/projects/broadcast' },
     ],
   },
-  { label: 'Articles', path: '/articles' },
   { label: 'Services', path: '/services' },
+  { label: 'Onatham', path: '/onatham' },
   { label: 'Achievements', path: '/achievements' },
   { label: 'About', path: '/about' },
   { label: 'Recent Experience', path: '/recentexperience' },
@@ -64,14 +64,14 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between h-[62px]">
             {/* Logo */}
-            <button onClick={() => handleNav('/')} className="flex items-center gap-3 group">
-              <img src="/henryogun-trans-new.png" alt="Henry Ogun" className="w-9 h-9 object-contain" />
-              <div className="leading-tight text-left">
-                <span className="block text-sm font-bold text-gray-900 tracking-tight group-hover:text-[#f4b940] transition-colors">
+            <button onClick={() => handleNav('/')} className="flex items-center gap-0 group">
+              <img src="/logo/favicon.png" alt="Onatham Technologies" className="h-[54px] w-auto object-contain" style={{background:'none'}} />
+              <div className="leading-tight text-left ml-2">
+                <span className="block text-base font-extrabold text-gray-900 tracking-tight group-hover:text-[#f4b940] transition-colors">
                   Henry Ogun
                 </span>
-                <span className="block text-[10px] font-bold text-[#f4b940] tracking-[0.2em] uppercase">
-                  SoundMasterH1
+                <span className="block text-[11px] font-extrabold text-[#f4b940] tracking-[0.15em] uppercase">
+                  Onatham Technologies Limited
                 </span>
               </div>
             </button>

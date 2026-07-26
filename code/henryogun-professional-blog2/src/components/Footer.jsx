@@ -32,11 +32,11 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="md:col-span-1">
-            <div className="flex items-center gap-3 mb-5">
-              <img src="/henryogun-trans-new.png" alt="Henry Ogun" className="w-10 h-10 object-contain" />
-              <div>
-                <p className="font-bold text-white text-base leading-tight">Henry Ogun</p>
-                <p className="text-[10px] font-bold text-[#f4b940] tracking-[0.2em] uppercase">SoundMasterH1</p>
+            <div className="flex items-center gap-0.5 mb-5">
+              <img src="/logo/favicon.png" alt="Onatham Technologies" className="h-20 w-auto max-w-none object-contain flex-shrink-0" />
+              <div className="leading-tight text-left ml-2">
+                <p className="font-extrabold text-white text-lg leading-tight">Henry Ogun</p>
+                <p className="text-[11px] font-extrabold text-[#f4b940] tracking-[0.15em] uppercase leading-tight">Onatham Technologies Limited</p>
               </div>
             </div>
             <p className="text-sm text-white/50 leading-relaxed max-w-xs mb-6">
