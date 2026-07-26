@@ -111,14 +111,14 @@ export default function OnathamPage() {
 
             {/* Right — branded card */}
             <div className="flex-shrink-0 w-full lg:w-auto">
-              <div className="relative bg-white rounded-3xl p-10 text-center shadow-2xl border-2 border-[#f4b940] max-w-[340px] mx-auto lg:mx-0">
+              <div className="relative bg-[#08142a] rounded-3xl p-10 text-center shadow-2xl border-2 border-[#f4b940] max-w-[340px] mx-auto lg:mx-0">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#f4b940] text-black text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full">
                   Professional Broadcast & Digital Solutions
                 </div>
-                <img src="/onatham-logo.png" alt="Onatham Technologies" className="w-72 mx-auto mt-4 mb-6 object-contain" />
-                <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-6" />
-                <p className="text-[#e07b10] font-black text-2xl leading-tight tracking-tight">Engineered for Excellence.</p>
-                <p className="text-[#08142a] font-black text-2xl leading-tight tracking-tight mt-1">Built for Everyone.</p>
+                <img src="/logo/onatham 2.png" alt="Onatham Technologies" className="w-72 mx-auto mt-4 mb-6 object-contain" />
+                <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6" />
+                <p className="text-[#f4b940] font-black text-2xl leading-tight tracking-tight">Engineered for Excellence.</p>
+                <p className="text-white font-black text-2xl leading-tight tracking-tight mt-1">Built for Everyone.</p>
               </div>
             </div>
 
