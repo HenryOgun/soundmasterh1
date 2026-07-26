@@ -1,6 +1,11 @@
 Options -MultiViews
 RewriteEngine On
 
+# Disable LiteSpeed Cache
+<IfModule LiteSpeed>
+CacheLookup off
+</IfModule>
+
 # Force HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
