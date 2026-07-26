@@ -1,3 +1,4 @@
+// v2
 import { useLocation } from 'react-router-dom';
 import { getCardsByPage } from './data';
 import AchievementsPage from './AchievementsPage';
@@ -10,6 +11,7 @@ import ArticlesPage from './ArticlesPage';
 import ProjectsAdminPage from './ProjectsAdminPage';
 import ServicesPage from './ServicesPage';
 import BookingPage from './BookingPage';
+import OnathamPage from './OnathamPage';
 
 const routeToPage = {
   '/': 'home',
@@ -23,6 +25,7 @@ const routeToPage = {
   '/projects/repair': 'projects-repair',
   '/services': 'services',
   '/booking': 'booking',
+  '/onatham': 'onatham',
 };
 
 export default function MainGrid({ onSelectArticle }) {
@@ -40,6 +43,7 @@ export default function MainGrid({ onSelectArticle }) {
   if (activePage === 'projects-tech') return <ProjectsAdminPage pageType="tech" localData={getCardsByPage('projects-tech')} />;
   if (activePage === 'services') return <ServicesPage />;
   if (activePage === 'booking') return <BookingPage />;
+  if (activePage === 'onatham') return <OnathamPage />;
 
   return null;
 }
