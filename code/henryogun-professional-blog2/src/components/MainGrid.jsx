@@ -12,6 +12,7 @@ import ProjectsAdminPage from './ProjectsAdminPage';
 import ServicesPage from './ServicesPage';
 import BookingPage from './BookingPage';
 import OnathamPage from './OnathamPage';
+import SpeakWellPrivacyPage from './SpeakWellPrivacyPage';
 
 const routeToPage = {
   '/': 'home',
@@ -26,6 +27,7 @@ const routeToPage = {
   '/services': 'services',
   '/booking': 'booking',
   '/onatham': 'onatham',
+  '/speakwell-privacy': 'speakwell-privacy',
 };
 
 export default function MainGrid({ onSelectArticle }) {
@@ -44,6 +46,7 @@ export default function MainGrid({ onSelectArticle }) {
   if (activePage === 'services') return <ServicesPage />;
   if (activePage === 'booking') return <BookingPage />;
   if (activePage === 'onatham') return <OnathamPage />;
+  if (activePage === 'speakwell-privacy') return <SpeakWellPrivacyPage />;
 
   return null;
 }

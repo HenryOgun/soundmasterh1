@@ -26,6 +26,7 @@ export default function App() {
           <Route path="/services" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/booking" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="/onatham" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
+          <Route path="/speakwell-privacy" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
           <Route path="*" element={<MainGrid onSelectArticle={setSelectedArticle} />} />
         </Routes>
         <Footer />
