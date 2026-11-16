@@ -1,0 +1,44 @@
+name: Deploy Blog to henryogun.com
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'code/henryogun-professional-blog2/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: code/henryogun-professional-blog2/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: code/henryogun-professional-blog2
+
+      - name: Build blog
+        run: npm run build
+        working-directory: code/henryogun-professional-blog2
+
+      - name: Deploy to WhoGoHost via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: code/henryogun-professional-blog2/dist/
+          server-dir: public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**

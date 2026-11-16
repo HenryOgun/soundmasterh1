@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Radio, Server, BarChart3, ArrowRight, Check, X,
-  ShieldCheck, Zap, Globe2,
+  ShieldCheck, Zap, Globe2, Smartphone, Activity,
 } from 'lucide-react';
 import GetInTouchModal from './GetInTouchModal';
 
@@ -36,6 +36,27 @@ const suiteProducts = [
   },
 ];
 
+const otherProducts = [
+  {
+    icon: Smartphone,
+    name: 'SpeakWell',
+    sub: 'English Learning App',
+    accent: '#0ea5e9',
+    desc: 'A world-class mobile app for mastering English speaking, pronunciation, grammar, vocabulary, and conversation — built for learners across Africa and beyond.',
+    highlights: ['34 learning screens', 'AI pronunciation feedback', 'Vocabulary flashcards', 'Public speaking training', 'Offline — no internet needed'],
+    badge: 'Android App',
+  },
+  {
+    icon: Activity,
+    name: 'Listener Monitor',
+    sub: 'Radio Analytics Dashboard',
+    accent: '#10b981',
+    desc: 'Real-time listener count tracking, programme engagement logging, WhatsApp and call webhook integration — everything a station manager needs to measure their audience.',
+    highlights: ['Live Icecast listener count', 'Programme engagement logs', 'WhatsApp & call tracking', 'CSV export & reports', 'Web-based, runs on any device'],
+    badge: 'Web App',
+  },
+];
+
 const pillars = [
   { icon: ShieldCheck, label: 'Runs Offline', desc: 'No internet dependency in the studio. Your broadcast never stops.' },
   { icon: Zap,         label: 'No Monthly Fees', desc: 'One price. Yours forever. No subscriptions, no surprises.' },
@@ -45,7 +66,7 @@ const pillars = [
 
 
 const comparison = [
-  { other: '$2,000–$5,000 / year in USD',            henolla: '₦1,600,000 one-time payment' },
+  { other: '$2,000–$5,000 / year in USD',            henolla: '₦5,000,000 one-time payment' },
   { other: 'Built for Western markets',               henolla: 'Built for any station, anywhere' },
   { other: 'Foreign support, different timezone',     henolla: 'Local support, same timezone' },
   { other: 'Complex setup, specialist hardware',      henolla: 'Standard Windows PC hardware' },
@@ -197,8 +218,8 @@ export default function OnathamPage() {
             {/* Pricing badge */}
             <div className="flex-shrink-0 bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-right">
               <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Complete Suite</p>
-              <p className="text-[#f4b940] text-4xl font-black">₦1,600,000</p>
-              <p className="text-green-400 text-sm font-bold mt-1">Under $1,000 USD</p>
+              <p className="text-[#f4b940] text-4xl font-black">₦5,000,000</p>
+              <p className="text-green-400 text-sm font-bold mt-1">Under $3,500 USD</p>
               <p className="text-gray-600 text-xs mt-1">Runs offline · No monthly fees</p>
             </div>
           </div>
@@ -290,6 +311,49 @@ export default function OnathamPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+          OTHER PRODUCTS
+      ══════════════════════════════════════════════ */}
+      <section className="py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-14">
+            <p className="text-[#f4b940] text-xs font-bold uppercase tracking-[0.25em] mb-4">More From Onatham</p>
+            <h2 className="text-4xl font-black text-[#08142a] leading-tight">Other Products</h2>
+            <div className="w-16 h-1 bg-[#f4b940] mt-5" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {otherProducts.map(({ icon: Icon, name, sub, accent, desc, highlights, badge }) => (
+              <div key={name} className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+                <div className="px-8 pt-8 pb-6 border-b border-gray-100">
+                  <div className="flex items-start justify-between gap-4 mb-5">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: accent + '18', border: `1px solid ${accent}33` }}>
+                      <Icon size={22} style={{ color: accent }} />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mt-1"
+                      style={{ backgroundColor: accent + '15', color: accent }}>
+                      {badge}
+                    </span>
+                  </div>
+                  <h3 className="text-[#08142a] text-2xl font-black">{name}</h3>
+                  <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mt-1">{sub}</p>
+                </div>
+                <div className="px-8 py-6">
+                  <p className="text-gray-500 text-sm leading-relaxed mb-5">{desc}</p>
+                  <ul className="space-y-2.5">
+                    {highlights.map(h => (
+                      <li key={h} className="flex items-center gap-2.5 text-sm text-gray-600">
+                        <Check size={13} style={{ color: accent }} className="flex-shrink-0" />{h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
